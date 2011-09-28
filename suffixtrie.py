@@ -1,7 +1,12 @@
 class Node:
-    def __init__(self,char):
+    nr_node = 0
+    def __init__(self,char,suffix_link=None):
         self.char=char
         self.children={}
+        self.node_id=Node.nr_node
+        self.suffix_link=suffix_link
+        Node.nr_node+=1
+
 
     def add(self,char,last):
         found=False
@@ -14,8 +19,30 @@ class Node:
 
     def draw(self,level=0):
         print("%s%s"%(" "*level,self.char))
-        for key in self.children:
-            self.children[key].draw(level+1)
+        for child in self.allChildren():
+            child.draw(level+1)
+
+    def drawDot(self):
+        print("\t n%d [label=\"%s\"];"%(self.node_id,self.char))
+        for child in self.allChildren():
+            print("\tn%d -> n%d;"%(self.node_id,child.node_id))
+            child.drawDot()
+
+    def printSuffix(self,pre=""):
+        new_pre=pre+self.char
+        if len(self.children)==0:  # leaf
+            print(new_pre)
+        else:
+            for child in self.allChildren():
+                child.printSuffix(new_pre)
+
+
+
+    def allChildren(self):
+        children=[ self.children[key] for key in self.children]
+        children.sort(key=lambda a: a.node_id)
+        return children
+
 
 class STrie:
     def __init__(self,string):
@@ -29,6 +56,14 @@ class STrie:
     def draw(self):
         self.root.draw()
 
+    def drawDot(self):
+        print("digraph STrie{")
+        self.root.drawDot()
+        print("}")
+
+    def printSuffix(self):
+        self.root.printSuffix()
+
 if __name__=="__main__":
-    st=STrie("a")
-    st.draw()
+    st=STrie("BANANAS")
+    st.printSuffix()
