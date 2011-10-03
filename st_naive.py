@@ -1,53 +1,25 @@
 
 class Node:
-    NR_NODE=0
 
-    def __init__(self,leaf=False):
+    def __init__(self,node_id,leaf=False):
         self.children={}
-        self.node_id=Node.NR_NODE
-        Node.NR_NODE+=1
+        self.node_id=node_id
         self.leaf=leaf
-
-    def add(self,string,start):
-        #if start >= len(string): return
-        char=string[start]
-        if(char in self.children):
-            old_edge=self.children[char]
-            # first find common
-            common_end=old_edge.start
-            new_end=start
-            while common_end < len(string) and \
-                    new_end < len(string) and \
-                    string[common_end]==string[new_end] :
-                common_end+=1
-                new_end+=1
-
-            if new_end>=len(string): return # this is already done
-            if common_end>=old_edge.end:
-                old_edge.node.add(string,new_end)
-            else:
-                # we need to split a edge
-                old_node=old_edge.node
-                inter_node=Node()
-                inter_node.children[string[common_end]]=Edge( \
-                    string,common_end,old_edge.end,old_node)
-                old_edge.node=inter_node
-                old_edge.end=common_end
-                # add new node
-                inter_node.add(string,new_end)
-        else: # We append a new leaf here
-            self.children[char]=Edge(string,start, len(string), Node(True))
+        self.gen=-1
 
     def __repr__(self):
-        return str(self.node_id)
+        return str(self.node_id)+":"+str(self.gen)
     
-    def drawdot(self):
+    def drawdot(self,tree_id,gen):
         leaf_str = ",shape=box" if self.leaf else ""
-        print("\tn%d [label=\"%r\"%s];"%(self.node_id,self,leaf_str))
+        leaf_str+= ",style=filled" if self.gen == gen else ""
+        print("\t\tt%dn%d [label=\"%r\"%s];"% \
+                (tree_id,self.node_id,self,leaf_str))
         for edge in self.get_children():
-            edge.node.drawdot();
-            print("\tn%d -> n%d [label=\"%r\"];"% \
-                    (self.node_id,edge.node.node_id,edge))
+            edge.node.drawdot(tree_id,gen);
+            print("\t\t\tt%dn%d -> t%dn%d [label=\"%r\"];"% \
+                    (tree_id,self.node_id,tree_id, \
+                        edge.node.node_id,edge))
 
     def get_children(self):
         child_list=[self.children[key] for key in self.children]
@@ -73,33 +45,74 @@ class Edge:
         return self.string[self.start:self.end]
 
 class STnaive:
+    NR_TREE=0 
+
     def __init__(self,string):
         self.string=string
-        self.root=Node()
+        self.root=Node(0)
+        self.nr_node=1 # root is counted
         self.construct()
+        self.tree_id=STnaive.NR_TREE
+        STnaive.NR_TREE+=1
+
+    def alloc_node(self):
+        self.nr_node+=1
+        return self.nr_node-1
 
     def construct(self):
         for current in range(0,len(self.string)):
-            self.root.add(self.string,current)
+            self.add(self.root,current)
 
     def drawdot(self):
-        #print("digraph ST%d{"%(self.root.node_id))
-        self.root.drawdot()
-        #print("}")
+        print("\tsubgraph clusterST%d{\n"%(self.tree_id))
+        self.root.drawdot(self.tree_id,self.root.gen)
+        print("\tcolor=blue")
+        print("\t}")
+
+    def add(self,node,start):
+        while True:
+            node.gen=start
+            char=self.string[start]
+            if not (char in node.children):
+                node.children[char]=Edge(self.string,start, \
+                        len(self.string), Node(self.alloc_node(),True))
+                return
+
+            old_edge=node.children[char]
+            # first find common
+            common_end=old_edge.start
+            new_end=start
+            while common_end < len(self.string) and \
+                    new_end < len(self.string) and \
+                    self.string[common_end]==self.string[new_end] :
+                common_end+=1
+                new_end+=1
+            if new_end>=len(self.string): return 
+            if common_end<old_edge.end:
+                # we need to split a edge
+                old_node=old_edge.node
+                inter_node=Node(self.alloc_node())
+                inter_node.children[self.string[common_end]]=Edge( \
+                        self.string,common_end,old_edge.end,old_node)
+                old_edge.node=inter_node
+                old_edge.end=common_end
+                # add new node
+                #self.add(inter_node,new_end)
+            node=old_edge.node
+            start=new_end
+
+def draw(st):
+    for i in range(0,len(st)):
+        STnaive(st[:i+1]).drawdot()
+
 
 if __name__=="__main__":
-    print("digraph ST{")
-    STnaive("m").drawdot()
-    STnaive("mi").drawdot()
-    STnaive("mis").drawdot()
-    STnaive("miss").drawdot()
-    STnaive("missi").drawdot()
-    STnaive("missis").drawdot()
-    STnaive("mississ").drawdot()
-    STnaive("mississi").drawdot()
-    STnaive("mississip").drawdot()
-    STnaive("mississipp").drawdot()
-    STnaive("mississippi$").drawdot()
+    print("digraph ST{\n")
+    
+    #for i in range(0,len("mississippi$")):
+    #    STnaive("mississippi$"[:i+1]).drawdot()
+    draw("mississippi$")
+    draw("ababcab$")
     #STnaive("papua").drawdot()
     #STnaive("a").drawdot()
     #STnaive("ab").drawdot()

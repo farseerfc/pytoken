@@ -44,6 +44,9 @@ class Edge:
     def __repr__(self):
         return self.string[self.start:self.end]
 
+    def __len__(self):
+        return self.end-self.start
+
 class STnaive:
     NR_TREE=0 
 
