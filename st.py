@@ -1,5 +1,10 @@
 INFINITY=1 << 20
 
+def log(string):
+    if False:
+        import sys
+        print(string,file=sys.stderr)
+
 class Node:
 
     def __init__(self,node_id,leaf=False,suffix_link=None):
@@ -48,17 +53,18 @@ class Edge:
         self.dst_node=dst_node
 
     def __repr__(self):
-        return self.string[self.begin:self.end]
+        return self.string[self.begin:self.end+1]
 
     def __len__(self):
-        return self.end - self.begin
+        return self.end - self.begin + 1
 
     def split(self,suffix,suffix_tree):
+        log("edge %r,suffix %r"%(self,suffix))
         new_node=Node(suffix_tree.alloc_node())
         new_edge=Edge(self.string, self.begin+len(suffix), 
                 self.end,new_node,self.dst_node )
         suffix_tree.insert_edge(new_edge)
-        self.end = self.begin + len(suffix)
+        self.end = self.begin + len(suffix) -1
         self.dst_node=new_node
         return new_node
 
@@ -69,7 +75,7 @@ class Suffix:
         self.end=end
 
     def __len__(self):
-        return self.end-self.begin
+        return self.end-self.begin + 1
 
     def is_explicit(self):
         return self.begin > self.end
@@ -84,6 +90,9 @@ class Suffix:
             if len(edge) > len(self): return
             self.begin += len(edge)
             self.src_node = edge.dst_node
+
+    def __repr__(self):
+        return "%d,%d" % (self.begin,self.end)
 
 class ST:
     NR_TREE=0 
@@ -194,6 +203,6 @@ def draw(st):
 
 if __name__=="__main__":
     print("digraph ST{\n")
-    #draw("mississippi$")
-    draw("aba$")
+    draw("mississippi$")
+    draw("papua$")
     print("}")
