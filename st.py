@@ -6,19 +6,20 @@ def log(string):
         print(string,file=sys.stderr)
 
 class Node:
-
-    def __init__(self,node_id,leaf=False,suffix_link=None):
+    def __init__(self,node_id,suffix_link=None):
         self.children={}
         self.node_id=node_id
-        self.leaf=leaf
         self.suffix_link=suffix_link
         self.gen=-1
+
+    def is_leaf(self):
+        return self.suffix_link == None and self.node_id != 0 
 
     def __repr__(self):
         return str(self.node_id)+":"+str(self.gen)
     
     def drawdot(self,tree_id,gen):
-        leaf_str = ",shape=box" if self.leaf else ""
+        leaf_str = ",shape=box" if self.is_leaf() else ""
         leaf_str+= ",style=filled" if self.gen == gen else ""
         print("\t\tt%dn%d [label=\"%r\"%s];"% \
                 (tree_id,self.node_id,self,leaf_str))
@@ -27,6 +28,9 @@ class Node:
             print("\t\t\tt%dn%d -> t%dn%d [label=\"%r\"];"% \
                     (tree_id,self.node_id,tree_id, \
                         edge.dst_node.node_id,edge))
+        if self.suffix_link != None:
+            print("\t\tt%dn%d -> t%dn%d [style=dotted];"% \
+                (tree_id,self.node_id,tree_id,self.suffix_link.node_id))
 
     def get_children(self):
         child_list=[self.children[key] for key in self.children]
@@ -38,10 +42,6 @@ class Node:
         for key in self.children:
             result = min(result,self.children[key].dst_node.rank())
         return result
-
-    #def lookup(self,char):
-    #    return self.children[char]
-
 
 
 class Edge:
@@ -58,14 +58,16 @@ class Edge:
     def __len__(self):
         return self.end - self.begin + 1
 
-    def split(self,suffix,suffix_tree):
+    def split(self,suffix,suffix_tree,gen):
         log("edge %r,suffix %r"%(self,suffix))
         new_node=Node(suffix_tree.alloc_node())
+        new_node.gen=gen
         new_edge=Edge(self.string, self.begin+len(suffix), 
                 self.end,new_node,self.dst_node )
         suffix_tree.insert_edge(new_edge)
         self.end = self.begin + len(suffix) -1
         self.dst_node=new_node
+        self.gen=gen
         return new_node
 
 class Suffix:
@@ -110,6 +112,7 @@ class ST:
         for current in range(0,len(self.string)):
             # self.add(self.root,current)
             self.add_prefix(current)
+            self.root.gen=current
 
     def add_prefix(self,last_char_idx):
         last_parent_node=None
@@ -129,12 +132,10 @@ class ST:
                         last_char:
                     break
                 else:
-                    parent_node=edge.split(active_point,self)
+                    parent_node=edge.split(active_point,self,last_char_idx)
             new_node = Node(self.alloc_node())
             new_edge = Edge(self.string,last_char_idx, INFINITY, \
                     parent_node,new_node) 
-                    
-            #parent_node.children[self.string[last_char_idx]]=new_edge
             self.insert_edge(new_edge)
             # insert suffix link
             if last_parent_node!=None and last_parent_node!=self.root:
@@ -164,37 +165,6 @@ class ST:
         print("\tcolor=blue")
         print("\t}")
 
-    def add(self,node,start):
-        while True:
-            node.gen=start
-            char=self.string[start]
-            if not (char in node.children):
-                node.children[char]=Edge(self.string,start, \
-                        len(self.string), Node(self.alloc_node(),True))
-                return
-
-            old_edge=node.children[char]
-            # first find common
-            common_end=old_edge.start
-            new_end=start
-            while common_end < len(self.string) and \
-                    new_end < len(self.string) and \
-                    self.string[common_end]==self.string[new_end] :
-                common_end+=1
-                new_end+=1
-            if new_end>=len(self.string): return 
-            if common_end<old_edge.end:
-                # we need to split a edge
-                old_node=old_edge.node
-                inter_node=Node(self.alloc_node())
-                inter_node.children[self.string[common_end]]=Edge( \
-                        self.string,common_end,old_edge.end,old_node)
-                old_edge.node=inter_node
-                old_edge.end=common_end
-                # add new node
-                #self.add(inter_node,new_end)
-            node=old_edge.node
-            start=new_end
 
 def draw(st):
     for i in range(0,len(st)):
@@ -202,6 +172,7 @@ def draw(st):
 
 
 if __name__=="__main__":
+    INFINITY = 100
     print("digraph ST{\n")
     draw("mississippi$")
     draw("papua$")
