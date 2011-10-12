@@ -1,0 +1,1404 @@
+
+
+\usepackage{tikz} 
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+
+%%%%%%%%%% Farseerfc: fix the bug of xetex on navigation bar of beamer %%%%%%%%%
+
+\def\beamer@linkspace#1{%
+  \begin{pgfpicture}{0pt}{-1.5pt}{#1}{5.5pt}
+    \pgfsetfillopacity{0}
+    \pgftext[x=0pt,y=-1.5pt]{.}
+    \pgftext[x=#1,y=5.5pt]{.}
+  \end{pgfpicture}}
+
+%%%%%%%%%% Farseerfc: fix the bug of xetex on navigation bar of beamer %%%%%%%%%
+
+\usetheme{Warsaw}
+\usecolortheme[named=OliveGreen]{structure}
+\setbeamercovered{transparent}
+\useoutertheme{infolines}
+\usepackage[english]{babel}
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Farseerfc defined commands
+
+\newcommand{\Plasma}[0]{\textbf\emph{\large Plasma }}
+\newcommand{\br}[0]{\par\vskip15pt\par}
+%\newenvironment{topcolumns}{\begin{columns}[t]}{\end{columns}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\title[Plasma]{Dynamic Consolidation of Highly Available Web Applications}
+
+\subtitle{Represented by farseerfc@gmail.com}
+
+\author[Fabien, Julia, Jean-Marc, Gilles]{
+	Fabien Hermenamier\inst{1} \and
+	Julia Lawall\inst{2} \and 
+	Jean-Marc Menaud\inst{1} \and 
+	Gilles Muller \inst{3} 
+}
+
+\institute[INRIA]{
+	\inst{1}ASCOLA Mines de Nantes - INRIA, LINA \and 
+	\inst{2}DIKU, University of Copenhagen \and 
+	\inst{3}  INRIA/LIP6-Regal
+}
+
+\date[inria 2011 | GC@SE.SJTU ]{inria-00567102, version 1 - 23 Feb 2011}
+
+
+\frame{\maketitle}
+
+
+\AtBeginSubsection[]{
+  \frame<beamer>{ 
+    \frametitle{Section Outline}   
+    \tableofcontents[currentsection,currentsubsection] 
+  }
+}
+
+\AtBeginSection[]{
+  \frame<beamer>{ 
+    \frametitle{Part Outline}   
+    \tableofcontents[currentpart,currentsection] 
+  }
+}
+
+\AtBeginPart{
+  \frame<beamer>{
+	\partpage
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Information of this paper} 
+\section{Information} 
+\subsection{About IRNIA} 
+
+\begin{frame}{About IRNIA}
+\includegraphics[width=0.4\textwidth]{Logo-INRIA.png} 
+%\pgfimage[width=0.4\textwidth]{Logo-INRIA.png}
+
+France National Institute for Research in Computer Science and Control
+ 
+\pause{}
+(French: Institut national de recherche en informatique et en automatique, INRIA)
+
+\pause{}
+
+\br
+a French national research institution focusing on computer science, control 
+theory and applied mathematics.
+\pause{}
+
+\br
+http://en.inria.fr/
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{About 1st Author -- Fabien Hermenier} 
+
+\begin{frame} {1st Author -- Fabien Hermenier}
+\begin{columns}[t]%{}
+
+
+\column{0.6\textwidth}
+\begin{block}{Research Interests}
+\begin{itemize}
+\item<1-> Grid and Cloud Computing
+\item<2-> Virtualization
+\item<3-> Green computing
+\item<4-> Autonomic computing
+\item<5-> Prototype: Entropy
+\end{itemize}
+\end{block}
+
+\column{0.4\textwidth}
+
+\includegraphics[width=\textwidth]{me-postdoc.jpg} 
+\begin{itemize}
+\item Phd. Computer Science 
+\item EMN/INRIA ASCOLA Research Group 
+\item Ecole des Mines de Nantes
+\end{itemize}
+\end{columns}%{}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[shrink=10]{1st Author Publications}
+
+\begin{thebibliography}{2}
+
+{ 
+\small 
+
+\beamertemplatearticlebibitems \bibitem{Cluster-Wide2010} Cluster-Wide Context 
+Switch of Virtualized jobs 
+\newblock\emph{ In proc. of the 4th International Worshop on Virtualization 
+Technologies in Distributed Computing, 2010 }
+\newblock Fabien Hermenier, Adrien Lèbre, Jean-Marc Menaud
+
+\beamertemplatearticlebibitems \bibitem{NValue2010} The Increasing NValue 
+Constraint
+\newblock\emph{ In proc. of the 2010 International Conference of AI and OR 
+Techniques in Constraint Programming, 2010 }
+\newblock Nicolas Beldiceanu, Fabien Hermenier, Xavier Lorca, and Thierry Petit
+
+\beamertemplatearticlebibitems \bibitem{Entropy2009} Entropy: a Consolidation 
+Manager for Clusters
+\newblock\emph{  In proc. of the 2009 International Conference on Virtual 
+Execution Environments (VEE'09), Mar. 2009 }
+\newblock Fabien Hermenier, Xavier Lorca, Jean-Marc Menaud, Gilles Muller, 
+Julia Lawall
+
+\beamertemplatearticlebibitems \bibitem{Power2006} Management in Grid Computing 
+with Xen
+\newblock\emph{In proc. of the 2006 on XEN in HPC Cluster and Grid Computing 
+Environments (XHPC06), Dec. 2006, Sorrento}
+\newblock Fabien Hermenier, Nicolas Loriant and Jean-Marc Menaud
+
+\beamertemplatearticlebibitems \bibitem{Aspect}Aspect-based pattern for Grid 
+Programming, DOI
+\newblock\emph{Proc. of the 20th International Symposium on Computer 
+Architecture and High Performance Computing (SBAC-PAD'08), Oct. 2008}
+\newblock Luis Daniel Benavides Navarro, Rémi Douence, Fabien Hermenier, 
+Jean-Marc Menaud, and Mario Südholt.
+}
+\end{thebibliography}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{About 2nd Author -- Julia Lawall}
+
+\begin{frame} {2nd Author -- Julia Lawall}
+
+Associated Professer in the TOPPS\footnote{Theory and practice of programming 
+languages, TOPPS} group at DIKU\footnote{The Department of Computer Sciences at 
+the University of Copenhagen, DIKU}.
+
+\begin{block}{Research activities}
+\begin{itemize}
+\item<1-> design and implementation of domain-specific languages
+\item<2-> partial evaluation
+\item<3-> optimal reduction of the lambda calculus and continuations
+\end{itemize}
+\end{block}
+
+\begin{block}{Projects}<4->
+\begin{itemize}
+\item The Coccinelle framework for Linux device driver evolution
+\item The Bossa framework for scheduler development
+\item The DiaGen compiler for creating dedicated frameworks for distributed systems.
+\item The Tempo partial evaluator for C programs.
+\item The Schism partial evaluator for Scheme programs.
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{3rd Author -- Jean-Marc Menaud} 
+\begin{frame}{3rd Author -- Jean-Marc Menaud }
+
+Member of the Ascola \footnote{Ascola is a joint team of the Computer Science 
+Departement of École des Mines Nantes and INRIA's research center in Rennes. 
+ASCOLA is also a team of Laboratoire Informatique de Nantes Atlantique (LINA, 
+UMR CNRS 6241).} Group
+
+\begin{columns}[t]%{}
+
+
+\column{0.5\textwidth}
+
+\begin{block}{Research interests}
+\begin{itemize}
+\item<1-> Language Design
+\item<2-> Aspect Oriented Programming
+\item<3-> Cluster Computing
+\item<4-> Autonomic computing
+\item<5-> Virtualization
+\item<6-> Dynamic consolidation
+\end{itemize}
+\end{block}
+
+\column{0.4\textwidth}
+
+\includegraphics[width=1\textwidth]{JM-Web.jpg} 
+\end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{3rd Author Publications}
+
+\begin{thebibliography}{2}
+
+{ 
+\small
+
+\beamertemplatearticlebibitems \bibitem{SLA-aware2009}SLA-aware virtual resource
+ management for cloud infrastructures. 
+\newblock\emph{In the Proceedings of 9th International Conference on Computer 
+and Information Technology (CIT'09), Xiamen, Chine (2009)}
+\newblock Nguyen Van, H., Dang Tran, F., Menaud, J.-M.: 
+
+\beamertemplatearticlebibitems \bibitem{Autonomic2009}Autonomic virtual resource
+ management for service hosting platforms. 
+\newblock\emph{Workshop on Software Engineering Challenges in Cloud Computing 
+as part of ICSE. 2009}
+\newblock Hien Nguyen Van, Frederic Dang Tran, and Jean-Marc Menaud. 
+
+\beamertemplatearticlebibitems \bibitem{Entropy20092}Entropy: a Consolidation 
+Manager for Cluster. 
+\newblock\emph{In proc. of the 2009 International Conference on Virtual 
+Execution Environments (VEE'09), Mar. 2009.}
+\newblock Fabien Hermenier, Xavier Lorca, Jean-Marc Menaud, Gilles Muller, 
+Julia Lawall. 
+
+\beamertemplatearticlebibitems \bibitem{Aspect-based2008}Aspect-based pattern 
+for Grid Programming. 
+\newblock\emph{Proc. of the 20th International Symposium on Computer 
+Architecture and High Performance Computing (SBAC-PAD'08), Oct. 2008.}
+\newblock Luis Daniel Benavides Navarro, Rémi Douence, Fabien Hermenier, 
+Jean-Marc Menaud, and Mario Südholt. 
+
+\beamertemplatearticlebibitems \bibitem{Generalized2007}Generalized dynamic 
+probes for the Linux kernel and applications with Arachne 
+\newblock\emph{IADIS Applied Computing  - February 2007}
+\newblock Nicolas Loriant, Jean-Marc Menaud 
+
+\beamertemplatearticlebibitems \bibitem{Power20062}Power Management in Grid 
+Computing with Xen 
+\newblock\emph{Workshop on XEN in HPC Cluster and Grid Computing Environments 
+(XHPC 06) – December 2006}
+\newblock Fabien Hermenier, Nicolas Loriant, Jean-Marc Menaud 
+
+}
+\end{thebibliography}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{4th Author -- Gilles Muller} 
+\begin{frame}{4th Author -- Gilles Muller }
+
+Senior Research Scientist, INRIA REGAL 
+
+\begin{block}{Research interests}
+\begin{itemize}
+\item Design of Operating Systems, using domain-specific languages
+\end{itemize}
+\end{block}
+
+\includegraphics[width=0.6\textwidth]{Gilles_Muller.jpg} 
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Abstract and Introduction} 
+
+\subsection{Abstract} 
+
+\begin{frame}{Absctract}
+
+Datacenters provide an economical and practical solution for hosting
+large scale \alert{n-tier Web applications}. Realizing these benefits in practice,
+however, requires that replicas be assigned to datacenter nodes according to
+certain \alert {placement constraints }.
+
+
+
+\begin{block}{\Plasma}<2->
+An approach for hosting \alert{highly available} Web
+applications, based on \alert{dynamic consolidation} of virtual machines and 
+\alert{placement constraint} descriptions.
+\end{block}
+
+\begin{block}{Keywords}<3->
+VM placement, cloud computing, high-availability, dynamic consolidation, datacenter
+\end{block}
+
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{Experiments}
+
+\begin{columns}[t]
+\column{0.3\textwidth}
+
+
+\begin{block}{Simulation}<1->
+\begin{itemize}
+\item 2000 nodes 
+\item 4000 VMs 
+\item 800 placement
+\end{itemize}
+\end{block}
+
+\column{0.6\textwidth}
+
+\begin{block}{Real}<2->
+\begin{itemize}
+\item 8 working nodes 
+\item 3 RUBiS instances
+\item 21 VMs continuous consolidation 
+\item able to reach 85\% of the load 
+\end{itemize}
+\end{block}
+
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introduction} 
+
+\begin{frame}{Introduction}
+
+\begin{itemize}
+\item<1-> Most modern Web applications must be both \alert{highly available (HA)} 
+and \alert{scalable}. 
+\item<2-> Replicas of a given tier are assigned to nodes in such as way as that 
+there is \alert{no single point of failure}. 
+\item<3-> Replicas of stateful tiers should be placed on nodes that provide an 
+\alert{acceptable latency}. 
+\item<4-> Datacenter administrator must ensure that the \alert{placement constraints}.
+\item<5-> Most previous dynamic consolidation systems optimize the placement of 
+the VMs according to
+their resource usage, but do \alert{NOT} consider the \alert{application 
+placement constraints}
+that are required to achieve both HA and scalability. 
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{frame}{\Plasma}
+\begin{itemize}
+\item<1-> We propose a dynamic consolidation manager, \Plasma, that
+can be configured to take into account not only \alert{resource constraints} 
+but also the \alert{placement constraints} of HA applications. 
+
+\item<2-> Configuration is made through scriptsthat allows the datacenter 
+administrator to describe the datacenter infrastructure
+and each application administrator to describe the placement constraints
+of the application’s VMs. 
+
+\item<3-> \Plasma is built around a core reconfiguration algorithm
+that can be dynamically customized by the configuration scripts. column
+
+\item<4-> Overall, our approach provides \alert{efficient dynamic consolidation} while 
+\begin{enumerate}
+\item<5-> guaranteeing to
+the application administrator that \alert{placement requirements} will be 
+satisfied and
+\item<6-> relieving the datacenter administrator of the burden of considering 
+the \alert{ constraints
+of the applications} when performing maintenance.
+\end{enumerate}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Main results}
+\begin{itemize}
+\item<1-> \alert{An extensible reconfiguration algorithm} which only considers an estimation
+of the misplaced VMs when a reconfiguration is required. This approach
+makes \Plasma scalable to datacenter of thousands of nodes.
+\item<2-> A deployment on a real cluster of 12 nodes. An experiment running 3
+instances of the RUBiS benchmarks with 21 VMs show that continuous
+consolidation can react rapidly to overload situations and can reach 
+\alert{85\%} of the load of a 21 working node cluster.
+\item<3-> Experiments on simulated data show that our implementation of the 
+reconfiguration algorithm scales well up to a datacenter of \alert{2000 nodes, 4000
+VMs, and 800 placement constraints} and solves such problems in \alert{less than
+2 minutes}.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Design and Implement} 
+\section{Plasma Desgin} 
+\subsection{Configuration scripts} 
+
+\begin{frame}{Configuration scripts}
+
+\begin{block}{Design goals}
+\begin{enumerate}
+\item<1-> to allow a datacenter
+administrator to manage the datacenter’s nodes without any knowledge of the
+placement constraints specified by the hosted applications, 
+\item<2-> to allow an application administrator to express constraints on the 
+placement of the VMs that run the application tier replicas, without detailed 
+knowledge of the infrastructure and without knowledge of the other hosted 
+applications.
+\end{enumerate}
+\end{block}
+
+\begin{block}{kinds of constraints}<3->
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+ban, fence & 
+\begin{minipage}[c]{0.7\textwidth}
+datacenter administrator to specify constraints induced by administrative tasks
+\end{minipage}
+\\
+\hline
+spread, latency & 
+\begin{minipage}[c]{0.7\textwidth}
+application administrators to specify the constraints on the relative placement of an application’s VMs.
+\end{minipage}
+\\
+\hline
+\end{tabular}
+\end{center}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Describing a datacenter I }
+\includegraphics[width=\textwidth]{figure1.png} 
+
+\pause{}
+
+The datacenter administrator must describe the
+available nodes, their roles, and the connections between them.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Describing a datacenter II}
+
+\includegraphics[width=\textwidth]{list1.png} 
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Describing an application I}
+\includegraphics[width=\textwidth]{figure2.png} 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Describing an application II}
+\includegraphics[width=0.9\textwidth]{list2.png} 
+
+Listing 2: Description of the HA application \$A1 depicted in Figure 2 for the
+datacenter described in Listing 1.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Architecture of the Plasma Consolidation Manager} 
+\begin{frame}{Plasma Consolidation Manager}
+The role of the Plasma Consolidation Manager is to maintain the datacenter in
+a configuration, i.e. an assignment of VMs to nodes
+\pause{}
+\begin{description}
+\item[viable] in that all the running VMs have access to sufficient resources
+\pause{}
+\item[consistent] with all the constraints specified by the datacenter 
+administrator and the application administrators. 
+\pause{}
+\end{description}
+\pause{}
+The Plasma consolidation manager runs on a service node and
+initiates the reassignment of VMs to nodes when it detects that the current
+configuration is not viable. It consists of four modules (see Figure 3) that are
+executed iteratively within an infinite control loop.column
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Plasma control loop}
+\includegraphics[width=\textwidth]{figure3.png} 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink=5]{The monitoring module
+	\includegraphics[width=0.3\textwidth]{figure3.png} }
+
+The monitoring module retrieves the current state
+of each node and each running VM using the distributed monitoring system
+\alert{Ganglia}. One set of sensors, running on the top of the VMs, retrieves
+information about the VMs’ current resource consumption while another set
+of sensors, running on the top of the VMMs, retrieves information about the
+VMMs’ resource capacity and the names of the VMs they host.
+\br \pause{}
+The computing capacity of a node and the CPU consumption of a VM are expressed using a
+unit, called \alert{uCPU} that follows the principles of Amazon EC2 instances. It
+provides a consistent characterization of CPU capacity that is not related to the
+underlying hardware.
+\br \pause{}
+All of these sensors regularly send statistics about the
+current state of the monitored element to a collector that is connected to the
+consolidation manager. When the collector does not receive statistics about a
+node or a VM for 20 seconds, it considers this element as offline.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The provisioning module
+	\includegraphics[width=0.5\textwidth]{figure3.png} }
+
+The provisioning module continuously estimates
+the \alert{uCPU} and \alert{memory} requirements of each VM based on the information
+collected by the monitoring module. The resource usage of the replicas may
+change over the time, depending of the time of day, the number of clients or
+the type of the requests executed by the application. The provisioning module
+thus predicts the resource usage of a VM based on the recent changes in its
+consumption.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The plan module
+	\includegraphics[width=0.3\textwidth]{figure3.png} }
+
+The plan module uses the configuration scripts provided by
+the datacenter administrator and the application administrators, the resource
+demand estimation provided by the provisioning module and the state of all
+the VMs to \alert{determined the viability} of the current configuration.
+\pause{} 
+\begin{itemize}
+\item If all the
+VMs have access to the required uCPU and memory resources, and all the
+placement constraints are satisfied, then the configuration is viable and the
+consolidation manager restarts the control loop. 
+\pause{}
+\item If the current configuration is
+no longer viable, the plan module computes a new placement of the VMs that
+represents a viable configuration. 
+\end{itemize}
+\pause{}
+Based on this information, it then computes a
+\alert{reconfiguration plan}, consisting of a serie of \alert{migrations and 
+launch actions} that
+will relocate the VMs from their current nodes to the nodes indicated by the
+computed placement.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The execution module
+	\includegraphics[width=0.5\textwidth]{figure3.png} }
+
+The execution module applies a reconfiguration plancolumn
+by performing all of the associated actions. As some action may depend on
+the completion of the other actions, the scheduling plan produced by the plan
+module is adapted to prevent the failure of the reconfiguration process if the
+actual duration of an action exceeds the estimated value.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reconfiguration Example} 
+\begin{frame}{Partial sample configurations}
+
+\begin{columns}[t]
+\column{0.45\textwidth}
+\begin{block}{Figure 1}
+\includegraphics[width=\textwidth]{figure1.png}
+\end{block}
+\column{0.45\textwidth}
+\begin{block}{Figure 2}
+\includegraphics[width=\textwidth]{figure2.png}
+\end{block}
+\end{columns}
+\pause{}
+Given the datacenter described in Listing 1 and the application defined in Listing
+2, Figure 4(a) depicts a non-viable VM configuration. 
+\pause{}
+\begin{enumerate}
+\item the uCPU demand of VM5 is not satisfied because WN1 does not provide sufficient
+uCPU resources for both VM5 and VM8, 
+\pause{}
+\item the node WN5 hosts VM7 while the use
+of this node has been banned by the administrator for maintenance.
+\end{enumerate}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Partial sample configurations}
+\includegraphics[width=\textwidth]{figure4.png}
+
+Figure 4: Partial sample configurations for the application described in Listing
+ 2, running on the datacenter described in Listing 1. Each graph denotes the
+uCPU (y-axis) and memory (x-axis) capacity of a node. Each box denotes the
+estimated resource demand of a VM. VM4 is waiting to be launched while other
+VMs are running.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Reconfiguration plan}
+
+\begin{columns}[t]
+\column{0.4\textwidth}
+
+\begin{block}{Table 1}
+\begin{center}
+\begin{tabular}{|c|c||l|}
+\hline     
+Start & End & Action \\
+\hline     
+ 0'0  & 0'5  & launch(VM4) \\
+ 0’0  & 0'10 & migrate(VM9) \\
+0'10  & 0'20 & migrate(VM8) \\
+0'20  & 0'30 & migrate(VM7) \\
+\hline     
+\end{tabular}
+\end{center}
+
+Table 1: Reconfiguration plan to reach the viable configuration in Figure 4(b)
+from the non-viable configuration in Figure 4(a). The launch and migration
+durations for a VM are estimated to be 5 and 10 seconds, respectively.
+
+\end{block}
+
+
+
+\column{0.5\textwidth}
+{
+
+\pause{}
+In order to ensure the feasibility of
+the reconfiguration process, the migration of VM7 to WN1 cannot be performed
+until VM8 is migrated to WN2 because WN1 does not initially have sufficient free
+resources to accommodate it. 
+
+\br \pause{}
+In addition, migrating VM8 to N2 before migrating
+VM9 on WN3 breaks the spread constraint on the tier \$T3. The plan module then
+computes a schedule for executing the actions, resulting in the reconfiguration
+plan shown in Table 1.
+
+}
+\end{columns}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementing the Plan Module} 
+
+\begin{frame}{Implementing the Plan Module} 
+The plan module relies on a \alert{core reconfiguration algorithm} that takes 
+into account the memory and CPU demands of the VMs provided by the provisioning
+module. 
+\br \pause
+The implementation is based on \alert{constraint programming}, which
+allows it to be easily extended with placement constraints provided by the datacenter
+administrator and the application administrators. The plan module
+analyzes new Plasma descriptions as they are provided. It then updates the
+core reconfiguration algorithm according to the new constraints.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Constraint Programming} 
+\begin{frame}[shrink=5]{Constraint Programming} 
+
+CP can determine a \alert{globally optimal solution}, if one exists,
+by using a pseudo exhaustive search based on depth-first search. The idea of
+CP is to model a problem by stating \alert{constraints} that must be
+satisfied by the solution. 
+\pause{}
+
+\begin{block}{Constraint Satisfaction Problem}
+\begin{description}
+\item[set of constants] describing the current state
+\pause{}
+\item[set of variables] for which an assignment is to be determined by the constraint solver
+\pause{}
+\item[set of domains] representing the set of possible values for each variable 
+\pause{}
+\item[set of constraints] that represent required relations between the values of the variables.
+
+\end{description}
+\end{block}
+
+\pause{}
+
+To make the implementation
+of a CSP as scalable as possible, the challenges are to model the problem
+using the most appropriate \alert{basic constraints} and to implement 
+\alert{domain-specific} heuristics to guide the solver efficiently to a solution. 
+\br \pause{}
+Concretely, the Plasma consolidation manager is written in Java and uses the constraint
+solver \alert{Choco} which provides an implementation for the constraints composing our model.
+
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{The Core Reconfiguration Algorithm}
+\begin{frame}[shrink=5]{The Core Reconfiguration Algorithm}
+
+\begin{columns}[t]
+\column{0.5\textwidth}
+\begin{block}{Reconfiguration Problem}
+Computing a viable configuration requires choosing a hosting node for each
+VM that satisfies its resource requirements, and planning the actions that will
+convert the current configuration to the chosen one.
+\end{block}
+\pause{}
+
+\column{0.4\textwidth}
+\begin{block}{Terms}
+a set of nodes $N$ \\
+a set of virtual machines $V$ \\
+each node $n_j \in N$ is denoted by \\
+memory capacity $n^{mem}_j $ \\
+uCPU capacity $n^{cpu}_j$
+\end{block}
+\end{columns}
+\pause{}
+
+\begin{columns}[t]
+\column{0.47\textwidth}
+\begin{block}{consuming slice ($c-slice$)}
+$c_i \in C$ is when a VM $vi$ is running
+on some node at the beginning of the reconfiguration process before migration.
+$c^h_i = j$ indicates that the c-slice of the VM $v_i$ is running on the
+node $n_j$ . Until the end of the slice $c^{ed}_i$ ,
+the VM is considered to use a constant amount of uCPU $c^{cpu}_i$ and memory $c^{mem}_i$
+resource equal to its current consumption.
+\end{block}
+\pause{}
+
+\column{0.47\textwidth}
+\begin{block}{demanding slice ($d-slice$)}
+$d_i \in D$ is when a VM $v_i$ is running
+on some node at the end of the reconfiguration process. $d^h_i = j$
+indicates that VM $v_i$ is hosted on the node $n_j$ . 
+The d-slice $d_i$ starts at the moment $d^{st}_i$ and 
+ends at the moment $d^{ed}_i$ . The VM is considered
+to use $d^{cpu}_i$ and $d^{mem}_i$ equal to the demand computed by the provisioning module.
+
+\end{block}
+\end{columns}
+
+\end{frame} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}<1>[label=modelactions]{Modeling the actions}
+\uncover<1>{The assignment of the VMs to nodes may lead to the
+execution of several actions A. The variables $a^{st}_i$ and $a^{ed}_i$ denote respectively
+the moments when an action $a_i$ starts and ends. The duration of an action can
+be estimated and modeled from experiments. The datacenter administrator
+provides, using two cost functions, a theoretical estimation of the cost of
+migration and launch actions, in terms of the amount of allocated memory and
+the uCPU consumption of the involved VM.}
+\br
+\uncover<2>{Solving a RP consists of computing a value for each $d^h_i$ and $a^{st}_i$ . The chosen
+values for these variables then indicate how to create a reconfiguration plan that
+contains all the actions to perform and a moment for each action to start that
+ensures its feasibility with regards to its theoretical duration.}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Modeling the actions -- launch action}
+\includegraphics[width=\textwidth]{figure5.png} 
+
+Figure 5: A placement of the waiting VM VM1 that will result in a launch
+action. The action will start at the beginning of the d-slice. The hatched
+section indicates the duration of the action.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Modeling the actions -- migration action}
+\includegraphics[width=\textwidth]{figure6.png} 
+
+Figure 6: A re-placement of the running VM VM3 that will result in a migration
+action. The action will start at the beginning of the d-slice and terminate at
+the end of the c-slice.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\againframe<2>{modelactions}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{VM placement}
+To run the VMs at peak level, a node must not host slices
+with a total uCPU or memory consumption greater than its capacity. The final
+configuration is determined by the placement of the d-slices. To place the d-slices
+with regard to their resource demand, we use the \alert{bin-packing} constraint .
+As this constraint can only account for one resource, we use two instances, one
+for the uCPU resource and another for the memory resource.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Scheduling the actions}
+To ensure the
+feasibility of the reconfiguration process, incoming actions can only be executed
+once there is a sufficient amount of free uCPU and memory resources on the
+hosting node. This implies that it may be necessary to \alert{execute some outgoing
+actions on a node prior to some incoming actions}, to free the required resources.
+\br \pause{}
+Dependencies between several migrations may be \alert{cyclic}. A common solution
+is to use an additional bypass migration on a temporary pivot node to break the
+cycle. The selected pivot node hosting the VM must then satisfy all
+the constraints. Our model allows at most one migration per VM and selects
+both the placement of the VMs and the scheduling of the actions in a single
+reconfiguration problem.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Evaluating a solution}
+Given a notion of cost, a constraint solver can compare possible solutions,
+and only return the one that has the lowest cost. Given that both migrating
+a VM and delaying this migration have an impact on the overall performance,
+we construct a notion of cost that takes both of these durations into account.
+\br \pause{}
+Specifically, the cost $K$ of a reconfiguration corresponds to the \alert{sum of the elapsed
+time} between the moment when the reconfiguration starts and the moment when
+each reconfiguration action has completed. This measure takes into account the
+number of actions, their execution time, and their delay. $K$ divided by the
+number of launch and migration actions gives an approximation of the duration
+of the reconfiguration process.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Optimizing the solving process}
+Computing a solution for the RP may
+be time consuming for large datacenters as selecting a host for each VM and
+planning the actions is an \alert{NP-hard} problem.
+\br \pause{}
+The placement variables of the other
+running VMs will be assigned to their current location before starting the solving
+process. 
+\br \pause{}
+The solver first replaces the VMs that are
+hosted on nodes than cannot handle their resource demand, as some of them
+will necessarily be migrated. Then the solver focuses on the other VMs. To
+reduce as much as possible the cost of the reconfiguration plan, the solver tries
+to place the running VMs in their current location. Finally, it tries to start the
+d-slices as early as possible.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Implementing Plasma Placement Constraints} 
+\begin{frame}{Implementing Plasma Placement Constraints}
+\begin{description}
+\item[spread] the implementation of spread uses a \alert{allDifferent} constraint.
+In addition, to ensure that the specified VMs never overlap on
+a same node during the reconfiguration process, implies constraints are used to
+delay the arrival of a d-slice on a node until the c-slices of the other involved
+VMs have terminated on this node. 
+ \pause{}
+\item[latency] The Plasma latency constraint forces a set of VMs to be hosted on a
+single group of nodes that belong to the latency class specified in parameter.
+ \pause{}
+\item[fence] The Plasma fence constraint forces a set of VMs to be hosted on a
+single group of specified nodes. The constraint is implemented using a domain
+restriction. 
+ \pause{}
+\item[ban] The Plasma ban constraint prevents a set of VMs from being hosted
+on a given set of nodes. It is thus the opposite of the fence constraint. The
+implementation of ban uses also a domain restriction. 
+\end{description}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{constraint spread({VM1,VM2})}
+\includegraphics[width=\textwidth]{figure7.png} 
+
+Figure 7: Using the constraint spread({VM1,VM2}), VM1 and VM2 are never
+hosted on a same node at the same moment to provide a full protection against
+SPOF.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\part{Evaluation and Extension} 
+\section{Evaluation of Plasma} 
+\begin{frame}{Evaluation of Plasma}
+The goal of the Plasma consolidation manager is to \alert{consolidate VMs while ensuring
+HA and scalability requirements}. However, the RP is a NP-Hard problem
+and thus has a \alert{potentially high computation cost} for large scale clusters. 
+ \pause{}
+\begin{itemize}
+\item We first demonstrate that dynamically consolidating VMs is interesting in practice, by
+evaluating Plasma on a small cluster of 12 nodes using the RUBiS benchmark 
+and demonstrate that dynamically consolidating VMs is interesting in practice.
+ \pause{}
+\item We then investigate the scalability of the Plasma reconfiguration algorithm and
+the impact of the placement constraints by simulating VM reconfigurations for
+a datacenters of up to 2000 nodes.
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Evaluating the benefit of Plasma using RUBiS} 
+\begin{frame}{Evaluating the benefit of Plasma using RUBiS}
+\begin{columns}[t]
+\column{0.4\textwidth}
+3 service nodes export the RUBiS VM images and run the benchmarks.
+The 4th service node runs the Plasma consolidation manager with at most
+10 seconds to compute a reconfiguration plan.
+\br
+ Requests involving dynamic content are distributed by each Apache service to Tomcat
+services using mod\_jk 1.2.28. 
+\br
+SQL queries executed in a Tomcat service are
+distributed to MySQL services using Connector/J 5.1.13. 
+\column{0.55\textwidth}
+\begin{block}{experimental cluster}
+\begin{itemize}
+\item 8 working nodes (WN1 to WN8) \\
+\item 4 service nodes \\
+\item a Gigabit network \\
+\br
+\item 2.1 GHz Intel Core 2 Duo, 4 GB \\
+\item Xen 3.4.2, Linux-2.6.32 \\
+\item 2.1 uCPU and 3.5 GB RAM \\
+\br
+\item 3 instances of RUBiS A1, A2, and A3 \\
+\item each 7 VMs (for a total of 21 VMs) \\
+
+\end{itemize}
+\end{block}
+\end{columns}
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Plasma description of the environment}
+\includegraphics[width=0.8\textwidth]{list3.png} 
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Recovering from load spikes}
+\includegraphics[width=\textwidth]{figure8.png} 
+
+Figure 8: Number of simulated clients during the execution of the experiment
+for each instance.
+\br
+ \pause{}
+\begin{description}
+\item[without consolidation] each VM is hosted by a separate
+node satisfying its placement constraints. This strawman approach evaluates
+the maximum performance of the Web applications.
+ \pause{}
+\item[static consolidation] we deploy a configuration that is viable with regards to
+the placement constraints of the VMs and their average resource consumption
+according to the initial set of clients.
+ \pause{}
+\item[dynamic consolidation] Plasma performs reconfiguration when the addition of new clients causes
+the configuration to become non-viable.
+ \pause{}
+\end{description}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{throughput of each instance}
+\includegraphics[width=0.8\textwidth]{figure9.png} 
+
+Figure 9: Average throughput of the instances with their associated standard
+error (maximum 10 req/s.) over 5 repetitions of the experiments.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Recovering from external events}
+
+\begin{block}{Table 2}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+Time   &   Event      &     Reconfiguration \\ \hline\hline
+ 2'10  & + ban({WN8}) & 3 + 3 migrations in 0'42 \\ \hline
+ 4'30  & + ban({WN4}) & 2 + 7 migrations in 1'02 \\ \hline
+ 7'05  & - ban({WN4}) &   no reconfiguration \\ \hline
+11'23  & + ban({WN4}) &      no solution \\ \hline
+11'43  & - ban({WN8}) &  2 migrations in 0'28 \\ \hline
+       & + ban({WN4}) & \\ \hline
+\end{tabular}
+\end{center}
+Table 2: External events that occurred during RP-HA. ’+’ indicates a constraints
+injection while ’-’ indicates a removal.
+\end{block}
+
+
+   Table 2 summarizes the structure of the experiment. At various times, ban
+constraints are added ($+$) or removed ($−$) to allow maintenance. We simulate
+node failure, by injecting a ban constraint which results in the same effect.
+Each time the configuration is observed to be non-viable, the solver is allocated
+10 seconds to determine a new configuration. Table 2 shows the number of
+migrations performed and their duration.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Scalability of Plasma}
+\begin{frame}{Scalability of Plasma}
+
+The difficulty of solving a RP depends on the following parameters: the resource
+demands (both uCPU and RAM), the specified constraints and the number of
+VMs and nodes. We evaluate the impact of each of these parameters by generating 
+non-viable configurations of a datacenter hosting HA Web applications, then
+we analyze the duration of the solving process and the resulting reconfiguration
+process.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The simulated datacenter}
+\includegraphics[width=0.8\textwidth]{list4.png} 
+
+Listing 4: The simulated datacenter. Nodes in \$R1 and \$R2 have a capacity of
+8 uCPU and 32 GB RAM. Nodes in \$R3 and \$R4 have a capacity of 14 uCPU
+and 48 GB RAM.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The simulated HA Web application}
+\includegraphics[width=0.6\textwidth]{list5.png} 
+
+Listing 5: A simulated HA Web application. VMs in \$T1 and \$T2 use 7.5 GB
+RAM and at most 4 uCPU each (large instances in the Amazon EC2 terminology). 
+VMs in \$T3 use 17.1 GB RAM and at most 6.5 uCPU each (high-memory
+extra-large instances).
+
+\br
+Each tier of the applications is replicated as described in
+Listing 5, amounting to 20 replicas per application. A total of 400 VMs are thus
+hosted by the datacenter. 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The simulated setup}
+All the VMs are assigned randomly to nodes satisfying their constraints, taking 
+into account their memory requirement but not their uCPU consumption.
+The uCPU consumption of each VM is then chosen randomly between 0 and
+its maximum usage, which may induce non-viable configurations. We finally
+simulate hardware failures, with 1\% of the nodes being taken off-line.
+\br \pause{}
+    We run the Plasma plan module on a dual processor quad-core Intel Xeon-
+L5420 at 2.5 GHz and 32 GB RAM, of which we use only one core. The node
+runs Linux 2.6.26-2-amd64 and Sun’s JVM 1.6u21 with 5 GB RAM allocated
+to the heap at startup. 
+\br \pause{}
+To evaluate the impact of application specific placement
+constraints, the plan module is run in two modes: (RP-Core) without the 
+application placement constraints, and (RP-HA) with the application constraints.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ Impact of the global uCPU demand I}
+In a first experiment, the plan module is run on configurations with a global 
+application uCPU demand varying
+between 50\% and 80\% of the total uCPU capacity of the datacenter. The plan
+module was allocated 2 minutes to solve the RP. This was repeated 100 times.
+For all the RPs, Plasma was able to compute at least a solution.
+ \pause{}
+\begin{block}{Impact of the global uCPU }
+\includegraphics[width=\textwidth]{figure10.png} 
+
+Figure 10: Impact of the global uCPU on the solving process.
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink=6]{ Impact of the global uCPU demand II}
+
+\begin{block}{Figure 10}
+\begin{center}
+\begin{columns}[t]
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{figure10a.png}
+\column{0.2\textwidth}
+\includegraphics[width=\textwidth]{figure10b.png}  
+\column{0.2\textwidth}
+\includegraphics[width=\textwidth]{figure10c.png} 
+\end{columns}
+\end{center}
+\end{block}
+
+Figure 10(a) shows the number of VMs selected as candidates by the plan
+module. We observe that this number increases with the uCPU load. While
+only 54 running VMs are indeed selected for a load of 50\%, 224 VMs (56\% of all
+the running VMs) are selected for a load of 80\%. 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ Impact of the global uCPU demand III}
+
+\begin{block}{Figure 10}
+\begin{center}
+\begin{columns}[t]
+\column{0.2\textwidth}
+\includegraphics[width=\textwidth]{figure10a.png}
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{figure10b.png}  
+\column{0.2\textwidth}
+\includegraphics[width=\textwidth]{figure10c.png} 
+\end{columns}
+\end{center}
+\end{block}
+
+Figure 10(b) shows the average
+time for the plan module to compute the first solution. We observe that the
+solving duration slightly increases with the global uCPU load from 0.2 seconds
+to 1.5 seconds. 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{ Impact of the global uCPU demand IV}
+
+\begin{block}{Figure 10}
+\begin{center}
+\begin{columns}[t]
+\column{0.2\textwidth}
+\includegraphics[width=\textwidth]{figure10a.png}
+\column{0.2\textwidth}
+\includegraphics[width=\textwidth]{figure10b.png}  
+\column{0.5\textwidth}
+\includegraphics[width=\textwidth]{figure10c.png} 
+\end{columns}
+\end{center}
+\end{block}
+
+Figure 10(c) that the cost
+of the computed reconfiguration plans increases with the global uCPU load.
+When a larger number of candidate VMs are selected, more VMs could have to
+be migrated to reach a viable configuration. 
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Impact of the constraint types}
+We set the global uCPU demand to 60\% and define three scenarios, each extending
+ RP-HA with different constraints. In RP-HA-sl, the latency constraint
+(Listing 5, line 7) uses the latency class \$small instead of \$medium, as used by
+RP-HA. In RP-HA-ban, the nodes WN0 through WN11 are made unavailable using a
+ban constraint. In RP-HA-fence, two fence constraints place applications \$A1
+to \$A5 on \$P1, and applications \$A6 to \$A10 on \$P2.
+
+ \pause{}
+\begin{block}{Impact of the constraints}
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Situation   & solved & duration & cost \\\hline\hline
+RP-HA       & 100 \% &   0.3 s  & 366 \\ \hline
+RP-HA-sl    & 100 \% &   0.5 s  & 384\\ \hline
+RP-HA-ban   &  96 \% &   0.7 s  & 1160\\ \hline
+RP-HA-fence &  51 \% &   0.3 s  & 619\\ \hline
+\end{tabular}
+\end{center}
+\end{block}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Impact of the problem size}
+We have defined 6 sets of
+configurations that differ in the number of VMs and nodes. 
+\begin{description}
+\item[x1] the standard simulated datacenter, with 400 VMs and 200 nodes. 
+\item[x2 to x10] are 2 to 10 times the size of the set x1.
+\item[x10] is then composed of configurations with 2000 nodes and 4000 VMs. 
+\end{description}
+
+The global uCPU demand
+is set to 60\%. We give the solver 10 minutes in order to allow it to compute a
+solution in each of the modes RP-Core and RP-HA. For both RP-Core and RP-HA
+at least one solution was computed for all the problems.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Impact of infrastructure size}
+\includegraphics[width=\textwidth]{figure11.png} 
+
+It takes to the solver
+ony an average of 100 seconds to solve an RP-HA problem.
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Extending Plasma with new constraints} 
+\begin{frame}{Extending Plasma with new constraints}
+The constraints spread and latency provide an application administrator with
+the foundations for a viable deployment of an HA application. Similarly, the
+constraints ban and fence provide a datacenter administrator with tools for
+common system maintenance tasks. Nevertheless, in a datacenter with a focus
+on different concerns, it may be useful to provide additional constraints. For
+example, placement constraints may be used to prevent disk I/O bottlenecks
+when VMs disk images are stored on the hosting nodes rather than on remote file
+servers. A datacenter administrator may also want to constrain the placement
+of the VMs to balance the network bandwidth usage.
+\br
+    Contrary to a rule based engine or an adhoc heuristic, the plan module
+of Plasma can be easily extended as it provides a deterministic composition
+of the placement constraints. Each placement constraint of Plasma is already
+considered as a plugin, loaded on demand, that contains the signature of the
+constraint for the configuration language and its implementation using the API
+of the constraint solver. A developer can thus model a new placement constraint
+in the same way, and link this model to the variables of the core RP just as the
+latency constraint.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Related Works, Conclusion and Future Work} 
+\section{Related Work} 
+\begin{frame}[allowframebreaks]{Dynamic consolidation}
+
+Nathuji et al. [16] present power efficient mechanisms to control and
+ coordinate the effects of various power management policies. This 
+includes the packing of VMs through live migration. Bobroff et al. [6]
+base their reconfiguration engine on a forecast service that predicts, for the next
+forecast interval, the resource demands of VMs, according to their history. Then
+the reconfiguration algorithm selects a node than can host the VMs during this
+time interval. To ensure efficiency, the forecast window takes into account the
+duration of the reconfiguration process. Verma et al. [23] additionally consider
+a power model to select the hosting nodes according to their power consumption. 
+Wood et al. [26] exploit the page sharing between the VMs to improve the
+packing. Finally, Yazir et al. [28] present a consolidation manager that takes
+into account a variable amount of weighted placement criteria related to the
+resource consumption of a VM: memory, CPU usage, latency, etc. Computing
+the placement of the VMs is decomposed into independent tasks, performed by
+multiple autonomous agents to improve scalability. All of these works provide
+heuristics that cannot be specialized with additional placement constraints that
+are required by application administrators and datacenter administrator.
+\br                                                                                                                                                             DRS [25] is a resource manager from VMWare that can be used to perform
+dynamic consolidation. It provides to the datacenter administrator a feature
+similar to the ban constraint and an affinity rule similar to spread. Latency
+and fence, however, are unavailable. Application administrators can not declare 
+themselves their placement requirements. In addition, actions performed
+by the datacenter administrator can supersede the inserted rules. This feature
+is error-prone as the administrator must manually ensure that the actions are
+compatible with all of the stated rules. Finally, to the best of our knowledge,
+rules are implemented as standalone heuristics that are considered individually.
+This limits the ability of DRS to compute reconfiguration plans that migrate
+additional VMs to solve complex configuration problems. In contrast, we provide 
+an approach that simultaneously considers all the constraints to compute a
+globally optimized solution. Hermenier et al. [12] provide an approach based on
+constraint programming to place VMs. Nevertheless, the reconfiguration algorithm
+ is partially based on a heuristic that cannot handle additional placement
+constraints such as spread. Finally, while Plasma selects only a small fraction
+of the running VMs as candidates to repair a non-viable configuration, Entropy
+considers all the running VMs, which limits its scalability to a few hundred of
+VMs and nodes.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[allowframebreaks]{Management of virtualized multi-tier applications}
+Urgaonkar et al. [21]
+propose a provisioning module to estimate the optimal number of replicas to
+run per tier to satisfy a workload. Each node hosts replicas of multiple tiers, but
+only one of these replicas is active at a given time. Depending on the intensity
+of each tier’s workload, a controller adjusts the ratio of activated replicas of the
+various tiers. Pradeep et al. [17] consider a datacenter that simultaneously hosts
+several multi-tier applications. VMs are statically placed by the datacenter
+administrator on the nodes. Then, a resource controller dynamically adjusts
+the distribution of resources to the individual tiers to meet the Service Level
+Agreements (SLA) of the application.
+\br
+Jung et al. [13] compute the number of replicas and the configuration offline.
+In addition, they use the SLAs to generate rules that are used online to adapt
+the scheduling policies of the VMM depending on the current resource demands
+of the VMs. Later, they extended their approach to generate relocation rules
+for the VMs to solve resource contention that take into account the cost of the
+migrations [14].
+\br
+These works focus on resource control policies so as to adapt the application 
+structure to the workload. However, they do not consider HA placement
+constraints.
+
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion and Future Work} 
+\begin{frame}{Reseach Conclusion}
+
+Consolidation of VMs allows multiple applications to share nodes within a 
+datacenter. However, modern applications have scalability and high availability
+requirements, and reconciling these requirements while allowing node sharing is
+challenging. We have proposed Plasma, a configurable consolidation manager
+allowing datacenter and application administrators to describe placement 
+constraints. Configuration scripts are interpreted on the fly to customize a core
+reconfiguration algorithm. The resulting specialized reconfiguration algorithm
+is then able to rearrange the placement of the VMs when the VMs do not have
+access to sufficient resources.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Experiments Conclusion}
+    Experiments on simulated data show that introducing placement constraints
+has a limited impact on the execution time of the reconfiguration algorithm. Our
+implementation can compute reconfigurations involving up to 4000 VMs, 2000
+nodes and 800 constraints less than 2 minutes. Real experiments on a cluster
+with 8 working nodes running 3 instances of the RUBiS benchmarks with a total
+of 21 VMs show that continuous consolidation allows this cluster to reach 85\%
+of the load of a cluster with 21 working nodes.
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Future Work}
+    In future work, we propose to improve the simulation mode of the plan module
+ so that a datacenter administrator may use it as a planning tool. We also
+plan to integrate additional types of constraints, e.g. on power consumption, so
+as to be able to optimize the datacenter’s use of energy when the application
+demand is low. We also plan to consider placement constraints that can be
+violated with a penalty expressed using high-level metrics. Finally, we plan to
+improve the scalability of the plan module by detecting independent subproblems 
+that can be solved in parallel using multiple cores.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{References} 
+\begin{frame}[allowframebreaks]{References}
+
+\begin{thebibliography}{2}
+
+{ 
+\small
+\beamertemplatearticlebibitems \bibitem{Amazon} [1] Amazon EC2 Instance Types. \newblock\emph \newblock http://aws.amazon.com/ec2/instance-types/.
+\beamertemplatearticlebibitems \bibitem{Algorithms2010Anderson} Algorithms for data migration. \newblock\emph{[2]  Algorithmica 57 (2010), 349–380. 10.1007/s00453-008-9214-y.}\newblock Anderson, E., Hall, J., Hartline, J., Hobbes, M., Karlin, A., Saia, J., Swaminathan, R., and Wilkes, J.
+\beamertemplatearticlebibitems \bibitem{Xen2003Barham} Xen and the art of virtualization.\newblock\emph{[3]   In 19th ACM Symposium on Operating Systems Principles (Oct. 2003), ACM Press, pp. 164–177.}\newblock Barham, P., Dragovic, B., Fraser, K., Hand, S., Harris, T., Ho, A., Neugebauer, R., Pratt, I., and Warfield, A.
+\beamertemplatearticlebibitems \bibitem{cumulatives2002Beldiceanu} A new multi-resource cumulatives constraint with negative heights.\newblock\emph{[4]  In CP ’02: 8th International Conference on Principles and Practice of Constraint Programming (2002), Springer-Verlag, pp. 63–79.}\newblock Beldiceanu, N., and Carlsson, M. 
+\beamertemplatearticlebibitems \bibitem{Global2005Beldiceanu} Global constraint catalog.\newblock\emph{[5]  Tech. Rep. T2005-08, Swedish Institute of Computer Science, 2005.}\newblock Beldiceanu, N., Carlsson, M., and Rampon, J.-X. 
+\beamertemplatearticlebibitems \bibitem{Dynamic2007Bobroff} Dynamic placement of virtual machines for managing SLA violations.\newblock\emph{[6]  Integrated Network Management, 2007. IM ’07. 10th IFIP/IEEE International Symposium on (May 2007), 119–128.}\newblock Bobroff, N., Kochut, A., and Beaty, K. 
+\beamertemplatearticlebibitems \bibitem{Performance2003Cecchet} Performance comparison of middleware architectures for generating dynamic web content.\newblock\emph{[7]  In Middleware ’03: Proceedings of the ACM/IFIP/USENIX 2003 International Conference on Middleware (New York, NY, USA, 2003), Springer-Verlag New York, Inc., pp. 242–261.}\newblock Cecchet, E., Chanda, A., Elnikety, S., Marguerite, J., and Zwaenepoel, W. 
+\beamertemplatearticlebibitems \bibitem{Choco2010} Choco: an open source Java constraint programming library. \newblock\emph{[8] Research report 10-02-INFO, , 2010.}\newblock Ecole des Mines de Nantes
+\beamertemplatearticlebibitems \bibitem{Live2005Clark} Live migration of virtual machines. \newblock\emph{[9]  In 2nd ACM/USENIX Symposium on Networked Systems Design and Implementation (NSDI ’05) (May 2005), pp. 273–286.}\newblock Clark, C., Fraser, K., Hand, S., Hansen, J. G., Jul, E., Limpach, C., Pratt, I., and Warfield, A.
+\beamertemplatearticlebibitems \bibitem{algorithms2001Hall} On algorithms for efficient data migration. \newblock\emph{[10] In Proceedings of the twelfth annual ACM-SIAM symposium on Discrete algorithms (Philadelphia, PA, USA, 2001), SODA ’01, Society for Industrial and Applied Mathematics, pp. 620–629.}\newblock Hall, J., Hartline, J., Karlin, A. R., Saia, J., and Wilkes, J. 
+\beamertemplatearticlebibitems \bibitem{Cluster-wide2010Hermenier} Cluster-wide context switch of virtualized jobs. \newblock\emph{[11] In VTDC10 - The 4th International Workshop on Virtualization Technologies in Distributed Computing (June 2010).}\newblock Hermenier, F., Lèbre, A., and Menaud, J.-M. 
+\beamertemplatearticlebibitems \bibitem{Entropy2009Hermenier), } Entropy: a consolidation manager for clusters. \newblock\emph{[12] In VEE ’09: 2009 ACM SIGPLAN/SIGOPS international conference on Virtual execution environments (2009), ACM, pp. 41–50.}\newblock Hermenier, F., Lorca, X., Menaud, J.-M., Muller, G., and Lawall, J. 
+\beamertemplatearticlebibitems \bibitem{Generating2008Jung} Generating adaptation policies for multi-tier applications in consolidated server environments.\newblock\emph{[13]  In ICAC ’08: 2008 International Conference on Autonomic Computing (Washington, DC, USA, 2008), IEEE Computer Society, pp. 23–32.}\newblock Jung, G., Joshi, K. R., Hiltunen, M. A., Schlichting, R. D., and Pu, C. 
+\beamertemplatearticlebibitems \bibitem{cost-sensitive2009Jung} A cost-sensitive adaptation engine for server consolidation of multitier applications. \newblock\emph{[14]  In Middleware ’09: 10th ACM/IFIP/USENIX International Conference on Middleware (New York, NY, USA, 2009), Springer-Verlag, pp. 1–20.}\newblock Jung, G., Joshi, K. R., Hiltunen, M. A., Schlichting, R. D., and Pu, C.
+\beamertemplatearticlebibitems \bibitem{Ganglia2004Massie} The Ganglia distributed monitoring system: design, implementation, and experience. \newblock\emph{[15]  Parallel Computing 30, 7 (2004), 817 – 840.}\newblock Massie, M. L., Chun, B. N., and Culler, D. E.
+\beamertemplatearticlebibitems \bibitem{VirtualPower2007Nathuji} VirtualPower: Coordinated power management in virtualizaed entreprise systems. \newblock\emph{[16] In 21st Symposium on Operating Systems Principles (SOSP) (Oct. 2007).}\newblock Nathuji, R., and Schwan, K. 
+\beamertemplatearticlebibitems \bibitem{Adaptive2007Padala} Adaptive control of virtualized resources in utility computing environments. \newblock\emph{[17] In EuroSys ’07: 2nd ACM SIGOPS/EuroSys European Conference on Computer Systems 2007 (New York, NY, USA, 2007), ACM, pp. 289–302.}\newblock Padala, P., Shin, K. G., Zhu, X., Uysal, M., Wang, Z., Singhal, S., Merchant, A., and Salem, K.
+\beamertemplatearticlebibitems \bibitem{Handbook2006Rossi} Handbook of Constraint Programming (Foundations of Artificial Intelligence). \newblock\emph{[18] Elsevier Science Inc., New York, NY, USA, 2006.}\newblock Rossi, F., van Beek, P., and Walsh, T. 
+\beamertemplatearticlebibitems \bibitem{Autonomic2006Ruth} Autonomic live adaptation of virtual computational environments in a multi-domain infrastructure.\newblock\emph{[19]  In Autonomic Computing, 2006. ICAC ’06. IEEE International Conference on (2006), pp. 5–14.}\newblock Ruth, P., Rhee, J., Xu, D., Kennell, R., and Goasguen, S. 
+\beamertemplatearticlebibitems \bibitem{constraint2004Shaw} A constraint for bin packing. \newblock\emph{[20] In Principles and Practice of Constraint Programming (CP’04) (2004), vol. 3258 of Lecture Notes in Computer Science, Springer, pp. 648–662.}\newblock Shaw, P. 
+\beamertemplatearticlebibitems \bibitem{Agile2008Urgaonkar} Agile dynamic provisioning of multi-tier internet applications. \newblock\emph{[21] ACM Trans. Auton. Adapt. Syst. 3, 1 (2008), 1–39.}\newblock Urgaonkar, B., Shenoy, P., Chandra, A., Goyal, P., and Wood, T. 
+\beamertemplatearticlebibitems \bibitem{alldifferent2001Hoeve} The alldifferent constraint: A survey. \newblock\emph{[22] CoRR cs.PL/0105015 (2001). }\newblock van Hoeve, W. J. 
+\beamertemplatearticlebibitems \bibitem{pMapper2008Verma} pMapper: power and migration cost aware application placement in virtualized systems. \newblock\emph{[23] In Middleware ’08: 9th ACM/IFIP/USENIX International Conference on Middleware (New York, NY, USA, 2008), Springer-Verlag New York, Inc., pp. 243–264.}\newblock Verma, A., Ahuja, P., and Neogi, A. 
+\beamertemplatearticlebibitems \bibitem{Virtualization2010} Virtualization management index. \newblock\emph{[24] Tech. rep., VKernel, Dec. 2010.}\newblock
+\beamertemplatearticlebibitems \bibitem{VMWare2006} VMWare Infrastructure: Resource Management with VMWare DRS. \newblock\emph{[25]  Tech. rep., 2006.}\newblock
+\beamertemplatearticlebibitems \bibitem{buddies2009Wood} Memory buddies: exploiting page sharing for smart colocation in virtualized data centers. \newblock\emph{[26] In VEE ’09: 2009 ACM SIGPLAN/SIGOPS international conference on Virtual execution environments (2009), ACM, pp. 31–40.}\newblock Wood, T., Tarasuk-Levin, G., Shenoy, P., Desnoyers, P., Cecchet, E., and Corner, M. D. 
+\beamertemplatearticlebibitems \bibitem{Homeostatic2003Yang} Homeostatic and tendency-based CPU load predictions. \newblock\emph{[27] In IPDPS ’03: 17th International Symposium on Parallel and Distributed Processing (Washington, DC, USA, 2003), IEEE Computer Society, p. 42.2.}\newblock Yang, L., Foster, I., and Schopf, J. M. 
+\beamertemplatearticlebibitems \bibitem{DynamicYazir} Dynamic resource allocation in computing clouds using distributed multiple criteria decision analysis.\newblock\emph{[28]  pp. 91 –98.}\newblock Yazir, Y., Matthews, C., Farahbod, R., Neville, S., Guitouni, A., Ganti, S., and Coady, Y.
+
+}
+\end{thebibliography}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{The End}
+\begin{center}
+Thank you.
+\end{center}
+\end{frame}
+\end{document}
+

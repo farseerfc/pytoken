@@ -3,3 +3,5 @@ suffixtree-0.1.py.bak
 
 *.pdf
 *.dot
+
+__pycache__
