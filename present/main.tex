@@ -81,7 +81,7 @@
 
 \begin{frame}{Algorithm of Constructing Suffix Tree}%
 \begin{columns}%
-\transdissolve[duration=0.2]<2->
+\transfade[duration=0.2]<2->
 \column{0.5\textwidth}
 \includegraphics[width=\textwidth]{mississippi.pdf}
 
@@ -106,7 +106,7 @@ suffix-link relation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Experiment -- mississippi}
 
-\transdissolve[duration=0.1]<2->
+\transfade[duration=0.1]<2->
 \begin{overlayarea}{\textwidth}{\textheight}
 \includegraphics[keepaspectratio,height=0.9\textheight,width=0.9\textwidth]{m.pdf}<1>
 \includegraphics[keepaspectratio,height=0.9\textheight,width=0.9\textwidth]{mi.pdf}<2>
@@ -123,9 +123,10 @@ suffix-link relation
 \end{overlayarea}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Experiment -- English text}
+\begin{frame}[shrink=15]{Experiment -- English text}
 
-\includegraphics[angle=270,width=0.9\textwidth]{plot.ps}
+%\includegraphics[angle=270,width=0.9\textwidth]{plot.fig}
+\include{figure/plot}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Future works}

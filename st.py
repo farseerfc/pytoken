@@ -1,5 +1,3 @@
-INFINITY=1 << 20
-RANKING=True
 
 def log(string):
     if False:
@@ -7,44 +5,19 @@ def log(string):
         print(string,file=sys.stderr)
 
 class Node:
-    def __init__(self,node_id,suffix_link=None):
+    RANKING = True
+
+    def __init__(self,node_id,gen,suffix_link=None):
         self.children={}
         self.node_id=node_id
+        self.gen=gen
         self.suffix_link=suffix_link
-        self.gen=-1
 
     def is_leaf(self): # root is not leaf and has no suffix_link
         return self.suffix_link == None and self.node_id != 0 
 
     def __repr__(self):
         return str(self.node_id)+":"+str(self.gen)
-    
-    def drawdot(self,tree,gen):
-        tree_id = tree.tree_id
-        string = tree.string
-        leaf_str = ",shape=box" if self.is_leaf() else ""
-        leaf_str+= ",style=filled" if self.gen == gen else ""
-        print("\t\tt%dn%d [label=\"%r\"%s];"% \
-                (tree_id,self.node_id,self,leaf_str))
-        for edge in self.get_children():
-            edge.dst.drawdot(tree,gen);
-            if edge.end >= INFINITY:
-                edge_str = "(%d,∞)\\n" % (edge.begin) 
-            else:
-                edge_str = "(%d,%d)\\n" % (edge.begin,edge.end+1)
-            if edge.end - edge.begin <16:
-                edge_str += string[edge.begin:edge.end+1]
-            else:
-                edge_str += string[edge.begin:edge.begin+8]
-                edge_str += "..."
-                edge_str += string[edge.end-8:edge.end]
-            print("\t\tt%dn%d -> t%dn%d [label=\"%s\",weight=1];"% \
-                    (tree_id,self.node_id,tree_id, \
-                    edge.dst.node_id,edge_str))
-        if self.suffix_link != None:
-            print("\t\tt%dn%d -> t%dn%d [style=dotted,weight=0];"% \
-                (tree_id,self.node_id,tree_id,self.suffix_link.node_id))
-
     def get_children(self):
         child_list=[self[key] for key in self]
         child_list.sort(key=lambda x:x.dst.rank())
@@ -52,7 +25,7 @@ class Node:
 
     def rank(self):
         result=self.node_id
-        if RANKING:
+        if Node.RANKING:
             for key in self:
                 result = min(result,self[key].dst.rank())
         return result
@@ -68,7 +41,17 @@ class Node:
 
     def __iter__(self):
         return self.children.__iter__()
-    
+
+    def common(self,parent_len=0,edge_len=0):
+        begin_set = set()
+        for char in self.children:
+            edge = self.children[char]
+            len_edge = parent_len + len(edge)
+            begin_set.add(edge.begin-parent_len)
+            for x in edge.dst.common(len_edge,len(edge)):
+                yield x
+        yield parent_len,begin_set
+
 
 class Edge:
     def __init__(self,begin,end,src,dst):
@@ -83,8 +66,7 @@ class Edge:
 
     def split(self,suffix,suffix_tree,gen):
         log("edge %r,suffix %r"%(self,suffix))
-        new_node=Node(suffix_tree.alloc_node())
-        new_node.gen=gen
+        new_node=Node(suffix_tree.alloc_node(),gen)
         new_edge=Edge(self.begin+len(suffix), \
                 self.end,new_node,self.dst )
         suffix_tree.insert_edge(new_edge)
@@ -120,22 +102,32 @@ class Suffix:
         return "%d,%d" % (self.begin,self.end)
 
 class ST:
+    INFINITY=1 << 30
+
     NR_TREE=0 
+    def alloc_treeid():
+        ST.NR_TREE +=1
+        return ST.NR_TREE
 
     def __init__(self,string,alphabet=None):
         self.string=string
         if alphabet == None:
             alphabet = set(string)
         self.alphabet=alphabet
-        self.root=Node(0)
+        self.root=Node(0,0)
         self.nr_node=1 # root is counted
-        self.tree_id=ST.NR_TREE
-        ST.NR_TREE+=1
+        self.tree_id=ST.alloc_treeid()
         self.active = Suffix(self.root,0,-1)
         for current in range(0,len(self.string)):
             # self.add(self.root,current)
             self.add(current)
-            self.root.gen=current
+
+    def append(self,string):
+        old_len = len(self.string)
+        self.string += string
+        self.alphabet = self.alphabet.union(string)
+        for current in range(old_len,len(self.string)):
+            self.add(current)
 
     def add(self,current):
         last_parent=None
@@ -153,8 +145,8 @@ class ST:
                     break
                 parent=edge.split(active,self,current)
             # new leaf
-            new_node = Node(self.alloc_node())
-            new_edge = Edge(current, INFINITY,parent,new_node) 
+            new_node = Node(self.alloc_node(),current)
+            new_edge = Edge(current, ST.INFINITY,parent,new_node) 
             self.insert_edge(new_edge)
             # insert suffix link
             if last_parent!=None and last_parent!=self.root:
@@ -169,6 +161,7 @@ class ST:
             last_parent.suffix_link = parent
         active.end+=1
         active.canonize(self)
+        self.root.gen=current
 
     def insert_edge(self,edge):
         edge.src[self.string[edge.begin]]=edge
@@ -177,39 +170,40 @@ class ST:
         self.nr_node+=1
         return self.nr_node-1
 
-
-    def drawdot(self):
-        print("\tsubgraph clusterST%d{\n"%(self.tree_id))
-        self.root.drawdot(self,self.root.gen)
-        print("\tcolor=blue")
-        print("\t}")
+    def lrs(self): #longest repeated substring
+        self.root.lrs()
 
 
-def draw_step(st):
-    for i in range(0,len(st)):
-        ST(st[:i+1]).drawdot()
-
-escape_list ={
-    "\\":"\\\\",
-    "\n":"",
-    "\"":"",
-    " ":""
-    }
 
 
-def escape(string):
-    for esc in escape_list:
-        string = string.replace(esc,escape_list[esc])
-    return string
-    
 
-if __name__=="__main__":
-    #INFINITY = 100
-    import sys
-    string = escape(sys.stdin.read())
-    
-    print("digraph ST{\n")
-    #draw_step(string)
-    ST(string).drawdot()
-    #ST("mississipi").drawdot()
-    print("}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

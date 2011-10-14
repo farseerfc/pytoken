@@ -3,6 +3,7 @@ import tokenize,token
 
 class PyToken:
     TK_REPR=dict([
+            (57                     ,'Encoding'),
             (token.AMPER            ,'&'),
             (token.AMPEREQUAL       ,'&='),
             (token.AT               ,'@'),
@@ -60,24 +61,81 @@ class PyToken:
             (token.VBAREQUAL        ,'|=')
             ])
 
+    FC_NONE     = 0x0
+    FC_ENCODING = 0x1
+    # keyword
+    FC_IF       = 0x100 
+    FC_DEF      = 0x101
+    FC_IMPORT   = 0x102
+    FC_CLASS    = 0x103
+    # op
+    FC_EQEQ     = 0x200
+    FC_EQ       = 0x201
+
+    FC_REPR = {
+            FC_NONE     : 'none'        ,
+            FC_ENCODING : 'encoding'    ,
+            FC_IF       : 'if'          ,
+            FC_DEF      : 'def'         ,
+            FC_IMPORT   : 'import'      ,
+            FC_CLASS    : 'class'       ,
+            FC_EQEQ     : '=='          ,
+            FC_EQ       : '='
+            }
+
 
     def __init__(self,tk_type,tk_str,bg,end,ln,filename):
+        self.fc_type  = PyToken.FC_NONE
         self.tk_type  = tk_type
         self.tk_str   = tk_str
-        self.tk_bg       = bg
-        self.tk_end      = end
-        self.tk_ln       = ln
+        self.tk_bg    = bg
+        self.tk_end   = end
+        self.tk_ln    = ln
         self.filename = filename
+        self.canonize()
+
+            
+    NAME_MAP={
+            'if'        :   FC_IF       ,
+            'def'       :   FC_DEF      ,
+            'import'    :   FC_IMPORT   ,
+            'class'     :   FC_CLASS 
+            }
+
+    def canonize_name(self):
+        if self.tk_str in PyToken.NAME_MAP:
+            self.fc_type = PyToken.NAME_MAP[self.tk_str]
+
+    OP_MAP = {
+            '=='    :   FC_EQEQ     ,
+            '='     :   FC_EQ       ,
+            }
+
+    def canonize_op(self):
+        if self.tk_str in PyToken.OP_MAP:
+            self.fc_type = PyToken.OP_MAP[self.tk_str]
+
+    def canonize_encoding(self):
+        self.fc_type = PyToken.FC_ENCODING
+
+    TYPE_MAP={
+            57                  : canonize_encoding ,
+            token.NAME          : canonize_name  ,
+            token.OP            : canonize_op
+            }
+
 
     def canonize(self):
-        if self.tk_type == token.NAME:
-            
+        if self.tk_type in PyToken.TYPE_MAP:
+            PyToken.TYPE_MAP[self.tk_type](self)
 
     def __str__(self):
+        if self.fc_type != PyToken.FC_NONE:
+            return '  '+PyToken.FC_REPR[self.fc_type]
         if self.tk_type in  PyToken.TK_REPR:
-            return PyToken.TK_REPR[self.tk_type]
+            return ' !'+str(self.tk_type)+PyToken.TK_REPR[self.tk_type]
         else:
-            return ' '+token.tok_name[self.tk_type]
+            return ' #'+str(self.tk_type)+token.tok_name[self.tk_type]
 
 
 
