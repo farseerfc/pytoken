@@ -1,6 +1,9 @@
+#!/usr/bin/python
+
 import tokenize,token
+from functools import total_ordering
 
-
+@total_ordering
 class PyToken:
     TK_REPR=dict([
             (57                     ,'Encoding'),
@@ -61,82 +64,83 @@ class PyToken:
             (token.VBAREQUAL        ,'|=')
             ])
 
-    FC_NONE     = 0x0
-    FC_ENCODING = 0x1
-    # keyword
-    FC_IF       = 0x100 
-    FC_DEF      = 0x101
-    FC_IMPORT   = 0x102
-    FC_CLASS    = 0x103
-    # op
-    FC_EQEQ     = 0x200
-    FC_EQ       = 0x201
-
-    FC_REPR = {
-            FC_NONE     : 'none'        ,
-            FC_ENCODING : 'encoding'    ,
-            FC_IF       : 'if'          ,
-            FC_DEF      : 'def'         ,
-            FC_IMPORT   : 'import'      ,
-            FC_CLASS    : 'class'       ,
-            FC_EQEQ     : '=='          ,
-            FC_EQ       : '='
-            }
 
 
     def __init__(self,tk_type,tk_str,bg,end,ln,filename):
-        self.fc_type  = PyToken.FC_NONE
         self.tk_type  = tk_type
         self.tk_str   = tk_str
         self.tk_bg    = bg
         self.tk_end   = end
         self.tk_ln    = ln
         self.filename = filename
-        self.canonize()
 
             
-    NAME_MAP={
-            'if'        :   FC_IF       ,
-            'def'       :   FC_DEF      ,
-            'import'    :   FC_IMPORT   ,
-            'class'     :   FC_CLASS 
-            }
-
-    def canonize_name(self):
-        if self.tk_str in PyToken.NAME_MAP:
-            self.fc_type = PyToken.NAME_MAP[self.tk_str]
-
-    OP_MAP = {
-            '=='    :   FC_EQEQ     ,
-            '='     :   FC_EQ       ,
-            }
-
-    def canonize_op(self):
-        if self.tk_str in PyToken.OP_MAP:
-            self.fc_type = PyToken.OP_MAP[self.tk_str]
-
-    def canonize_encoding(self):
-        self.fc_type = PyToken.FC_ENCODING
-
-    TYPE_MAP={
-            57                  : canonize_encoding ,
-            token.NAME          : canonize_name  ,
-            token.OP            : canonize_op
-            }
-
-
-    def canonize(self):
-        if self.tk_type in PyToken.TYPE_MAP:
-            PyToken.TYPE_MAP[self.tk_type](self)
-
     def __str__(self):
-        if self.fc_type != PyToken.FC_NONE:
-            return '  '+PyToken.FC_REPR[self.fc_type]
         if self.tk_type in  PyToken.TK_REPR:
-            return ' !'+str(self.tk_type)+PyToken.TK_REPR[self.tk_type]
+            return '!'+str(self.tk_type)+PyToken.TK_REPR[self.tk_type]
         else:
-            return ' #'+str(self.tk_type)+token.tok_name[self.tk_type]
+            return '#'+str(self.tk_type)+token.tok_name[self.tk_type]
 
+    def __cmp__(self,other):
+        return self.tk_type - other.tk_type
+
+    def __repr__(self):
+        return str(self)
+
+    def __eq__(self,other):
+        return self.tk_type == other.tk_type
+
+    def __lt__(self,other):
+        return self.tk_type < other.tk_type
+
+    def __hash__(self):
+        return hash(self.tk_type)
+
+@total_ordering
+class TokenSeq:
+    def __init__(self,lst=[]):
+        self.lst=lst
+
+    def __len__(self):
+        return len(self.lst)
+
+    def __getitem__(self,key):
+        if type(key)==slice:
+            return TokenSeq(self.lst[key])
+        return self.lst[key]
+
+    def __delitem__(self,key):
+        del self.lst[key]
+
+    def __setitem__(self,key,value):
+        self.lst[key]=value
+
+    def __cmp__(self,other):
+        for i in range(0,len(self)):
+            if self[i] == other[i]:continue
+            if self[i] < other[i]: return -1
+            if self[i] > other[i]: return 1
+        return 0
+
+    def __iter__(self):
+        for item in self.lst:
+            yield item
+
+    def __reversed__(self):
+        for item in reversed(self.lst):
+            yield item
+
+    def append(self,item):
+        self.lst.append(item)
+
+    def __repr__(self):
+        return repr(self.lst)
+
+    def __eq__(self,other):
+        return self.__cmp__(other) == 0
+
+    def __lt__(self,other):
+        return self.__cmp__(other) < 0
 
 
 def tk_eat(tk_type,tk_str,bg,end,ln,filename):
@@ -145,10 +149,11 @@ def tk_eat(tk_type,tk_str,bg,end,ln,filename):
     return t
 
 def tk(filename):
-    lst=[]
+    lst=TokenSeq()
     for tupl in tokenize.tokenize(open(filename,'rb').readline):
         lst.append(tk_eat(*tupl,filename=filename))
-    print('\n'.join(str(x)+'\t'+x.tk_str for x in lst))
+    #print('\n'.join(str(x)+'\t'+x.tk_str for x in lst))
+    return lst
 
    #     try:
    #     for tk_type,tk_str,bg,end,ln in tokenize(open(filename).readline):
@@ -160,4 +165,7 @@ def tk(filename):
 if __name__=='__main__':
     import sys
     for f in sys.argv[1:]:
-        tk(f)
+        nr_token = 0
+        for x in tk(f):
+            nr_token+=1
+            print(str(nr_token)+'\t'+str(x)+'\t'+x.tk_str )

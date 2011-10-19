@@ -1,0 +1,182 @@
+
+\usepackage{tikz} 
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage{listings}
+%%%%%%%%%% Farseerfc: fix the bug of xetex on navigation bar of beamer %%%%%%%%%
+
+\def\beamer@linkspace#1{%
+  \begin{pgfpicture}{0pt}{-1.5pt}{#1}{5.5pt}
+    \pgfsetfillopacity{0}
+    \pgftext[x=0pt,y=-1.5pt]{.}
+    \pgftext[x=#1,y=5.5pt]{.}
+  \end{pgfpicture}}
+
+%%%%%%%%%% Farseerfc: fix the bug of xetex on navigation bar of beamer %%%%%%%%%
+
+\usetheme{Warsaw}
+\usecolortheme[named=OliveGreen]{structure}
+%\setbeamercovered{dynamic}
+\useoutertheme{infolines}
+\usepackage[english]{babel}
+
+
+\graphicspath{{figure/}}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Farseerfc defined commands
+
+\newcommand{\br}[0]{\par\vskip15pt\par}
+%\newenvironment{topcolumns}{\begin{columns}[t]}{\end{columns}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\title[report]{Report of Progress}
+
+
+\subtitle{by Jiachen Yang}
+
+\author[jc-yang]{
+	Jiachen Yang\inst{1} 
+}
+
+\institute[Osaka-U]{
+	\inst{1}Research Student in Osaka University
+}
+
+
+
+\frame{\maketitle}
+
+
+\AtBeginSubsection[]{
+  \frame<beamer>{ 
+    \frametitle{Section Outline}   
+    \tableofcontents[currentsection,currentsubsection] 
+  }
+}
+
+\AtBeginSection[]{
+  \frame<beamer>{ 
+    \frametitle{Part Outline}   
+    \tableofcontents[currentpart,currentsection] 
+  }
+}
+
+\AtBeginPart{
+  \frame<beamer>{
+	\partpage
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{In last week} 
+
+\begin{frame}[fragile]{Algorithm of Finding Common Subsequence on Suffix Tree}%
+Find All common subsequences in a given String
+
+\begin{lstlisting}
+$  echo mississippi#|./common_filter.py 
+issi	4:{1, 4}
+si	2:{3, 6}
+ssi	3:{2, 5}    
+\end{lstlisting}
+
+Find common subsequences between two Strings
+
+\begin{lstlisting}
+$  echo abcdef_xcdefgh#|./common_filter.py 
+cdef	4:{8, 2}
+ef	2:{10, 4}
+def	3:{9, 3}
+
+\end{lstlisting}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Filter result}
+Filter common sequence longer than 40 chars:
+\begin{lstlisting}
+for length , start_set in apply_filter(st,
+            [lambda length,start_set:length>40]):
+    print(length,start_set)
+\end{lstlisting}
+
+Filter common sequence occered in more than 3 positions:
+
+\begin{lstlisting}
+for length , start_set in apply_filter(st,
+        [lambda length,start_set:len(start_set)>4]):
+    print(length,start_set)
+
+VM_S390_	8:{2842, 915, 4301, 4261, 4282}
+VM_GET_	7:{2023, 719, 3666, 787, 3638, 3612}
+\end{lstlisting}
+
+
+\end{frame}
+
+\begin{frame}[fragile]{Tokenize in Python Code}
+
+\begin{lstlisting}
+farseer ~/pytoken $  ./tokenfc.py tokenfc.py | head -n20
+!57Encoding	utf-8
+!55T	#!/usr/bin/python
+#56NL	
+
+#56NL	
+
+!1N	import
+!1N	tokenize
+!53O	,
+!1N	token
+!4n	
+
+!1N	from
+!1N	functools
+!1N	import
+!1N	total_ordering
+!4n	
+
+#56NL	
+
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Combine Tokenizer with Suffix Tree}
+\begin{lstlisting}
+farseer ~/pytoken $  ./st_token.py st_token.py
+6:{35, 70}	[!1N, !1N, !1N, !53O, !1N, !53O]
+8:{8, 3}	[!1N, !1N, !1N, !53O, !4n, !1N, !1N, !1N]
+6:{15, 31}	[!1N, !1N, !4n, !1N, !1N, !1N]
+6:{90, 71}	[!1N, !1N, !53O, !1N, !53O, !53O]
+7:{9, 4}	[!1N, !1N, !53O, !4n, !1N, !1N, !1N]
+7:{54, 47}	[!1N, !53O, !1N, !53O, !1N, !53O, !4n]
+7:{122, 100}	[!1N, !53O, !1N, !53O, !1N, !53O, !53O]
+6:{120, 100, 78, 47}	[!1N, !53O, !1N, !53O, !1N, !53O]
+11:{80, 37}	[!1N, !53O, !1N, !53O, !21, !53O, !53O, !53O, !4n, !5>==>, !1N]
+7:{91, 102}	[!1N, !53O, !1N, !53O, !53O, !21, !53O]
+9:{82, 39}	[!1N, !53O, !21, !53O, !53O, !53O, !4n, !5>==>, !1N]
+6:{10, 5}	[!1N, !53O, !4n, !1N, !1N, !1N]
+7:{41, 84}	[!21, !53O, !53O, !53O, !4n, !5>==>, !1N]
+6:{17, 7}	[!4n, !1N, !1N, !1N, !53O, !4n]
+7:{99, 53}	[!4n, !1N, !53O, !1N, !53O, !1N, !53O]
+6:{48, 55}	[!53O, !1N, !53O, !1N, !53O, !4n]
+6:{123, 101}	[!53O, !1N, !53O, !1N, !53O, !53O]
+10:{81, 38}	[!53O, !1N, !53O, !21, !53O, !53O, !53O, !4n, !5>==>, !1N]
+6:{92, 103}	[!53O, !1N, !53O, !53O, !21, !53O]
+8:{40, 83}	[!53O, !21, !53O, !53O, !53O, !4n, !5>==>, !1N]
+6:{42, 85}	[!53O, !53O, !53O, !4n, !5>==>, !1N]
+
+\end{lstlisting}
+\end{frame}
+\end{document}

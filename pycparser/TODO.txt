@@ -1,0 +1,39 @@
+Todo
+----
+
+- close issue 31 and open new one
+
+Changes since last
+------------------
+
+* 
+
+Version Update
+--------------
+
+setup.py, __init__.py, README.txt
+- Tag in hg
+
+
+Build docs and distribution
+---------------------------
+
+rst2html readme.txt > readme.html
+python setup.py sdist upload
+
+Misc
+----
+
+yacc optimization: 
+- If parsetab.py/pyc doesn't exist in the path, the table will be reconstructed anyway, regardless of the optimize parameter
+- If it does exist:
+  - If optimize=True, the table will be loaded unconditionally
+  - If optimize=False, the table will be loaded only if it's older than the grammar
+
+lex optimization:
+- If optimize=False, the lexical table is re-computed and is not saved to a lextab file
+- If optimize=True:
+  - If lextab.py/pyc exists in the path, it will be loaded unconditionally
+  - If lextab.py/pyc doesn't exist, it will be created and loaded
+
+

@@ -17,11 +17,11 @@ def draw_node(node,tree,gen):
         else:
             edge_str = "(%d,%d)\\n" % (edge.begin,edge.end+1)
         if edge.end - edge.begin <16:
-            edge_str += string[edge.begin:edge.end+1]
+            edge_str += str(string[edge.begin:edge.end+1])
         else:
-            edge_str += string[edge.begin:edge.begin+8]
+            edge_str += str(string[edge.begin:edge.begin+8])
             edge_str += "..."
-            edge_str += string[edge.end-8:edge.end]
+            edge_str += str(string[edge.end-8:edge.end])
         print("\t\tt%dn%d -> t%dn%d [label=\"%s\",weight=1];"% \
                 (tree_id,node.node_id,tree_id, \
                 edge.dst.node_id,edge_str))
