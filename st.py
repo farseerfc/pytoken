@@ -1,6 +1,7 @@
+FCLOG=False
 
 def log(string):
-    if False:
+    if FCLOG:
         import sys
         print(string,file=sys.stderr)
 
@@ -173,4 +174,6 @@ class ST:
     def lrs(self): #longest repeated substring
         self.root.lrs()
 
+    def __len__(self):
+        return len(self.string)
 

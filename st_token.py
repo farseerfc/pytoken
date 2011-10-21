@@ -1,26 +1,32 @@
 #!/usr/bin/python
-from tokenfc import *
+from tokenply import *
 from filter import *
-from io import BytesIO 
-from st_dot import *
+from st import log,FCLOG 
+FCLOG = True
 
 if __name__=="__main__":
     import sys
+    terms= []
+    file_id = 0
+    tokenseq = TokenSeq([])
+    log("TOKENSEQ:%d"%len(tokenseq))
     for f in sys.argv[1:]:
-        tokenseq = tk(f)
-        st = ST(tokenseq)
-        # print("digraph ST{")
-        # draw_tree(st)
-        # print("}")
-        lst =[] 
-        for length,start_set in apply_filter(st,[\
-                filter_mcs(),filter_length(25)]):
-            if len(start_set)==0:continue
-            lst.append((length,start_set))
-        lst.sort(key=lambda p:-p[0])
-        for length,start_set in lst:
-            start = list(start_set)[0]
-            print("%d:%s\t%s"%(length,start_set,
-                tokenseq[start:start+length]))
+        file_id +=1
+        tokenseq += tokenize(f)
+        log("TOKENSEQ:%d"%len(tokenseq))
+        terms.append(len(tokenseq))
+    st=ST(tokenseq)
+    log(terms)
 
-    #print(tokenseq) 
+    for length,start_set in \
+            filter_mcs(
+            filter_sort_length(
+            filter_gst(terms,2,
+            filter_length(30,
+            st.root.common())))):
+        if len(start_set)==0:continue
+        start = list(start_set)[0]
+        print("%d:%s\t%s"%(length,start_set,
+            tokenseq[start:start+length]))
+
+    log(str(terms) +str(len(tokenseq)))
