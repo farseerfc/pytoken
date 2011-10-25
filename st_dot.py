@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from st import ST
     
 def draw_node(node,tree,gen):

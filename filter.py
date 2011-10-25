@@ -69,7 +69,7 @@ if __name__ == "__main__":
     for length , start_set in \
             filter_mcs(
             filter_sort_length(
-            filter_length(10,
+            filter_length(1,
             st.root.common()))):
         if len(start_set)==0:continue
         #if length < 2 : continue

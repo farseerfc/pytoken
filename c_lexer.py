@@ -15,6 +15,8 @@ import ply.lex
 from ply.lex import TOKEN
 
 
+
+
 class CLexer(object):
     """ A lexer for the C language. After building it, set the
         input text with input(), and call token() to get new 
@@ -61,12 +63,15 @@ class CLexer(object):
         """
         self.lexer.lineno = 1
 
-    def input(self, text):
+    def input(self, text,filename):
+        self.filename=filename
         self.lexer.input(text)
     
     def token(self):
         g = self.lexer.token()
         return g
+
+
 
     ######################--   PRIVATE   --######################
     

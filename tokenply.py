@@ -2,6 +2,7 @@
 from python_lex import PythonLexer
 from functools import total_ordering
 from codecs import unicode_escape_encode
+from c_lexer import CLexer
 
 ENDMARKER = "ENDMARKER"
 
@@ -95,14 +96,34 @@ class TokenSeq:
     def __lt__(self,other):
         return self.__cmp__(other) < 0
 
+def clex(text,filename):
+    def errfoo(msg,a,b):
+        import sys
+        print(msg)
+        sys.exit()
+    def typelookup(namd):
+        return False
+    clex=CLexer(errfoo,typelookup)
+    clex.build()
+    clex.input(text)
+    return clex
+
+def pylex(text,filename):
+    lexer=PythonLexer()
+    lexer.input(text,filename)
+    return lexer
+
 
 def tokenize(filename):
+    import sys
     fl=open(filename)
-    lexer=PythonLexer()
-    lexer.input(fl.read(),filename)
+    print(filename,file=sys.stderr)
+    sys.stderr.flush()
+    lexer=pylex(fl.read(),filename)
     ts=TokenSeq([])
     for lextoken in lexer:
         ts.append(TokenPly(lextoken,filename))
+    fl.close()
     return ts
 
 
