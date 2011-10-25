@@ -1,12 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from python_lex import PythonLexer
 from functools import total_ordering
 from codecs import unicode_escape_encode
 from c_lexer import CLexer
+from io import open
 
-ENDMARKER = "ENDMARKER"
+ENDMARKER = u"ENDMARKER"
 
-class TokenPly:
+class TokenPly(object):
     def __init__(self,lextoken,filename):
         self.type  = lextoken.type
         self.value   = lextoken.value
@@ -15,7 +16,7 @@ class TokenPly:
         self.filename = filename
 
     def __repr__(self):
-        return "TokenPly(%s,%s,%d,%d,%s"% (
+        return u"TokenPly(%s,%s,%d,%d,%s"% (
                 self.type,repr(self.value),
                 self.lineno,self.lexpos,repr(self.filename))
 
@@ -37,8 +38,7 @@ class TokenPly:
             return hash(self.filename)
         return hash(self.type)
 
-@total_ordering
-class TokenSeq:
+class TokenSeq(object):
     def __init__(self,lst):
         if type(lst) == list:
             self.lst=lst
@@ -70,7 +70,7 @@ class TokenSeq:
         self.lst[key]=value
 
     def __cmp__(self,other):
-        for i in range(0,len(self)):
+        for i in xrange(0,len(self)):
             if self[i] == other[i]:continue
             if self[i] < other[i]: return -1
             if self[i] > other[i]: return 1
@@ -88,7 +88,7 @@ class TokenSeq:
         self.lst.append(item)
 
     def __repr__(self):
-        return ",".join(x.type for x in self.lst)
+        return u",".join(x.type for x in self.lst)
 
     def __eq__(self,other):
         return self.__cmp__(other) == 0
@@ -96,10 +96,11 @@ class TokenSeq:
     def __lt__(self,other):
         return self.__cmp__(other) < 0
 
+TokenSeq = total_ordering(TokenSeq)
 def clex(text,filename):
     def errfoo(msg,a,b):
         import sys
-        print(msg)
+        print msg
         sys.exit()
     def typelookup(namd):
         return False
@@ -117,7 +118,7 @@ def pylex(text,filename):
 def tokenize(filename):
     import sys
     fl=open(filename)
-    print(filename,file=sys.stderr)
+    print >>sys.stderr, filename
     sys.stderr.flush()
     lexer=pylex(fl.read(),filename)
     ts=TokenSeq([])
@@ -127,11 +128,11 @@ def tokenize(filename):
     return ts
 
 
-if __name__=="__main__":
+if __name__==u"__main__":
     import sys
     idx=0
     for filename in sys.argv[1:]:
         for tok in tokenize(filename):
-            print("%d:\t%s"%(idx,tok))
+            print u"%d:\t%s"%(idx,tok)
             idx+=1
 

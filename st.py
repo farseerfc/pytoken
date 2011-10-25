@@ -1,11 +1,12 @@
+#!/usr/bin/python2
 FCLOG=False
 
 def log(string):
     if FCLOG:
         import sys
-        print(string,file=sys.stderr)
+        print >>sys.stderr, string
 
-class Node:
+class Node(object):
     RANKING = True
 
     def __init__(self,node_id,gen,suffix_link=None):
@@ -18,7 +19,7 @@ class Node:
         return self.suffix_link == None and self.node_id != 0 
 
     def __repr__(self):
-        return str(self.node_id)+":"+str(self.gen)
+        return unicode(self.node_id)+u":"+unicode(self.gen)
     def get_children(self):
         child_list=[self[key] for key in self]
         child_list.sort(key=lambda x:x.dst.rank())
@@ -54,7 +55,7 @@ class Node:
         yield parent_len,begin_set
 
 
-class Edge:
+class Edge(object):
     def __init__(self,begin,end,src,dst):
         self.begin=begin
         self.end=end
@@ -66,7 +67,7 @@ class Edge:
         return self.end - self.begin + 1
 
     def split(self,suffix,suffix_tree,gen):
-        log("edge %r,suffix %r"%(self,suffix))
+        log(u"edge %r,suffix %r"%(self,suffix))
         new_node=Node(suffix_tree.alloc_node(),gen)
         new_edge=Edge(self.begin+len(suffix), \
                 self.end,new_node,self.dst )
@@ -76,7 +77,7 @@ class Edge:
         self.gen=gen
         return new_node
 
-class Suffix:
+class Suffix(object):
     def __init__(self,src,begin,end):
         self.src=src
         self.begin=begin
@@ -100,13 +101,15 @@ class Suffix:
             self.src = edge.dst
 
     def __repr__(self):
-        return "%d,%d" % (self.begin,self.end)
+        return u"%d,%d" % (self.begin,self.end)
 
-class ST:
+class ST(object):
     INFINITY=1 << 30
 
     NR_TREE=0 
-    def alloc_treeid():
+
+    @classmethod
+    def alloc_treeid(ST):
         ST.NR_TREE +=1
         return ST.NR_TREE
 
@@ -119,7 +122,7 @@ class ST:
         self.nr_node=1 # root is counted
         self.tree_id=ST.alloc_treeid()
         self.active = Suffix(self.root,0,-1)
-        for current in range(0,len(self.string)):
+        for current in xrange(0,len(self.string)):
             # self.add(self.root,current)
             self.add(current)
 
@@ -127,7 +130,7 @@ class ST:
         old_len = len(self.string)
         self.string += string
         self.alphabet = self.alphabet.union(string)
-        for current in range(old_len,len(self.string)):
+        for current in xrange(old_len,len(self.string)):
             self.add(current)
 
     def add(self,current):

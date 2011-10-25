@@ -1,20 +1,21 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 from tokenply import *
 from filter import *
 from st import log,FCLOG 
 FCLOG = True
 
-if __name__=="__main__":
+
+if __name__==u"__main__":
     import sys
     sys.setrecursionlimit(1<<16)
     terms= []
     file_id = 0
     tokenseq = TokenSeq([])
-    log("TOKENSEQ:%d"%len(tokenseq))
+    log(u"TOKENSEQ:%d"%len(tokenseq))
     for f in sys.argv[1:]:
         file_id +=1
         tokenseq += tokenize(f)
-        log("TOKENSEQ:%d"%len(tokenseq))
+        log(u"TOKENSEQ:%d"%len(tokenseq))
         terms.append(len(tokenseq))
     st=ST(tokenseq)
     log(terms)
@@ -27,7 +28,8 @@ if __name__=="__main__":
             st.root.common())))):
         if len(start_set)==0:continue
         start = list(start_set)[0]
-        print("%d:%s\t%s"%(length,start_set,
-            tokenseq[start:start+length]))
+        print u"%d:%s\t%s"%(length,start_set,
+            tokenseq[start:start+length])
 
-    log(str(terms) +str(len(tokenseq)))
+
+    log(unicode(terms) +unicode(len(tokenseq)))

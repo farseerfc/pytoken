@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 #-----------------------------------------------------------------
 # pycparser: c_lexer.py
 #
@@ -13,12 +13,13 @@ import sys
 
 import ply.lex
 from ply.lex import TOKEN
+from io import open
 
 
 
 
 class CLexer(object):
-    """ A lexer for the C language. After building it, set the
+    u""" A lexer for the C language. After building it, set the
         input text with input(), and call token() to get new 
         tokens.
         
@@ -27,7 +28,7 @@ class CLexer(object):
         directives.
     """
     def __init__(self, error_func, type_lookup_func):
-        """ Create a new Lexer.
+        u""" Create a new Lexer.
         
             error_func:
                 An error function. Will be called with an error
@@ -41,15 +42,15 @@ class CLexer(object):
         """
         self.error_func = error_func
         self.type_lookup_func = type_lookup_func
-        self.filename = ''
+        self.filename = u''
         
         # Allow either "# line" or "# <num>" to support GCC's
         # cpp output
         #
-        self.line_pattern = re.compile('([ \t]*line\W)|([ \t]*\d+)')
+        self.line_pattern = re.compile(u'([ \t]*line\W)|([ \t]*\d+)')
 
     def build(self, **kwargs):
-        """ Builds the lexer from the specification. Must be
+        u""" Builds the lexer from the specification. Must be
             called after the lexer object is created. 
             
             This method exists separately, because the PLY
@@ -59,7 +60,7 @@ class CLexer(object):
         self.lexer = ply.lex.lex(object=self, **kwargs)
 
     def reset_lineno(self):
-        """ Resets the internal line number counter of the lexer.
+        u""" Resets the internal line number counter of the lexer.
         """
         self.lexer.lineno = 1
 
@@ -86,7 +87,7 @@ class CLexer(object):
     def _find_tok_column(self, token):
         i = token.lexpos
         while i > 0:
-            if self.lexer.lexdata[i] == '\n': break
+            if self.lexer.lexdata[i] == u'\n': break
             i -= 1
         return (token.lexpos - i) + 1
     
@@ -97,18 +98,18 @@ class CLexer(object):
     ## Reserved keywords
     ##
     keywords = (
-        'AUTO', '_BOOL', 'BREAK', 'CASE', 'CHAR', 'CONST', 'CONTINUE',
-        'DEFAULT', 'DO', 'DOUBLE', 'ELSE', 'ENUM', 'EXTERN',
-        'FLOAT', 'FOR', 'GOTO', 'IF', 'INLINE', 'INT', 'LONG', 'REGISTER',
-        'RESTRICT', 'RETURN', 'SHORT', 'SIGNED', 'SIZEOF', 'STATIC', 'STRUCT',
-        'SWITCH', 'TYPEDEF', 'UNION', 'UNSIGNED', 'VOID',
-        'VOLATILE', 'WHILE',
+        u'AUTO', u'_BOOL', u'BREAK', u'CASE', u'CHAR', u'CONST', u'CONTINUE',
+        u'DEFAULT', u'DO', u'DOUBLE', u'ELSE', u'ENUM', u'EXTERN',
+        u'FLOAT', u'FOR', u'GOTO', u'IF', u'INLINE', u'INT', u'LONG', u'REGISTER',
+        u'RESTRICT', u'RETURN', u'SHORT', u'SIGNED', u'SIZEOF', u'STATIC', u'STRUCT',
+        u'SWITCH', u'TYPEDEF', u'UNION', u'UNSIGNED', u'VOID',
+        u'VOLATILE', u'WHILE',
     )
 
     keyword_map = {}
     for keyword in keywords:
-        if keyword == '_BOOL':
-            keyword_map['_Bool'] = keyword
+        if keyword == u'_BOOL':
+            keyword_map[u'_Bool'] = keyword
         else:
             keyword_map[keyword.lower()] = keyword
 
@@ -117,55 +118,55 @@ class CLexer(object):
     ##
     tokens = keywords + (
         # Identifiers
-        'ID', 
+        u'ID', 
         
         # Type identifiers (identifiers previously defined as 
         # types with typedef)
-        'TYPEID',
+        u'TYPEID',
         
         # constants 
-        'INT_CONST_DEC', 'INT_CONST_OCT', 'INT_CONST_HEX',
-        'FLOAT_CONST', 
-        'CHAR_CONST',
-        'WCHAR_CONST',
+        u'INT_CONST_DEC', u'INT_CONST_OCT', u'INT_CONST_HEX',
+        u'FLOAT_CONST', 
+        u'CHAR_CONST',
+        u'WCHAR_CONST',
         
         # String literals
-        'STRING_LITERAL',
-        'WSTRING_LITERAL',
+        u'STRING_LITERAL',
+        u'WSTRING_LITERAL',
 
         # Operators 
-        'PLUS', 'MINUS', 'TIMES', 'DIVIDE', 'MOD',
-        'OR', 'AND', 'NOT', 'XOR', 'LSHIFT', 'RSHIFT',
-        'LOR', 'LAND', 'LNOT',
-        'LT', 'LE', 'GT', 'GE', 'EQ', 'NE',
+        u'PLUS', u'MINUS', u'TIMES', u'DIVIDE', u'MOD',
+        u'OR', u'AND', u'NOT', u'XOR', u'LSHIFT', u'RSHIFT',
+        u'LOR', u'LAND', u'LNOT',
+        u'LT', u'LE', u'GT', u'GE', u'EQ', u'NE',
         
         # Assignment
-        'EQUALS', 'TIMESEQUAL', 'DIVEQUAL', 'MODEQUAL', 
-        'PLUSEQUAL', 'MINUSEQUAL',
-        'LSHIFTEQUAL','RSHIFTEQUAL', 'ANDEQUAL', 'XOREQUAL', 
-        'OREQUAL',
+        u'EQUALS', u'TIMESEQUAL', u'DIVEQUAL', u'MODEQUAL', 
+        u'PLUSEQUAL', u'MINUSEQUAL',
+        u'LSHIFTEQUAL',u'RSHIFTEQUAL', u'ANDEQUAL', u'XOREQUAL', 
+        u'OREQUAL',
 
         # Increment/decrement 
-        'PLUSPLUS', 'MINUSMINUS',
+        u'PLUSPLUS', u'MINUSMINUS',
 
         # Structure dereference (->)
-        'ARROW',
+        u'ARROW',
 
         # Conditional operator (?)
-        'CONDOP',
+        u'CONDOP',
         
         # Delimeters 
-        'LPAREN', 'RPAREN',         # ( )
-        'LBRACKET', 'RBRACKET',     # [ ]
-        'LBRACE', 'RBRACE',         # { } 
-        'COMMA', 'PERIOD',          # . ,
-        'SEMI', 'COLON',            # ; :
+        u'LPAREN', u'RPAREN',         # ( )
+        u'LBRACKET', u'RBRACKET',     # [ ]
+        u'LBRACE', u'RBRACE',         # { } 
+        u'COMMA', u'PERIOD',          # . ,
+        u'SEMI', u'COLON',            # ; :
 
         # Ellipsis (...)
-        'ELLIPSIS',
+        u'ELLIPSIS',
         
         # pre-processor 
-        'PPHASH',      # '#'
+        u'PPHASH',      # '#'
     )
 
     ##
@@ -174,42 +175,42 @@ class CLexer(object):
     ##
 
     # valid C identifiers (K&R2: A.2.3)
-    identifier = r'[a-zA-Z_][0-9a-zA-Z_]*'
+    identifier = ur'[a-zA-Z_][0-9a-zA-Z_]*'
 
     # integer constants (K&R2: A.2.5.1)
-    integer_suffix_opt = r'(u?ll|U?LL|([uU][lL])|([lL][uU])|[uU]|[lL])?'
-    decimal_constant = '(0'+integer_suffix_opt+')|([1-9][0-9]*'+integer_suffix_opt+')'
-    octal_constant = '0[0-7]*'+integer_suffix_opt
-    hex_constant = '0[xX][0-9a-fA-F]+'+integer_suffix_opt
+    integer_suffix_opt = ur'(u?ll|U?LL|([uU][lL])|([lL][uU])|[uU]|[lL])?'
+    decimal_constant = u'(0'+integer_suffix_opt+u')|([1-9][0-9]*'+integer_suffix_opt+u')'
+    octal_constant = u'0[0-7]*'+integer_suffix_opt
+    hex_constant = u'0[xX][0-9a-fA-F]+'+integer_suffix_opt
     
-    bad_octal_constant = '0[0-7]*[89]'
+    bad_octal_constant = u'0[0-7]*[89]'
 
     # character constants (K&R2: A.2.5.2)
     # Note: a-zA-Z are allowed as escape chars to support #line
     # directives with Windows paths as filenames (\dir\file...)
     #
-    simple_escape = r"""([a-zA-Z\\?'"])"""
-    octal_escape = r"""([0-7]{1,3})"""
-    hex_escape = r"""(x[0-9a-fA-F]+)"""
-    bad_escape = r"""([\\][^a-zA-Z\\?'"x0-7])"""
+    simple_escape = ur"""([a-zA-Z\\?'"])"""
+    octal_escape = ur"""([0-7]{1,3})"""
+    hex_escape = ur"""(x[0-9a-fA-F]+)"""
+    bad_escape = ur"""([\\][^a-zA-Z\\?'"x0-7])"""
 
-    escape_sequence = r"""(\\("""+simple_escape+'|'+octal_escape+'|'+hex_escape+'))'
-    cconst_char = r"""([^'\\\n]|"""+escape_sequence+')'    
-    char_const = "'"+cconst_char+"'"
-    wchar_const = 'L'+char_const
-    unmatched_quote = "('"+cconst_char+"*\\n)|('"+cconst_char+"*$)"
-    bad_char_const = r"""('"""+cconst_char+"""[^'\n]+')|('')|('"""+bad_escape+r"""[^'\n]*')"""
+    escape_sequence = ur"""(\\("""+simple_escape+u'|'+octal_escape+u'|'+hex_escape+u'))'
+    cconst_char = ur"""([^'\\\n]|"""+escape_sequence+u')'    
+    char_const = u"'"+cconst_char+u"'"
+    wchar_const = u'L'+char_const
+    unmatched_quote = u"('"+cconst_char+u"*\\n)|('"+cconst_char+u"*$)"
+    bad_char_const = ur"""('"""+cconst_char+u"""[^'\n]+')|('')|('"""+bad_escape+ur"""[^'\n]*')"""
 
     # string literals (K&R2: A.2.6)
-    string_char = r"""([^"\\\n]|"""+escape_sequence+')'    
-    string_literal = '"'+string_char+'*"'
-    wstring_literal = 'L'+string_literal
-    bad_string_literal = '"'+string_char+'*'+bad_escape+string_char+'*"'
+    string_char = ur"""([^"\\\n]|"""+escape_sequence+u')'    
+    string_literal = u'"'+string_char+u'*"'
+    wstring_literal = u'L'+string_literal
+    bad_string_literal = u'"'+string_char+u'*'+bad_escape+string_char+u'*"'
 
     # floating constants (K&R2: A.2.5.3)
-    exponent_part = r"""([eE][-+]?[0-9]+)"""
-    fractional_constant = r"""([0-9]*\.[0-9]+)|([0-9]+\.)"""
-    floating_constant = '(((('+fractional_constant+')'+exponent_part+'?)|([0-9]+'+exponent_part+'))[FfLl]?)'
+    exponent_part = ur"""([eE][-+]?[0-9]+)"""
+    fractional_constant = ur"""([0-9]*\.[0-9]+)|([0-9]+\.)"""
+    floating_constant = u'(((('+fractional_constant+u')'+exponent_part+u'?)|([0-9]+'+exponent_part+u'))[FfLl]?)'
 
     ##
     ## Lexer states
@@ -217,20 +218,20 @@ class CLexer(object):
     states = (
         # ppline: preprocessor line directives
         # 
-        ('ppline', 'exclusive'),
+        (u'ppline', u'exclusive'),
     )
     
     def t_PPHASH(self, t):
-        r'[ \t]*\#'
+        ur'[ \t]*\#'
         m = self.line_pattern.match(
             t.lexer.lexdata, pos=t.lexer.lexpos)
         
         if m:
-            t.lexer.begin('ppline')
+            t.lexer.begin(u'ppline')
             self.pp_line = self.pp_filename = None
             #~ print "ppline starts on line %s" % t.lexer.lineno
         else:
-            t.type = 'PPHASH'
+            t.type = u'PPHASH'
             return t
     
     ##
@@ -239,9 +240,9 @@ class CLexer(object):
     @TOKEN(string_literal)
     def t_ppline_FILENAME(self, t):
         if self.pp_line is None:
-            self._error('filename before line number in #line', t)
+            self._error(u'filename before line number in #line', t)
         else:
-            self.pp_filename = t.value.lstrip('"').rstrip('"')
+            self.pp_filename = t.value.lstrip(u'"').rstrip(u'"')
             #~ print "PP got filename: ", self.pp_filename
 
     @TOKEN(decimal_constant)
@@ -254,95 +255,95 @@ class CLexer(object):
             pass
 
     def t_ppline_NEWLINE(self, t):
-        r'\n'
+        ur'\n'
         
         if self.pp_line is None:
-            self._error('line number missing in #line', t)
+            self._error(u'line number missing in #line', t)
         else:
             self.lexer.lineno = int(self.pp_line)
             
             if self.pp_filename is not None:
                 self.filename = self.pp_filename
                 
-        t.lexer.begin('INITIAL')
+        t.lexer.begin(u'INITIAL')
 
     def t_ppline_PPLINE(self, t):
-        r'line'
+        ur'line'
         pass
     
-    t_ppline_ignore = ' \t'
+    t_ppline_ignore = u' \t'
 
     def t_ppline_error(self, t):
-        msg = 'invalid #line directive'
+        msg = u'invalid #line directive'
         self._error(msg, t)
 
     ##
     ## Rules for the normal state
     ##
-    t_ignore = ' \t'
+    t_ignore = u' \t'
 
     # Newlines
     def t_NEWLINE(self, t):
-        r'\n+'
-        t.lexer.lineno += t.value.count("\n")
+        ur'\n+'
+        t.lexer.lineno += t.value.count(u"\n")
 
     # Operators
-    t_PLUS              = r'\+'
-    t_MINUS             = r'-'
-    t_TIMES             = r'\*'
-    t_DIVIDE            = r'/'
-    t_MOD               = r'%'
-    t_OR                = r'\|'
-    t_AND               = r'&'
-    t_NOT               = r'~'
-    t_XOR               = r'\^'
-    t_LSHIFT            = r'<<'
-    t_RSHIFT            = r'>>'
-    t_LOR               = r'\|\|'
-    t_LAND              = r'&&'
-    t_LNOT              = r'!'
-    t_LT                = r'<'
-    t_GT                = r'>'
-    t_LE                = r'<='
-    t_GE                = r'>='
-    t_EQ                = r'=='
-    t_NE                = r'!='
+    t_PLUS              = ur'\+'
+    t_MINUS             = ur'-'
+    t_TIMES             = ur'\*'
+    t_DIVIDE            = ur'/'
+    t_MOD               = ur'%'
+    t_OR                = ur'\|'
+    t_AND               = ur'&'
+    t_NOT               = ur'~'
+    t_XOR               = ur'\^'
+    t_LSHIFT            = ur'<<'
+    t_RSHIFT            = ur'>>'
+    t_LOR               = ur'\|\|'
+    t_LAND              = ur'&&'
+    t_LNOT              = ur'!'
+    t_LT                = ur'<'
+    t_GT                = ur'>'
+    t_LE                = ur'<='
+    t_GE                = ur'>='
+    t_EQ                = ur'=='
+    t_NE                = ur'!='
 
     # Assignment operators
-    t_EQUALS            = r'='
-    t_TIMESEQUAL        = r'\*='
-    t_DIVEQUAL          = r'/='
-    t_MODEQUAL          = r'%='
-    t_PLUSEQUAL         = r'\+='
-    t_MINUSEQUAL        = r'-='
-    t_LSHIFTEQUAL       = r'<<='
-    t_RSHIFTEQUAL       = r'>>='
-    t_ANDEQUAL          = r'&='
-    t_OREQUAL           = r'\|='
-    t_XOREQUAL          = r'\^='
+    t_EQUALS            = ur'='
+    t_TIMESEQUAL        = ur'\*='
+    t_DIVEQUAL          = ur'/='
+    t_MODEQUAL          = ur'%='
+    t_PLUSEQUAL         = ur'\+='
+    t_MINUSEQUAL        = ur'-='
+    t_LSHIFTEQUAL       = ur'<<='
+    t_RSHIFTEQUAL       = ur'>>='
+    t_ANDEQUAL          = ur'&='
+    t_OREQUAL           = ur'\|='
+    t_XOREQUAL          = ur'\^='
 
     # Increment/decrement
-    t_PLUSPLUS          = r'\+\+'
-    t_MINUSMINUS        = r'--'
+    t_PLUSPLUS          = ur'\+\+'
+    t_MINUSMINUS        = ur'--'
 
     # ->
-    t_ARROW             = r'->'
+    t_ARROW             = ur'->'
 
     # ?
-    t_CONDOP            = r'\?'
+    t_CONDOP            = ur'\?'
 
     # Delimeters
-    t_LPAREN            = r'\('
-    t_RPAREN            = r'\)'
-    t_LBRACKET          = r'\['
-    t_RBRACKET          = r'\]'
-    t_LBRACE            = r'\{'
-    t_RBRACE            = r'\}'
-    t_COMMA             = r','
-    t_PERIOD            = r'\.'
-    t_SEMI              = r';'
-    t_COLON             = r':'
-    t_ELLIPSIS          = r'\.\.\.'
+    t_LPAREN            = ur'\('
+    t_RPAREN            = ur'\)'
+    t_LBRACKET          = ur'\['
+    t_RBRACKET          = ur'\]'
+    t_LBRACE            = ur'\{'
+    t_RBRACE            = ur'\}'
+    t_COMMA             = ur','
+    t_PERIOD            = ur'\.'
+    t_SEMI              = ur';'
+    t_COLON             = ur':'
+    t_ELLIPSIS          = ur'\.\.\.'
 
     t_STRING_LITERAL    = string_literal
     
@@ -361,7 +362,7 @@ class CLexer(object):
 
     @TOKEN(bad_octal_constant)
     def t_BAD_CONST_OCT(self, t):
-        msg = "Invalid octal constant"
+        msg = u"Invalid octal constant"
         self._error(msg, t)
 
     @TOKEN(octal_constant)
@@ -385,12 +386,12 @@ class CLexer(object):
     
     @TOKEN(unmatched_quote)
     def t_UNMATCHED_QUOTE(self, t):
-        msg = "Unmatched '"
+        msg = u"Unmatched '"
         self._error(msg, t)
 
     @TOKEN(bad_char_const)
     def t_BAD_CHAR_CONST(self, t):
-        msg = "Invalid char constant %s" % t.value
+        msg = u"Invalid char constant %s" % t.value
         self._error(msg, t)
 
     @TOKEN(wstring_literal)
@@ -401,37 +402,37 @@ class CLexer(object):
     
     @TOKEN(bad_string_literal)
     def t_BAD_STRING_LITERAL(self, t):
-        msg = "String contains invalid escape code" 
+        msg = u"String contains invalid escape code" 
         self._error(msg, t)
 
     @TOKEN(identifier)
     def t_ID(self, t):
-        t.type = self.keyword_map.get(t.value, "ID")
+        t.type = self.keyword_map.get(t.value, u"ID")
         
-        if t.type == 'ID' and self.type_lookup_func(t.value):
-            t.type = "TYPEID"
+        if t.type == u'ID' and self.type_lookup_func(t.value):
+            t.type = u"TYPEID"
             
         return t
     
     def t_error(self, t):
-        msg = 'Illegal character %s' % repr(t.value[0])
+        msg = u'Illegal character %s' % repr(t.value[0])
         self._error(msg, t)
 
 
-if __name__ == "__main__":
+if __name__ == u"__main__":
     import sys
     text = open(sys.argv[1]).read()
     
    
     def errfoo(msg, a, b):
-        sys.write(msg + "\n")
+        sys.write(msg + u"\n")
         sys.exit()
     
     def typelookup(namd):
         return False
 
     def printme(lst):
-        print(" ".join(str(x) for x in lst))
+        print u" ".join(unicode(x) for x in lst)
     
     clex = CLexer(errfoo, typelookup)
     clex.build()

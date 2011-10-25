@@ -1,5 +1,5 @@
-
-class Node:
+#!/usr/bin/python2
+class Node(object):
 
     def __init__(self,node_id,leaf=False):
         self.children={}
@@ -8,18 +8,18 @@ class Node:
         self.gen=-1
 
     def __repr__(self):
-        return str(self.node_id)+":"+str(self.gen)
+        return unicode(self.node_id)+u":"+unicode(self.gen)
     
     def drawdot(self,tree_id,gen):
-        leaf_str = ",shape=box" if self.leaf else ""
-        leaf_str+= ",style=filled" if self.gen == gen else ""
-        print("\t\tt%dn%d [label=\"%r\"%s];"% \
-                (tree_id,self.node_id,self,leaf_str))
+        leaf_str = u",shape=box" if self.leaf else u""
+        leaf_str+= u",style=filled" if self.gen == gen else u""
+        print u"\t\tt%dn%d [label=\"%r\"%s];"% \
+                (tree_id,self.node_id,self,leaf_str)
         for edge in self.get_children():
             edge.node.drawdot(tree_id,gen);
-            print("\t\t\tt%dn%d -> t%dn%d [label=\"%r\"];"% \
+            print u"\t\t\tt%dn%d -> t%dn%d [label=\"%r\"];"% \
                     (tree_id,self.node_id,tree_id, \
-                        edge.node.node_id,edge))
+                        edge.node.node_id,edge)
 
     def get_children(self):
         child_list=[self.children[key] for key in self.children]
@@ -34,7 +34,7 @@ class Node:
 
 
 
-class Edge:
+class Edge(object):
     def __init__(self,string,start,end,node):
         self.string=string
         self.start=start
@@ -44,7 +44,7 @@ class Edge:
     def __repr__(self):
         return self.string[self.start:self.end]
 
-class STnaive:
+class STnaive(object):
     NR_TREE=0 
 
     def __init__(self,string):
@@ -60,14 +60,14 @@ class STnaive:
         return self.nr_node-1
 
     def construct(self):
-        for current in range(0,len(self.string)):
+        for current in xrange(0,len(self.string)):
             self.add(self.root,current)
 
     def drawdot(self):
-        print("\tsubgraph clusterST%d{\n"%(self.tree_id))
+        print u"\tsubgraph clusterST%d{\n"%(self.tree_id)
         self.root.drawdot(self.tree_id,self.root.gen)
-        print("\tcolor=blue")
-        print("\t}")
+        print u"\tcolor=blue"
+        print u"\t}"
 
     def add(self,node,start):
         while True:
@@ -102,17 +102,17 @@ class STnaive:
             start=new_end
 
 def draw(st):
-    for i in range(0,len(st)):
+    for i in xrange(0,len(st)):
         STnaive(st[:i+1]).drawdot()
 
 
-if __name__=="__main__":
-    print("digraph ST{\n")
+if __name__==u"__main__":
+    print u"digraph ST{\n"
     
     #for i in range(0,len("mississippi$")):
     #    STnaive("mississippi$"[:i+1]).drawdot()
-    draw("mississippi$")
-    draw("ababcab$")
+    draw(u"mississippi$")
+    draw(u"ababcab$")
     #STnaive("papua").drawdot()
     #STnaive("a").drawdot()
     #STnaive("ab").drawdot()
@@ -121,4 +121,4 @@ if __name__=="__main__":
     #STnaive("ababcab").drawdot()
     #STnaive("ababcabc").drawdot()
     #STnaive("ababcabca").drawdot()
-    print("}")
+    print u"}"

@@ -1,4 +1,3 @@
-#!/usr/bin/python
 """PLY tokenizer for parsing Python"""
 
 # Written by Andrew Dalke
@@ -8,7 +7,6 @@
 
 import re
 import tokenize
-import codecs
 
 from ply import lex
 
@@ -39,7 +37,7 @@ def raise_indentation_error(message, t):
 
 
 # Import only the definitions starting with "t_"
-globals().update( (k,v) for (k,v) in list(python_tokens.__dict__.items())
+globals().update( (k,v) for (k,v) in python_tokens.__dict__.items()
                         if k.startswith("t_") )
 
 RESERVED = python_tokens.RESERVED
@@ -196,7 +194,7 @@ def t_HEX_NUMBER(t):
     value = t.value
     if value[-1] in "lL":
         value = value[:-1]
-        f = int
+        f = long
     else:
         f = int
     t.value = (f(value, 16), t.value)
@@ -208,7 +206,7 @@ def t_OCT_NUMBER(t):
     value = t.value
     if value[-1] in "lL":
         value = value[:-1]
-        f = int
+        f = long
     else:
         f = int
     t.value = (f(value, 8), t.value)
@@ -220,7 +218,7 @@ def t_DEC_NUMBER(t):
     value = t.value
     if value[-1] in "lL":
         value = value[:-1]
-        f = int
+        f = long
     else:
         f = int
     t.value = (f(value, 10), t.value)
@@ -417,17 +415,12 @@ def _parse_quoted_string(start_tok, string_toks):
     #  ""    - string_escape
     s = "".join(tok.value for tok in string_toks)
     quote_type = start_tok.value.lower()
-    uni_esc = codecs.getdecoder("unicode_escape")
-    raw_esc = codecs.getdecoder("raw_unicode_escape")
     if quote_type == "":
-        #return s.decode("string_escape")
-        return uni_esc(s)
+        return s.decode("string_escape")
     elif quote_type == "u":
-        #return s.decode("unicode_escape")
-        return uni_esc(s)
+        return s.decode("unicode_escape")
     elif quote_type == "ur":
-        #return s.decode("raw_unicode_escape")
-        return raw_esc(s)
+        return s.decode("raw_unicode_escape")
     elif quote_type == "r":
         return s
     else:
@@ -494,7 +487,7 @@ def annotate_indentation_state(lexer, token_stream):
     saw_colon = False
     for token in token_stream:
         if SHOW_TOKENS:
-            print("Got token:", token)
+            print "Got token:", token
         token.at_line_start = at_line_start
 
         if token.type == "COLON":
@@ -656,7 +649,7 @@ class PythonLexer(object):
 
     def token(self):
         try:
-            x = next(self.token_stream)
+            x = self.token_stream.next()
             #print "Return", x
             return x
         except StopIteration:
@@ -667,8 +660,7 @@ class PythonLexer(object):
 
 lexer = PythonLexer()
 
-if __name__=="__main__":
-    text = open("python_lex.py").read()
-    lexer.input(text, "python_lex.py")
-    for tok in lexer:
-        print(tok)
+#text = open("python_lex.py").read()
+#lexer.input(text, "python_lex.py")
+#for tok in lexer:
+#    print tok

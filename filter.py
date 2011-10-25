@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 from st import ST,log,FCLOG
 
 
@@ -30,7 +30,7 @@ def filter_mcs(gen):
             end = start + length
             if end in end_map: 
                 if length > end_map[end]:
-                    log("!!!!!!!!!!!!!!!end map conflict!!!!!!!!!!")
+                    log(u"!!!!!!!!!!!!!!!end map conflict!!!!!!!!!!")
                 else:
                     remove_set.add(start)
             end_map[end]=length
@@ -51,7 +51,7 @@ def filter_gst(eof_list,min_occur,gen):
                     idx+=1
                     limit=eof_list[idx]
                 else:
-                    raise RuntimeError("start pos %d > limit %d"% \
+                    raise RuntimeError(u"start pos %d > limit %d"% \
                         (start,limit))
         nr_occur=sum(occur)
         if nr_occur < min_occur:continue
@@ -60,7 +60,7 @@ def filter_gst(eof_list,min_occur,gen):
 
 
 
-if __name__ == "__main__":
+if __name__ == u"__main__":
     import sys
     string = sys.stdin.read()
     st = ST(string)
@@ -74,6 +74,6 @@ if __name__ == "__main__":
         if len(start_set)==0:continue
         #if length < 2 : continue
         start = list(start_set)[0]
-        print("%s\t%d:%s"%(string[start:start+length],length,start_set))
+        print u"%s\t%d:%s"%(string[start:start+length],length,start_set)
 
 

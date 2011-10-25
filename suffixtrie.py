@@ -1,4 +1,5 @@
-class Node:
+#!/usr/bin/python2
+class Node(object):
     nr_node = 0
     def __init__(self,char,suffix_link=None):
         self.char=char
@@ -14,24 +15,24 @@ class Node:
             self.children[key].add(char,last)
             if key==char:
                 found=True
-        if (not found) and (self.char==last or self.char=="^"):
+        if (not found) and (self.char==last or self.char==u"^"):
             self.children[char]=Node(char)
 
     def draw(self,level=0):
-        print("%s%s"%(" "*level,self.char))
+        print u"%s%s"%(u" "*level,self.char)
         for child in self.allChildren():
             child.draw(level+1)
 
     def drawDot(self):
-        print("\t n%d [label=\"%s\"];"%(self.node_id,self.char))
+        print u"\t n%d [label=\"%s\"];"%(self.node_id,self.char)
         for child in self.allChildren():
-            print("\tn%d -> n%d;"%(self.node_id,child.node_id))
+            print u"\tn%d -> n%d;"%(self.node_id,child.node_id)
             child.drawDot()
 
-    def printSuffix(self,pre=""):
+    def printSuffix(self,pre=u""):
         new_pre=pre+self.char
         if len(self.children)==0:  # leaf
-            print(new_pre)
+            print new_pre
         else:
             for child in self.allChildren():
                 child.printSuffix(new_pre)
@@ -44,11 +45,11 @@ class Node:
         return children
 
 
-class STrie:
+class STrie(object):
     def __init__(self,string):
-        self.root=Node("^")
-        self.string=string+"$"
-        last="^"
+        self.root=Node(u"^")
+        self.string=string+u"$"
+        last=u"^"
         for ch in self.string:
             self.root.add(ch,last)
             last=ch
@@ -57,13 +58,13 @@ class STrie:
         self.root.draw()
 
     def drawDot(self):
-        print("digraph STrie{")
+        print u"digraph STrie{"
         self.root.drawDot()
-        print("}")
+        print u"}"
 
     def printSuffix(self):
         self.root.printSuffix()
 
-if __name__=="__main__":
-    st=STrie("BANANAS")
+if __name__==u"__main__":
+    st=STrie(u"BANANAS")
     st.printSuffix()
