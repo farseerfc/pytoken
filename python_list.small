@@ -155,7 +155,6 @@
 /usr/lib/python2.7/site-packages/glib/option.py
 /usr/lib/python2.7/site-packages/plist/plist.py
 /usr/lib/python2.7/site-packages/formencode/util/threadinglocal.py
-/usr/lib/python2.7/site-packages/formencode/i18n/msgfmt.py
 /usr/lib/python2.7/site-packages/formencode/schema.py
 /usr/lib/python2.7/site-packages/formencode/interfaces.py
 /usr/lib/python2.7/site-packages/formencode/variabledecode.py
@@ -177,12 +176,9 @@
 /usr/lib/python2.7/site-packages/BeautifulSoup.py
 /usr/lib/python2.7/site-packages/musicbrainz2/model.py
 /usr/lib/python2.7/site-packages/musicbrainz2/data/countrynames.py
-/usr/lib/python2.7/site-packages/musicbrainz2/data/languagenames.py
-/usr/lib/python2.7/site-packages/musicbrainz2/data/scriptnames.py
 /usr/lib/python2.7/site-packages/musicbrainz2/data/releasetypenames.py
 /usr/lib/python2.7/site-packages/musicbrainz2/disc.py
 /usr/lib/python2.7/site-packages/musicbrainz2/utils.py
-/usr/lib/python2.7/site-packages/snack.py
 /usr/lib/python2.7/site-packages/pyexo.py
 /usr/lib/python2.7/site-packages/bluetooth/osx.py
 /usr/lib/python2.7/site-packages/bluetooth/widcomm.py
@@ -231,7 +227,6 @@
 /usr/lib/python2.7/site-packages/genshi/input.py
 /usr/lib/python2.7/site-packages/genshi/output.py
 /usr/lib/python2.7/site-packages/genshi/filters/transform.py
-/usr/lib/python2.7/site-packages/genshi/filters/i18n.py
 /usr/lib/python2.7/site-packages/genshi/util.py
 /usr/lib/python2.7/site-packages/genshi/path.py
 /usr/lib/python2.7/site-packages/genshi/core.py
@@ -299,7 +294,6 @@
 /usr/lib/python2.7/site-packages/pytz/exceptions.py
 /usr/lib/python2.7/site-packages/pytz/reference.py
 /usr/lib/python2.7/site-packages/pytz/tzfile.py
-/usr/lib/python2.7/site-packages/cupshelpers/cupshelpers.py
 /usr/lib/python2.7/site-packages/cupshelpers/ppds.py
 /usr/lib/python2.7/site-packages/cupshelpers/openprinting.py
 /usr/lib/python2.7/site-packages/cupshelpers/installdriver.py
@@ -310,7 +304,6 @@
 /usr/lib/python2.7/site-packages/lcms.py
 /usr/lib/python2.7/site-packages/netsnmp/client.py
 /usr/lib/python2.7/site-packages/mpdclient2.py
-/usr/lib/python2.7/site-packages/GnuPGInterface.py
 /usr/lib/python2.7/site-packages/asciidocapi.py
 /usr/lib/python2.7/site-packages/fuseparts/subbedopts.py
 /usr/lib/python2.7/site-packages/fuseparts/setcompatwrap.py
@@ -335,7 +328,6 @@
 /usr/lib/python2.7/site-packages/fdpexpect.py
 /usr/lib/python2.7/site-packages/dateutil/tz.py
 /usr/lib/python2.7/site-packages/dateutil/easter.py
-/usr/lib/python2.7/site-packages/dateutil/parser.py
 /usr/lib/python2.7/site-packages/dateutil/rrule.py
 /usr/lib/python2.7/site-packages/dateutil/relativedelta.py
 /usr/lib/python2.7/site-packages/dateutil/tzwin.py
@@ -414,7 +406,6 @@
 /usr/lib/python2.7/popen2.py
 /usr/lib/python2.7/argparse.py
 /usr/lib/python2.7/locale.py
-/usr/lib/python2.7/shlex.py
 /usr/lib/python2.7/sre_compile.py
 /usr/lib/python2.7/profile.py
 /usr/lib/python2.7/optparse.py
@@ -431,13 +422,11 @@
 /usr/lib/python2.7/bsddb/dbshelve.py
 /usr/lib/python2.7/atexit.py
 /usr/lib/python2.7/trace.py
-/usr/lib/python2.7/tarfile.py
 /usr/lib/python2.7/inspect.py
 /usr/lib/python2.7/mimetools.py
 /usr/lib/python2.7/ConfigParser.py
 /usr/lib/python2.7/modulefinder.py
 /usr/lib/python2.7/user.py
 /usr/lib/python2.7/sndhdr.py
-/usr/lib/python2.7/heapq.py
 /usr/lib/python2.7/string.py
 /usr/lib/python2.7/sha.py

@@ -37,8 +37,8 @@ def common(st):
             len_edge = parent_len + len(edge)
             begin_set.add(edge.begin-parent_len)
             stack.append((edge.dst,len_edge,len(edge)))
-        #yield parent_len,begin_set
-        result.append((parent_len,begin_set))
-    return result
+        yield parent_len,begin_set
+        #result.append((parent_len,begin_set))
+    #return result
 
 

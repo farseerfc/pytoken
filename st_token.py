@@ -8,7 +8,7 @@ FCLOG = True
 
 if __name__==u"__main__":
     import sys
-    sys.setrecursionlimit(1<<16)
+    #sys.setrecursionlimit(1<<16)
     terms= []
     file_id = 0
     tokenseq = TokenSeq([])
