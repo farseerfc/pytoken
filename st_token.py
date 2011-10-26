@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 from tokenply import *
 from filter import *
+from common import common
 from st import log,FCLOG 
 FCLOG = True
 
@@ -19,13 +20,15 @@ if __name__==u"__main__":
         terms.append(len(tokenseq))
     st=ST(tokenseq)
     log(terms)
+    print >>sys.stderr,"End Building ST!"
+    sys.stderr.flush()
 
     for length,start_set in \
             filter_mcs(
             filter_sort_length(
             filter_gst(terms,2,
             filter_length(30,
-            st.root.common())))):
+            common(st))))):
         if len(start_set)==0:continue
         start = list(start_set)[0]
         print u"%d:%s\t%s"%(length,start_set,

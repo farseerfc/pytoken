@@ -44,6 +44,7 @@ class Node(object):
     def __iter__(self):
         return self.children.__iter__()
 
+    # recursion version, use iteration version in ST.common
     def common(self,parent_len=0,edge_len=0):
         begin_set = set()
         for char in self.children:
