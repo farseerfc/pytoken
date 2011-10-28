@@ -2,6 +2,7 @@
 *.dot
 
 __pycache__
+*.ipt
 *.out
 *.pyc
 *.pyo

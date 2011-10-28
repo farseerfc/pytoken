@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-from st import ST,log,FCLOG
+from st import ST
 
 
 def filter_no(gen):
@@ -30,7 +30,7 @@ def filter_mcs(gen):
             end = start + length
             if end in end_map: 
                 if length > end_map[end]:
-                    log(u"!!!!!!!!!!!!!!!end map conflict!!!!!!!!!!")
+                    assert(False)
                 else:
                     remove_set.add(start)
             end_map[end]=length
@@ -56,8 +56,6 @@ def filter_gst(eof_list,min_occur,gen):
         nr_occur=sum(occur)
         if nr_occur < min_occur:continue
         yield length,start_set
-
-
 
 
 if __name__ == u"__main__":

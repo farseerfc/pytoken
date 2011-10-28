@@ -2,9 +2,7 @@
 from tokenply import *
 from filter import *
 from common import common
-from st import log,FCLOG 
-FCLOG = True
-
+from ngram import filter_ngram,filter_sort_occur
 
 if __name__==u"__main__":
     import sys
@@ -12,27 +10,26 @@ if __name__==u"__main__":
     terms= []
     file_id = 0
     tokenseq = TokenSeq([])
-    log(u"TOKENSEQ:%d"%len(tokenseq))
     for f in sys.argv[1:]:
         file_id +=1
         tokenseq += tokenize(f)
-        log(u"TOKENSEQ:%d"%len(tokenseq))
         terms.append(len(tokenseq))
     st=ST(tokenseq)
-    log(terms)
     print >>sys.stderr,"End Building ST!"
     sys.stderr.flush()
 
-    for length,start_set in \
+    #for length,start_set in \
+    for occur,length,start_set in \
+            filter_sort_occur(
+            filter_ngram(tokenseq,"input",4,
             filter_mcs(
             filter_sort_length(
             filter_gst(terms,2,
-            filter_length(30,
-            common(st))))):
+            filter_length(64,
+            common(st))))))):
         if len(start_set)==0:continue
         start = list(start_set)[0]
-        print u"%d:%s\t%s"%(length,start_set,
+        print u"%f,%d:%s\t%s"%(occur,length,start_set,
             tokenseq[start:start+length])
 
 
-    log(unicode(terms) +unicode(len(tokenseq)))

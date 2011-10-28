@@ -1,18 +1,18 @@
 #!/usr/bin/python2
 FCLOG=False
 
-def log(string):
-    if FCLOG:
-        import sys
-        print >>sys.stderr, string
+#def log(string):
+#    if FCLOG:
+#        import sys
+#        print >>sys.stderr, string
 
 class Node(object):
     RANKING = True
 
-    def __init__(self,node_id,gen,suffix_link=None):
+    def __init__(self,node_id,suffix_link=None):
         self.children={}
         self.node_id=node_id
-        self.gen=gen
+        #self.gen=gen
         self.suffix_link=suffix_link
 
     def is_leaf(self): # root is not leaf and has no suffix_link
@@ -22,15 +22,15 @@ class Node(object):
         return unicode(self.node_id)+u":"+unicode(self.gen)
     def get_children(self):
         child_list=[self[key] for key in self]
-        child_list.sort(key=lambda x:x.dst.rank())
+        #child_list.sort(key=lambda x:x.dst.rank())
         return child_list
 
-    def rank(self):
-        result=self.node_id
-        if Node.RANKING:
-            for key in self:
-                result = min(result,self[key].dst.rank())
-        return result
+    #def rank(self):
+    #    result=self.node_id
+    #    if Node.RANKING:
+    #        for key in self:
+    #            result = min(result,self[key].dst.rank())
+    #    return result
 
     def __getitem__(self,key):
         return self.children[key]
@@ -68,7 +68,6 @@ class Edge(object):
         return self.end - self.begin + 1
 
     def split(self,suffix,suffix_tree,gen):
-        log(u"edge %r,suffix %r"%(self,suffix))
         new_node=Node(suffix_tree.alloc_node(),gen)
         new_edge=Edge(self.begin+len(suffix), \
                 self.end,new_node,self.dst )
