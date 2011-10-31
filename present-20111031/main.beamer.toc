@@ -1,3 +1,0 @@
-\beamer@endinputifotherversion {3.12pt}
-\select@language {english}
-\beamer@sectionintoc {1}{In last week}{2}{0}{1}

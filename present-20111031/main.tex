@@ -239,12 +239,7 @@ self.fix_sentence_endings = fix_sentence_endings
 self.break_long_words = break_long_words
 self.drop_whitespace = drop_whitespace
 self.break_on_hyphens = break_on_hyphens
-
-# recompile the regexes for Unicode mode -- done in this clumsy way for
-# backwards compatibility because it's rather common to monkey-patch
-# the TextWrapper class' wordsep_re attribute.
-self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
- \end{lstlisting}
+\end{lstlisting}
 \end{column}
 
 \begin{column}[t]{0.48\textwidth}
@@ -285,38 +280,36 @@ self.metavar = metavar
 \begin{column}[t]{0.48\textwidth}
 /usr/lib/python2.7/rexec.py:(2431,84,2733,96)
 \begin{lstlisting}
-        self.rexec = rexec
+    self.rexec = rexec
 
-    def set_rexec(self, rexec):
-        # Called by RExec instance to complete initialization
-        self.rexec = rexec
+def set_rexec(self, rexec):
+    self.rexec = rexec
 
-    def get_suffixes(self):
-        return self.rexec.get_suffixes()
+def get_suffixes(self):
+    return self.rexec.get_suffixes()
 
-    def is_builtin(self, name):
-        return self.rexec.is_builtin(name)
+def is_builtin(self, name):
+    return self.rexec.is_builtin(name)
 
-    def init_builtin(self, name):
- 
+def init_builtin(self, name):
 \end{lstlisting}
 \end{column}
 
 \begin{column}[t]{0.48\textwidth}
 /usr/lib/python2.7/wave.py:(13626,377,14086,391)
 \begin{lstlisting}
-        return self.loader
+    return self.loader
 
-    def set_loader(self, loader):
-        self.loader = loader
+def set_loader(self, loader):
+    self.loader = loader
 
-    def get_hooks(self):
-        return self.loader.get_hooks()
+def get_hooks(self):
+    return self.loader.get_hooks()
 
-    def set_hooks(self, hooks):
-        return self.loader.set_hooks(hooks)
+def set_hooks(self, hooks):
+    return self.loader.set_hooks(hooks)
 
-    def import_module(self, name, globals={}, locals={}, fromlist=[]):
+def import_module(self, name, globals={}, locals={}, fromlist=[]):
 \end{lstlisting}
 
 \end{column}
@@ -337,36 +330,36 @@ self.metavar = metavar
 \begin{column}[t]{0.48\textwidth}
 /usr/lib/python2.7/cProfile.py:(5398,166,6514,199)
 \begin{lstlisting}
-    usage = "cProfile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
-    parser = OptionParser(usage=usage)
-    parser.allow_interspersed_args = False
-    parser.add_option('-o', '--outfile', dest="outfile",
-        help="Save stats to <outfile>", default=None)
-    parser.add_option('-s', '--sort', dest="sort",
-        help="Sort order when printing to stdout, based on pstats.Stats class",
-        default=-1)
+usage = "cProfile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
+parser = OptionParser(usage=usage)
+parser.allow_interspersed_args = False
+parser.add_option('-o', '--outfile', dest="outfile",
+    help="Save stats to <outfile>", default=None)
+parser.add_option('-s', '--sort', dest="sort",
+    help="Sort order when printing to stdout, based on pstats.Stats class",
+    default=-1)
 
-    if not sys.argv[1:]:
-        parser.print_usage()
-        sys.exit(2)
+if not sys.argv[1:]:
+    parser.print_usage()
+    sys.exit(2)
 
-    (options, args) = parser.parse_args()
-    sys.argv[:] = args
+(options, args) = parser.parse_args()
+sys.argv[:] = args
 
-    if len(args) > 0:
-        progname = args[0]
-        sys.path.insert(0, os.path.dirname(progname))
-        with open(progname, 'rb') as fp:
-            code = compile(fp.read(), progname, 'exec')
-        globs = {
-            '__file__': progname,
-            '__name__': '__main__',
-            '__package__': None,
-        }
-        runctx(code, globs, None, options.outfile, options.sort)
-    else:
-        parser.print_usage()
-    return parser
+if len(args) > 0:
+    progname = args[0]
+    sys.path.insert(0, os.path.dirname(progname))
+    with open(progname, 'rb') as fp:
+        code = compile(fp.read(), progname, 'exec')
+    globs = {
+        '__file__': progname,
+        '__name__': '__main__',
+        '__package__': None,
+    }
+    runctx(code, globs, None, options.outfile, options.sort)
+else:
+    parser.print_usage()
+return parser
 
 # When invoked as main program, invoke the profiler on a script
 if __name__ == '__main__':
@@ -377,36 +370,36 @@ if __name__ == '__main__':
 \begin{column}[t]{0.48\textwidth}
 /usr/lib/python2.7/profile.py:(22350,586,23465,619)
 \begin{lstlisting}
-    usage = "profile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
-    parser = OptionParser(usage=usage)
-    parser.allow_interspersed_args = False
-    parser.add_option('-o', '--outfile', dest="outfile",
-        help="Save stats to <outfile>", default=None)
-    parser.add_option('-s', '--sort', dest="sort",
-        help="Sort order when printing to stdout, based on pstats.Stats class",
-        default=-1)
+usage = "profile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
+parser = OptionParser(usage=usage)
+parser.allow_interspersed_args = False
+parser.add_option('-o', '--outfile', dest="outfile",
+    help="Save stats to <outfile>", default=None)
+parser.add_option('-s', '--sort', dest="sort",
+    help="Sort order when printing to stdout, based on pstats.Stats class",
+    default=-1)
 
-    if not sys.argv[1:]:
-        parser.print_usage()
-        sys.exit(2)
+if not sys.argv[1:]:
+    parser.print_usage()
+    sys.exit(2)
 
-    (options, args) = parser.parse_args()
-    sys.argv[:] = args
+(options, args) = parser.parse_args()
+sys.argv[:] = args
 
-    if len(args) > 0:
-        progname = args[0]
-        sys.path.insert(0, os.path.dirname(progname))
-        with open(progname, 'rb') as fp:
-            code = compile(fp.read(), progname, 'exec')
-        globs = {
-            '__file__': progname,
-            '__name__': '__main__',
-            '__package__': None,
-        }
-        runctx(code, globs, None, options.outfile, options.sort)
-    else:
-        parser.print_usage()
-    return parser
+if len(args) > 0:
+    progname = args[0]
+    sys.path.insert(0, os.path.dirname(progname))
+    with open(progname, 'rb') as fp:
+        code = compile(fp.read(), progname, 'exec')
+    globs = {
+        '__file__': progname,
+        '__name__': '__main__',
+        '__package__': None,
+    }
+    runctx(code, globs, None, options.outfile, options.sort)
+else:
+    parser.print_usage()
+return parser
 
 # When invoked as main program, invoke the profiler on a script
 if __name__ == '__main__':
@@ -536,7 +529,6 @@ if q:
 \begin{itemize}
 \item Continue to read papers
 \item Add c lexer support and other language support
-\item idea of using n-gram to figure out "interesting" clones
 \end{itemize}
 \end{frame}
 
