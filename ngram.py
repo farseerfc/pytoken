@@ -13,9 +13,9 @@ def ngram(tokenseq,time,n):
 def input(filename,n):
     result = {}
     for line in open(filename):
-        pos, tokenseq_str = line.split("\t")
+        pos, tokenseq_str = line.split("\t")[:2]
         length_str,start_set_str = pos.split(":")
-        length = int(length_str)
+        length = int(length_str.split(",")[1])
         start_set=eval(start_set_str)
         tokenseq_str = tokenseq_str.strip()
         tokenseq = tokenseq_str.split(",")

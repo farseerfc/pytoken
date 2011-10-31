@@ -39,35 +39,52 @@ class TokenPly(object):
         return hash(self.type)
 
 class TokenSeq(object):
-    def __init__(self,lst):
+    def __init__(self,lst,start=0,length=-1):
+        if length==-1:length=len(lst)
+        self.start=start
+        self.length=length
+        if type(lst) == TokenSeq: raise NotImplemented
         if type(lst) == list:
             self.lst=lst
             return
+        raise NotImplemented
         self.lst=[]
         for token in lst:
             self.lst.append(token)
 
+    def cano(self):
+        if self.start == 0 and self.length == len(self.lst): return
+        raise NotImplemented
+
+        self.lst=self.lst[self.start:self.start+self.length]
+        self.start=0
+        self.length=len(self.lst)
+
     def __len__(self):
-        return len(self.lst)
+        return self.length
 
     def __iadd__(self,other):
         if type(other)==TokenSeq:
-            self.lst.extend(other.lst)
+            self.cano()
+            self.lst.extend(other)
+            self.length=len(self.lst)
             return self
         else:
-            return NotImplemented()
+            return NotImplemented
 
 
     def __getitem__(self,key):
         if type(key)==slice:
-            return TokenSeq(self.lst[key])
-        return self.lst[key]
-
-    def __delitem__(self,key):
-        del self.lst[key]
+            return TokenSeq(self.lst,
+                    self.start+key.start,
+                    self.start+(key.stop-key.start))
+        if key>=self.length: raise IndexError()
+        return self.lst[self.start+key]
 
     def __setitem__(self,key,value):
-        self.lst[key]=value
+        self.cano()
+        if key>=self.length: raise IndexError()
+        self.lst[self.start+key]=value
 
     def __cmp__(self,other):
         for i in xrange(0,len(self)):
@@ -77,18 +94,16 @@ class TokenSeq(object):
         return 0
 
     def __iter__(self):
-        for item in self.lst:
-            yield item
-
-    def __reversed__(self):
-        for item in reversed(self.lst):
-            yield item
+        for i in xrange(self.start,self.start+self.length):
+            yield self.lst[i]
 
     def append(self,item):
+        self.cano()
         self.lst.append(item)
+        self.length=len(self.lst)
 
     def __repr__(self):
-        return u",".join(x.type for x in self.lst)
+        return u",".join(x.type for x in self)
 
     def __eq__(self,other):
         return self.__cmp__(other) == 0
@@ -97,6 +112,7 @@ class TokenSeq(object):
         return self.__cmp__(other) < 0
 
 TokenSeq = total_ordering(TokenSeq)
+
 def clex(text,filename):
     def errfoo(msg,a,b):
         import sys

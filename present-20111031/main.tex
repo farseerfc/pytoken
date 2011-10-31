@@ -1,0 +1,543 @@
+ 
+\usepackage[round]{natbib}
+\usepackage{tikz} 
+\usepackage{mathptmx}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{color}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\only<beamer|trans|handout|draft>{
+\newcommand{\newblock}{}
+}
+
+\usepackage{listings}
+%%%%%%%%%% Farseerfc: fix the bug of xetex on navigation bar of beamer %%%%%%%%%
+
+\def\beamer@linkspace#1{%
+  \begin{pgfpicture}{0pt}{-1.5pt}{#1}{5.5pt}
+    \pgfsetfillopacity{0}
+    \pgftext[x=0pt,y=-1.5pt]{.}
+    \pgftext[x=#1,y=5.5pt]{.}
+  \end{pgfpicture}}
+
+%%%%%%%%%% Farseerfc: fix the bug of xetex on navigation bar of beamer %%%%%%%%%
+
+\usetheme{Warsaw}
+\usecolortheme[named=OliveGreen]{structure}
+%\setbeamercovered{dynamic}
+\useoutertheme{infolines}
+\usepackage[english]{babel}
+
+
+\graphicspath{{figure/}}
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Farseerfc defined commands
+
+\newcommand{\br}[0]{\par\vskip15pt\par}
+%\newenvironment{topcolumns}{\begin{columns}[t]}{\end{columns}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\title[report]{Report of Progress}
+
+
+\subtitle{by Jiachen Yang}
+
+\author[jc-yang]{
+	Jiachen Yang\inst{1} 
+}
+
+\institute[Osaka-U]{
+	\inst{1}Research Student in Osaka University
+}
+
+
+
+\frame{\maketitle}
+
+
+\AtBeginSubsection[]{
+  \frame<beamer>{ 
+    \frametitle{Section Outline}   
+    \tableofcontents[currentsection,currentsubsection] 
+  }
+}
+
+\AtBeginSection[]{
+  \frame<beamer>{ 
+    \frametitle{Part Outline}   
+    \tableofcontents[currentpart,currentsection] 
+  }
+}
+
+\AtBeginPart{
+  \frame<beamer>{
+	\partpage
+  }
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{In last week} 
+
+\begin{frame}{Works in last week}
+
+\begin{itemize}
+\item Implemented n-gram to rank Maximal Common Sequence
+\item Optimize memory usage and performance
+\end{itemize}
+
+%Paper reading \cite{roy2007survey}, \cite{rainer2008using},
+%      \cite{smith2009detecting}.
+
+%\bibliographystyle{abbrvnat}
+%\bibliography{ref}
+\end{frame}
+
+\begin{frame}{Divide clones into Interesting group and Non-interesting group}
+
+Find \alert{62} clone-sets which is longer than \alert{64} tokens 
+from \alert{183} fils of Python stdlib.
+
+Look into these clone-sets manually, mark \alert{22} of them as 
+interesting, rest as non-ineresting.
+
+Count the occurance of n-gram from non-interesting clone-sets. Use this
+as input.
+
+\begin{equation}
+Importance(clone) = 
+\frac{\sum_{gram \in clone} Occur(gram)}{NRgrams(clone)} 
+\end{equation}
+
+\begin{equation}
+Rank(clone) = \frac{Importance(clone)}{NRtokens(clone)}
+\end{equation}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[shrink=35,fragile]{Clone of 64+ tokens from Python 2.7 stdlib}
+
+\lstset{
+    breaklines=true
+}
+
+\begin{lstlisting}
+0.000000,66:set([55784, 207455])	DEF,NAME,LPAR,NAME,COMMA,NAME,RPAR,COLON,NEWLINE,INDENT,IF,NAME,LESS,NUMBER,OR,NAME,GREATER,NAME,DOT,NAME,COLON,NEWLINE,INDENT,RAISE,NAME,COMMA,STRING,NEWLINE,DEDENT,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NUMBER,NEWLINE,DEDENT,DEF,NAME,LPAR,NAME,COMMA,NAME,RPAR,COLON,NEWLINE,INDENT,IF,NAME,DOT,NAME,COLON,NEWLINE,INDENT,NAME,DOT,NAME,DOT,NAME,LPAR,NUMBER	/usr/lib/python2.7/aifc.py:(12768,393,13052,401),/usr/lib/python2.7/wave.py:(7738,219,8022,227)
+0.000000,66:set([73097, 367803])	NEWLINE,NAME,EQUAL,LSQB,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA	/usr/lib/python2.7/macpath.py:(152,7,533,14),/usr/lib/python2.7/keyword.py:(314,13,850,47)
+0.000000,65:set([68744, 335450])	NAME,NEWLINE,DEDENT,DEF,NAME,LPAR,NAME,COMMA,NAME,RPAR,COLON,NEWLINE,INDENT,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,DEDENT,DEF,NAME,LPAR,NAME,RPAR,COLON,NEWLINE,INDENT,RETURN,NAME,DOT,NAME,DOT,NAME,LPAR,RPAR,NEWLINE,DEDENT,DEF,NAME,LPAR,NAME,COMMA,NAME,RPAR,COLON,NEWLINE,INDENT,RETURN,NAME,DOT,NAME,DOT,NAME,LPAR,NAME,RPAR,NEWLINE,DEDENT,DEF,NAME,LPAR,NAME,COMMA,NAME	/usr/lib/python2.7/rexec.py:(2431,84,2733,96),/usr/lib/python2.7/ihooks.py:(11898,351,12140,362)
+0.000000,65:set([25224, 251671])	NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME	/usr/lib/python2.7/cookielib.py:(24631,750,25241,765),/usr/lib/python2.7/httplib.py:(11353,347,11902,361)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[shrink=30,fragile]{Clones that appearently \alert{NOT} interesting}
+
+\lstset{
+    breaklines=true
+}
+
+\begin{lstlisting}
+0.000000,84:set([49268, 126614])	STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA,STRING,COLON,NAME,COMMA	/usr/lib/python2.7/tokenize.py:(3723,104,4289,114),/usr/lib/python2.7/logging/handlers.py:(27668,677,28330,697)
+0.000000,73:set([234292, 236182])	NEWLINE,NAME,EQUAL,LSQB,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING	/usr/lib/python2.7/posixpath.py:(588,18,1018,26),/usr/lib/python2.7/os2emxpath.py:(370,12,784,19)
+0.000000,66:set([73097, 367803])	NEWLINE,NAME,EQUAL,LSQB,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA,STRING,COMMA	/usr/lib/python2.7/macpath.py:(152,7,533,14),/usr/lib/python2.7/keyword.py:(314,13,850,47)
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink=30,fragile]{Non-interesting Clones Judging by Viewing code}
+
+\lstset{
+    breaklines=true,
+    language=Python
+}
+
+\begin{columns}
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/aifc.py:(22067,646,22703,665)
+
+\begin{lstlisting}
+        if comptype not in ('NONE', 'ULAW', 'ALAW', 'G722'):
+            raise Error, 'unsupported compression type'
+        self._comptype = comptype
+        self._compname = compname
+
+    def getcomptype(self):
+        return self._comptype
+
+    def getcompname(self):
+        return self._compname
+
+##  def setversion(self, version):
+##      if self._nframeswritten:
+##          raise Error, 'cannot change parameters after starting to write'
+##      self._version = version
+
+    def setparams(self, info):
+        nchannels, sampwidth, framerate, nframes, comptype, compname = info
+        if self._nframeswritten:
+            raise Error, 'cannot change parameters after starting to write'
+\end{lstlisting}
+\end{column}
+
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/wave.py:(13626,377,14086,391)
+
+\begin{lstlisting}
+        if comptype not in ('NONE',):
+            raise Error, 'unsupported compression type'
+        self._comptype = comptype
+        self._compname = compname
+
+    def getcomptype(self):
+        return self._comptype
+
+    def getcompname(self):
+        return self._compname
+
+    def setparams(self, params):
+        nchannels, sampwidth, framerate, nframes, comptype, compname = params
+        if self._datawritten:
+            raise Error, 'cannot change parameters after starting to write'
+ 
+\end{lstlisting}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink=30,fragile]{Non-interesting Clones Judging by Viewing code}
+
+\lstset{
+    breaklines=true,
+    language=Python
+}
+
+\begin{columns}
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/textwrap.py:(4808,111,5681,130)
+\begin{lstlisting}
+         expand_tabs=True,
+         replace_whitespace=True,
+         fix_sentence_endings=False,
+         break_long_words=True,
+         drop_whitespace=True,
+         break_on_hyphens=True):
+self.width = width
+self.initial_indent = initial_indent
+self.subsequent_indent = subsequent_indent
+self.expand_tabs = expand_tabs
+self.replace_whitespace = replace_whitespace
+self.fix_sentence_endings = fix_sentence_endings
+self.break_long_words = break_long_words
+self.drop_whitespace = drop_whitespace
+self.break_on_hyphens = break_on_hyphens
+
+# recompile the regexes for Unicode mode -- done in this clumsy way for
+# backwards compatibility because it's rather common to monkey-patch
+# the TextWrapper class' wordsep_re attribute.
+self.wordsep_re_uni = re.compile(self.wordsep_re.pattern, re.U)
+ \end{lstlisting}
+\end{column}
+
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/wave.py:(13626,377,14086,391)
+\begin{lstlisting}
+         default=None,
+         type=None,
+         choices=None,
+         required=False,
+         help=None,
+         metavar=None):
+self.option_strings = option_strings
+self.dest = dest
+self.nargs = nargs
+self.const = const
+self.default = default
+self.type = type
+self.choices = choices
+self.required = required
+self.help = help
+self.metavar = metavar
+\end{lstlisting}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink=30,fragile]{Non-interesting Clones Judging by Viewing code}
+
+\lstset{
+    breaklines=true,
+    language=Python
+}
+
+\begin{columns}
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/rexec.py:(2431,84,2733,96)
+\begin{lstlisting}
+        self.rexec = rexec
+
+    def set_rexec(self, rexec):
+        # Called by RExec instance to complete initialization
+        self.rexec = rexec
+
+    def get_suffixes(self):
+        return self.rexec.get_suffixes()
+
+    def is_builtin(self, name):
+        return self.rexec.is_builtin(name)
+
+    def init_builtin(self, name):
+ 
+\end{lstlisting}
+\end{column}
+
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/wave.py:(13626,377,14086,391)
+\begin{lstlisting}
+        return self.loader
+
+    def set_loader(self, loader):
+        self.loader = loader
+
+    def get_hooks(self):
+        return self.loader.get_hooks()
+
+    def set_hooks(self, hooks):
+        return self.loader.set_hooks(hooks)
+
+    def import_module(self, name, globals={}, locals={}, fromlist=[]):
+\end{lstlisting}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink=35,fragile]{Interesting Clones}
+
+\lstset{
+    breaklines=true,
+    language=Python
+}
+
+\begin{columns}
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/cProfile.py:(5398,166,6514,199)
+\begin{lstlisting}
+    usage = "cProfile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
+    parser = OptionParser(usage=usage)
+    parser.allow_interspersed_args = False
+    parser.add_option('-o', '--outfile', dest="outfile",
+        help="Save stats to <outfile>", default=None)
+    parser.add_option('-s', '--sort', dest="sort",
+        help="Sort order when printing to stdout, based on pstats.Stats class",
+        default=-1)
+
+    if not sys.argv[1:]:
+        parser.print_usage()
+        sys.exit(2)
+
+    (options, args) = parser.parse_args()
+    sys.argv[:] = args
+
+    if len(args) > 0:
+        progname = args[0]
+        sys.path.insert(0, os.path.dirname(progname))
+        with open(progname, 'rb') as fp:
+            code = compile(fp.read(), progname, 'exec')
+        globs = {
+            '__file__': progname,
+            '__name__': '__main__',
+            '__package__': None,
+        }
+        runctx(code, globs, None, options.outfile, options.sort)
+    else:
+        parser.print_usage()
+    return parser
+
+# When invoked as main program, invoke the profiler on a script
+if __name__ == '__main__':
+    main()
+\end{lstlisting}
+\end{column}
+
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/profile.py:(22350,586,23465,619)
+\begin{lstlisting}
+    usage = "profile.py [-o output_file_path] [-s sort] scriptfile [arg] ..."
+    parser = OptionParser(usage=usage)
+    parser.allow_interspersed_args = False
+    parser.add_option('-o', '--outfile', dest="outfile",
+        help="Save stats to <outfile>", default=None)
+    parser.add_option('-s', '--sort', dest="sort",
+        help="Sort order when printing to stdout, based on pstats.Stats class",
+        default=-1)
+
+    if not sys.argv[1:]:
+        parser.print_usage()
+        sys.exit(2)
+
+    (options, args) = parser.parse_args()
+    sys.argv[:] = args
+
+    if len(args) > 0:
+        progname = args[0]
+        sys.path.insert(0, os.path.dirname(progname))
+        with open(progname, 'rb') as fp:
+            code = compile(fp.read(), progname, 'exec')
+        globs = {
+            '__file__': progname,
+            '__name__': '__main__',
+            '__package__': None,
+        }
+        runctx(code, globs, None, options.outfile, options.sort)
+    else:
+        parser.print_usage()
+    return parser
+
+# When invoked as main program, invoke the profiler on a script
+if __name__ == '__main__':
+    main()
+\end{lstlisting}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[shrink=20,fragile]{Interesting Clones}
+
+\lstset{
+    breaklines=true,
+    language=Python
+}
+
+\begin{columns}
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/ihooks.py:(16000,461,16330,473)
+\begin{lstlisting}
+if '.' in name:
+    i = name.find('.')
+    head = name[:i]
+    tail = name[i+1:]
+else:
+    head = name
+    tail = ""
+if parent:
+    qname = "%s.%s" % (parent.__name__, head)
+else:
+    qname = head
+q = self.import_it(head, qname, parent)
+if q: return q, tail
+\end{lstlisting}
+\end{column}
+
+\begin{column}[t]{0.48\textwidth}
+/usr/lib/python2.7/modulefinder.py:(5689,171,6023,183)
+\begin{lstlisting}
+if '.' in name:
+    i = name.find('.')
+    head = name[:i]
+    tail = name[i+1:]
+else:
+    head = name
+    tail = ""
+if parent:
+    qname = "%s.%s" % (parent.__name__, head)
+else:
+    qname = head
+q = self.import_module(head, qname, parent)
+if q:
+\end{lstlisting}
+
+\end{column}
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{5-gram of non-interesting clones}
+\begin{lstlisting}
+2:('COLON', 'NAME', 'SEMI', 'NEWLINE', 'DEDENT')
+2:('COLON', 'NEWLINE', 'INDENT', 'NAME', 'COMMA')
+2:('COLON', 'NEWLINE', 'INDENT', 'NAME', 'LSQB')
+2:('COLON', 'NEWLINE', 'INDENT', 'RETURN', 'NEWLINE')
+2:('COMMA', 'NAME', 'COMMA', 'NAME', 'EQUAL')
+2:('COMMA', 'NAME', 'EQUAL', 'NAME', 'NEWLINE')
+2:('COMMA', 'NAME', 'EQUAL', 'NAME', 'RPAR')
+2:('COMMA', 'NAME', 'EQUAL', 'NUMBER', 'RPAR')
+2:('COMMA', 'NAME', 'IN', 'NAME', 'LPAR')
+2:('COMMA', 'NAME', 'RPAR', 'NEWLINE', 'FOR')
+   ... ...
+856:('STRING', 'RSQB', 'EQUAL', 'NAME', 'DOT')
+1110:('COLON', 'STRING', 'COMMA', 'NUMBER', 'COLON')
+1110:('NUMBER', 'COLON', 'STRING', 'COMMA', 'NUMBER')
+1110:('STRING', 'COMMA', 'NUMBER', 'COLON', 'STRING')
+1112:('COMMA', 'NUMBER', 'COLON', 'STRING', 'COMMA')
+1124:('EQUAL', 'NAME', 'DOT', 'NAME', 'NEWLINE')
+1272:('COMMA', 'STRING', 'COLON', 'STRING', 'COMMA')
+1274:('COLON', 'STRING', 'COMMA', 'STRING', 'COLON')
+1274:('STRING', 'COLON', 'STRING', 'COMMA', 'STRING')
+1276:('STRING', 'COMMA', 'STRING', 'COLON', 'STRING')
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[shrink=25,fragile]{Sorting using rank of clone I}
+\lstset{
+    breaklines=true
+}
+\begin{lstlisting}
+0.297738,254:set([21521, 473793])	DEF,NAME,LPAR,RPAR,COLON,NEWLINE,INDENT,IMPORT,NAME,NEWLINE,NAME,EQUAL,NUMBER,NEWLINE,IF,NAME,DOT,NAME,LSQB,NUMBER,COLON,RSQB,AND,NAME,DOT,NAME,LSQB,NUMBER,RSQB,EQEQUAL,STRING,COLON,NEWLINE,INDENT,DEL,NAME,DOT,NAME,LSQB,NUMBER,COLON,NUMBER,RSQB,NEWLINE,NAME,EQUAL,NUMBER,NEWLINE,DEDENT,TRY,COLON,NEWLINE,INDENT,IF,NAME,DOT,NAME,LSQB,NUMBER,COLON,RSQB,COLON,NEWLINE,INDENT,NAME,LPAR,NAME,DOT,NAME,LSQB,NUMBER,COLON,RSQB,COMMA,NAME,COMMA,NUMBER,RPAR,NEWLINE,DEDENT,ELSE,COLON,NEWLINE,INDENT,NAME,LPAR,LSQB,STRING,RSQB,COMMA,NAME,COMMA,NUMBER,RPAR,NEWLINE,DEDENT,DEDENT,EXCEPT,NAME,COLON,NEWLINE,INDENT,NAME,DOT,NAME,DOT,NAME,LPAR,STRING,RPAR,NEWLINE,NAME,DOT,NAME,LPAR,NUMBER,RPAR,NEWLINE,DEDENT,DEDENT,DEF,NAME,LPAR,NAME,COMMA,NAME,COMMA,NAME,RPAR,COLON,NEWLINE,INDENT,IMPORT,NAME,NEWLINE,IMPORT,NAME,NEWLINE,FOR,NAME,IN,NAME,COLON,NEWLINE,INDENT,IF,NAME,DOT,NAME,DOT,NAME,LPAR,NAME,RPAR,COLON,NEWLINE,INDENT,PRINT,NAME,PLUS,STRING,COMMA,NEWLINE,IF,NAME,OR,NAME,COLON,NEWLINE,INDENT,PRINT,STRING,NEWLINE,IMPORT,NAME,NEWLINE,NAME,EQUAL,NAME,DOT,NAME,LPAR,NAME,DOT,NAME,DOT,NAME,LPAR,NAME,COMMA,STRING,RPAR,RPAR,NEWLINE,NAME,LPAR,NAME,COMMA,NAME,COMMA,NUMBER,RPAR,NEWLINE,DEDENT,ELSE,COLON,NEWLINE,INDENT,PRINT,STRING,NEWLINE,DEDENT,DEDENT,ELSE,COLON,NEWLINE,INDENT,PRINT,NAME,PLUS,STRING,COMMA,NEWLINE,NAME,DOT,NAME,DOT,NAME,LPAR,RPAR,NEWLINE,TRY,COLON,NEWLINE,INDENT,PRINT,NAME,LPAR,NAME,RPAR,NEWLINE,DEDENT,EXCEPT,NAME,COLON,NEWLINE,INDENT,PRINT,STRING,NEWLINE,DEDENT,DEDENT,DEDENT,DEDENT	/usr/lib/python2.7/imghdr.py:(2520,127,3543,161),/usr/lib/python2.7/sndhdr.py:(4910,191,5933,225)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[shrink=35,fragile]{Sorting using rank of clone II}
+\lstset{
+    breaklines=true
+}
+\begin{lstlisting}
+1.107312,81:set([251523, 350155])	RPAR,NEWLINE,CONTINUE,NEWLINE,DEDENT,ELSE,COLON,NEWLINE,INDENT,IF,NOT,NAME,DOT,NAME,COLON,NEWLINE,INDENT,NAME,DOT,NAME,EQUAL,STRING,NEWLINE,DEDENT,ELSE,COLON,NEWLINE,INDENT,NAME,DOT,NAME,EQUAL,STRING,NEWLINE,DEDENT,IF,NAME,COLON,NEWLINE,INDENT,NAME,LPAR,NAME,RPAR,NEWLINE,DEDENT,ELIF,NAME,COLON,NEWLINE,INDENT,NAME,DOT,NAME,DOT,NAME,LPAR,NAME,RPAR,NEWLINE,DEDENT,ELSE,COLON,NEWLINE,INDENT,NAME,DOT,NAME,EQUAL,NAME,DOT,NAME,PLUS,STRING,NEWLINE,DEDENT,BREAK,NEWLINE,DEDENT,DEDENT,DEDENT	/usr/lib/python2.7/httplib.py:(9710,308,10280,323),/usr/lib/python2.7/rfc822.py:(6713,180,7283,195)
+1.121843,99:set([397635, 474188])	RPAR,NEWLINE,DEDENT,NAME,EQUAL,NAME,NEWLINE,DEF,NAME,LPAR,NAME,COMMA,NAME,RPAR,COLON,NEWLINE,INDENT,STRING,NEWLINE,IF,NAME,LPAR,NAME,RPAR,NOTEQUAL,NAME,LPAR,NAME,RPAR,COLON,NEWLINE,INDENT,RAISE,NAME,COMMA,STRING,NEWLINE,DEDENT,GLOBAL,NAME,NEWLINE,IF,NOT,NAME,COLON,NEWLINE,INDENT,NAME,EQUAL,NAME,LPAR,NAME,RPAR,NEWLINE,DEDENT,NAME,EQUAL,NAME,LSQB,COLON,RSQB,NEWLINE,NAME,EQUAL,NAME,LPAR,NAME,COMMA,NAME,RPAR,NEWLINE,FOR,NAME,IN,NAME,LPAR,NAME,LPAR,NAME,RPAR,RPAR,COLON,NEWLINE,INDENT,NAME,LSQB,NAME,LSQB,NAME,RSQB,RSQB,EQUAL,NAME,LSQB,NAME,RSQB,NEWLINE,DEDENT,RETURN	/usr/lib/python2.7/stringold.py:(10779,378,11362,399),/usr/lib/python2.7/string.py:(2287,56,2871,78)
+1.417108,84:set([105704, 402678])	NAME,COMMA,NAME,EQUAL,NAME,COMMA,NAME,EQUAL,NAME,COMMA,NAME,EQUAL,NAME,COMMA,NAME,EQUAL,NAME,COMMA,NAME,EQUAL,NAME,RPAR,COLON,NEWLINE,INDENT,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME,NEWLINE,NAME,DOT,NAME,EQUAL,NAME	/usr/lib/python2.7/textwrap.py:(4808,111,5681,130),/usr/lib/python2.7/argparse.py:(28125,768,28575,783)
+
+\end{lstlisting}
+
+\end{frame}
+
+
+\begin{frame}[shrink=30,fragile]{Sorting using rank of clone III}
+\lstset{
+    breaklines=true
+}
+\begin{lstlisting}
+16.355650,132:set([250961, 379630])	NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,RBRACE,NEWLINE,NAME,EQUAL	/usr/lib/python2.7/httplib.py:(4961,176,5942,213),/usr/lib/python2.7/base64.py:(3658,118,3984,129)
+16.604723,131:set([250922, 379627])	NAME,EQUAL,LBRACE,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA,NUMBER,COLON,STRING,COMMA	/usr/lib/python2.7/httplib.py:(4713,164,5572,199),/usr/lib/python2.7/base64.py:(3637,117,3967,126)
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}{Works in this week}
+\begin{itemize}
+\item Continue to read papers
+\item Add c lexer support and other language support
+\item idea of using n-gram to figure out "interesting" clones
+\end{itemize}
+\end{frame}
+
+\end{document}
