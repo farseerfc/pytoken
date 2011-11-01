@@ -19,8 +19,9 @@ def filter_occur(m,gen):
 def filter_sort_length(gen):
     lst=[pair for pair in gen]
     lst.sort(key=lambda x:-x[0])
-    for pair in lst:
-        yield pair
+    return lst
+    #for pair in lst:
+    #    yield pair
 
 def filter_mcs(gen):
     end_map = {}

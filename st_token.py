@@ -22,9 +22,9 @@ if __name__==u"__main__":
     for occur,length,start_set in \
             filter_sort_occur(
             filter_ngram(tokenseq,"input.ipt",4,
+            filter_gst(terms,2,
             filter_mcs(
             filter_sort_length(
-            filter_gst(terms,2,
             filter_length(64,
             common(st))))))):
         if len(start_set)==0:continue

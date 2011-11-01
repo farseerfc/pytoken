@@ -7,9 +7,24 @@ from io import open
 
 ENDMARKER = u"ENDMARKER"
 
+TOKENTYPE={}
+TYPETOKEN=[]
+
+def token_type(type_str):
+    if type_str not in TOKENTYPE:
+        TYPETOKEN.append(type_str)
+        TOKENTYPE[type_str]=len(TYPETOKEN)-1
+    return TOKENTYPE[type_str]
+
+
+def type_token(token_id):
+    return TYPETOKEN[token_id]
+
+assert(token_type(ENDMARKER)==0)
+
 class TokenPly(object):
     def __init__(self,lextoken,filename):
-        self.type  = lextoken.type
+        self.type  = token_type(lextoken.type)
         self.value   = lextoken.value
         self.lexpos    = lextoken.lexpos
         self.lineno    = lextoken.lineno
@@ -17,26 +32,26 @@ class TokenPly(object):
 
     def __repr__(self):
         return u"TokenPly(%s,%s,%d,%d,%s"% (
-                self.type,repr(self.value),
+                type_token(self.type),repr(self.value),
                 self.lineno,self.lexpos,repr(self.filename))
 
     def __eq__(self,other):
-        if self.type == ENDMARKER:
-            return other.type== ENDMARKER \
+        if self.type == 0:
+            return other.type== 0 \
                     and other.filename == self.filename
         return self.type == other.type
 
     def __lt__(self,other):
-        if self.type==ENDMARKER:
-            if other.type != ENDMARKER:
+        if self.type==0:
+            if other.type != 0:
                 return False
             else: return self.filename < other.filename
         return self.type < other.type
 
     def __hash__(self):
-        if self.type==ENDMARKER:
+        if self.type==0:
             return hash(self.filename)
-        return hash(self.type)
+        return self.type
 
 class TokenSeq(object):
     def __init__(self,lst,start=0,length=-1):
@@ -103,7 +118,7 @@ class TokenSeq(object):
         self.length=len(self.lst)
 
     def __repr__(self):
-        return u",".join(x.type for x in self)
+        return ",".join(type_token(x.type) for x in self)
 
     def __eq__(self,other):
         return self.__cmp__(other) == 0
