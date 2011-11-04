@@ -29,14 +29,12 @@ def common(st):
 
     while len(stack)>0:
         node,parent_len,edge_len=stack.pop()
-        begin_set = set()
+        end_set = set()
         for char in node.children:
             edge = node.children[char]
             len_edge = parent_len + len(edge)
-            begin_set.add(edge.begin-parent_len)
+            end_set.add(edge.begin)
             stack.append((edge.dst,len_edge,len(edge)))
-        yield parent_len,begin_set
-        #result.append((parent_len,begin_set))
-    #return result
+        yield parent_len,end_set
 
 

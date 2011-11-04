@@ -7,14 +7,14 @@ def filter_no(gen):
         yield pair
 
 def filter_length(m,gen):
-    for length,start_set in gen:
+    for length,end_set in gen:
         if length > m:
-            yield (length,start_set)
+            yield (length,end_set)
 
 def filter_occur(m,gen):
-    for legnth,start_set in gen:
-        if len(start_set) > m:
-            yield (length,start_set)
+    for legnth,end_set in gen:
+        if len(end_set) > m:
+            yield (length,end_set)
 
 def filter_sort_length(gen):
     lst=[pair for pair in gen]
@@ -25,27 +25,27 @@ def filter_sort_length(gen):
 
 def filter_mcs(gen):
     end_map = {}
-    for length,start_set in gen:
+    for length,end_set in gen:
         remove_set =set()
-        for start in start_set:
-            end = start + length
+        for end in end_set:
+            #start = end - length
             if end in end_map: 
                 if length > end_map[end]:
                     assert(False)
                 else:
-                    remove_set.add(start)
+                    remove_set.add(end)
             end_map[end]=length
-        start_set = start_set . difference(remove_set)
-        if len(start_set) > 1 : yield length,start_set
+        end_set = end_set . difference(remove_set)
+        if len(end_set) > 1 : yield length,end_set
 
 def filter_gst(eof_list,min_occur,gen):
-    for length,start_set in gen:
+    for length,end_set in gen:
         occur = [0 for i in eof_list]
         idx=0
         limit=eof_list[idx]
-        for start in start_set:
+        for end in end_set:
             while True:
-                if start<limit:
+                if end<=limit:
                     occur[idx]=1
                     break
                 elif idx < len(eof_list):
@@ -56,7 +56,7 @@ def filter_gst(eof_list,min_occur,gen):
                         (start,limit))
         nr_occur=sum(occur)
         if nr_occur < min_occur:continue
-        yield length,start_set
+        yield length,end_set
 
 
 if __name__ == u"__main__":
@@ -65,14 +65,14 @@ if __name__ == u"__main__":
     st = ST(string)
     result = []
 
-    for length , start_set in \
+    for length , end_set in \
             filter_mcs(
             filter_sort_length(
             filter_length(1,
             st.root.common()))):
-        if len(start_set)==0:continue
+        if len(end_set)==0:continue
         #if length < 2 : continue
-        start = list(start_set)[0]
-        print u"%s\t%d:%s"%(string[start:start+length],length,start_set)
+        end = list(end_set)[0]
+        print u"%s\t%d:%s"%(string[end-length:end],length,end_set)
 
 
