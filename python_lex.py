@@ -646,6 +646,7 @@ class PythonLexer(object):
         self.lexer.filename = filename
         self.lexer.line_offsets = get_line_offsets(data)
         self.token_stream = make_token_stream(self.lexer, add_endmarker=True)
+        self.filename=filename
 
     def token(self):
         try:

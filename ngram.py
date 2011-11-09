@@ -1,4 +1,5 @@
 #!/usr/bin/python2
+from tokenply import token_type, type_token
 
 def ngram(tokenseq,time,n):
     result={}
@@ -33,7 +34,7 @@ def filter_ngram(tokenseq,filename,n,gen):
     for length,end_set in gen:
         occur = 0.0
         for end in end_set:
-            tokenlist =[x.type for x in tokenseq[end-length:end]]
+            tokenlist =[type_token(x.type) for x in tokenseq[end-length:end]]
             for i in xrange(0,len(tokenlist)-n+1):
                 gram=tuple(tokenlist[i:i+n])
                 if gram in ngrams:

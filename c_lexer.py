@@ -66,13 +66,32 @@ class CLexer(object):
 
     def input(self, text,filename):
         self.filename=filename
+        self.lexer.filename=filename
         self.lexer.input(text)
     
-    def token(self):
-        g = self.lexer.token()
-        return g
+    #def token(self):
+    #    g = self.lexer.token()
+    #    return g
 
+    def add_endmarker(self,stream):
+        lineno=0
+        lexpos=0
+        for tok in stream:
+            tok.filename=self.filename
+            yield tok
+            lineno=tok.lineno
+            lexpos=tok.lexpos
+        end=ply.lex.LexToken()
+        end.type="ENDMARKER"
+        end.value=None
+        end.lineno=lineno
+        end.lexpos=lexpos+1
+        yield end
 
+    def __iter__(self):
+        stream=iter(self.lexer.token,None)
+        stream=self.add_endmarker(stream)
+        return stream
 
     ######################--   PRIVATE   --######################
     

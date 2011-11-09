@@ -10,10 +10,10 @@ if __name__==u"__main__":
     terms= []
     file_id = 0
     tokenseq = TokenSeq([])
-    for f in sys.argv[1:]:
+    for f in sys.argv[2:]:
         file_id +=1
         tokenseq += tokenize(f)
-        terms.append(len(tokenseq))
+        terms.append(len(tokenseq)-1)
     st=ST(tokenseq)
     print >>sys.stderr,"End Building ST!"
     sys.stderr.flush()
@@ -21,11 +21,11 @@ if __name__==u"__main__":
     #for length,end_set in \
     for occur,length,end_set in \
             filter_sort_occur(
-            filter_ngram(tokenseq,"input.ipt",4,
+            filter_ngram(tokenseq,sys.argv[1],4,
             filter_gst(terms,2,
             filter_mcs(
             filter_sort_length(
-            filter_length(64,
+            filter_length(24,
             common(st))))))):
         if len(end_set)==0:continue
         pos=[]
@@ -45,6 +45,6 @@ if __name__==u"__main__":
 
         end = list(end_set)[0]
         print u"%f,%d:%s\t%s\t%s"%(occur,length,end_set,
-            tokenseq[end-length:end],",".join(pos))
+            tokenseq[end-length:end],";".join(pos))
 
 

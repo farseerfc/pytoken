@@ -31,7 +31,7 @@ class TokenPly(object):
         self.filename = filename
 
     def __repr__(self):
-        return u"TokenPly(%s,%s,%d,%d,%s"% (
+        return u"TokenPly(%s,%s,%d,%d,%s)"% (
                 type_token(self.type),repr(self.value),
                 self.lineno,self.lexpos,repr(self.filename))
 
@@ -128,7 +128,13 @@ class TokenSeq(object):
 
 TokenSeq = total_ordering(TokenSeq)
 
-def clex(text,filename):
+def filename_filter(filename,lexer):
+    for tok in lexer:
+        if lexer.filename == filename:
+            yield tok
+
+def clex(filename):
+    from c_pre import preprocess
     def errfoo(msg,a,b):
         import sys
         print msg
@@ -137,25 +143,30 @@ def clex(text,filename):
         return False
     clex=CLexer(errfoo,typelookup)
     clex.build()
-    clex.input(text)
-    return clex
+    clex.input(preprocess(filename),filename)
+    return filename_filter(filename,clex)
 
-def pylex(text,filename):
+def pylex(filename):
+    fl=open(filename)
     lexer=PythonLexer()
-    lexer.input(text,filename)
+    lexer.input(fl.read(),filename)
+    fl.close()
     return lexer
 
+LEXER_MAP={"c":clex,"h":clex,"py":pylex}
 
 def tokenize(filename):
     import sys
-    fl=open(filename)
     print >>sys.stderr, filename
     sys.stderr.flush()
-    lexer=pylex(fl.read(),filename)
+
+    ext=filename.split(".")
+    ext=ext[len(ext)-1]
+
+    lexer=LEXER_MAP[ext](filename)
     ts=TokenSeq([])
     for lextoken in lexer:
         ts.append(TokenPly(lextoken,filename))
-    fl.close()
     return ts
 
 
