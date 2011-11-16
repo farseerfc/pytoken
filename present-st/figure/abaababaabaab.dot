@@ -1,0 +1,294 @@
+digraph ST{
+
+	subgraph clusterST3{
+
+	label=<<font color="grey">a</font>>
+		t3n0 [label="0:0",style=filled,color=red];
+		{ rank=same; t3n1}
+		t3n1 [label="1:0",shape=box,style=filled];
+		t3n0 -> t3n1 [label="(0,...)\na...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST4{
+
+	label=<<font color="grey">ab</font>>
+		t4n0 [label="0:1",style=filled,color=red];
+		{ rank=same; t4n1 t4n2}
+		t4n1 [label="1:0",shape=box];
+		t4n0 -> t4n1 [label="(0,...)\nab...",weight=1];
+		t4n2 [label="2:1",shape=box,style=filled];
+		t4n0 -> t4n2 [label="(1,...)\nb...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST5{
+
+	label=<<font color="grey">ab</font>a>
+		t5n0 [label="0:2",style=filled,color=red];
+		{ rank=same; t5n1 t5n2}
+		t5n1 [label="1:0",shape=box];
+		t5n0 -> t5n1 [label="(0,...)\naba...",weight=1];
+		t5n2 [label="2:1",shape=box];
+		t5n0 -> t5n2 [label="(1,...)\nba...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST6{
+
+	label=<<font color="grey">abaa</font>>
+		t6n0 [label="0:3",style=filled];
+		{ rank=same; t6n3 t6n2}
+		t6n3 [label="3:3",style=filled,color=red];
+		{ rank=same; t6n4 t6n1}
+		t6n4 [label="4:3",shape=box,style=filled];
+		t6n3 -> t6n4 [label="(3,...)\na...",weight=1];
+		t6n1 [label="1:0",shape=box];
+		t6n3 -> t6n1 [label="(1,...)\nbaa...",weight=1];
+		t6n0 -> t6n3 [label="(0,1)\na",weight=1];
+		t6n2 [label="2:1",shape=box];
+		t6n0 -> t6n2 [label="(1,...)\nbaa...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST7{
+
+	label=<<font color="grey">abaa</font>b>
+		t7n0 [label="0:4",style=filled];
+		{ rank=same; t7n3 t7n2}
+		t7n3 [label="3:3",color=red];
+		{ rank=same; t7n4 t7n1}
+		t7n4 [label="4:3",shape=box];
+		t7n3 -> t7n4 [label="(3,...)\nab...",weight=1];
+		t7n1 [label="1:0",shape=box];
+		t7n3 -> t7n1 [label="(1,...)\nbaab...",weight=1];
+		t7n0 -> t7n3 [label="(0,1)\na",weight=1];
+		t7n2 [label="2:1",shape=box];
+		t7n0 -> t7n2 [label="(1,...)\nbaab...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST8{
+
+	label=<<font color="grey">abaa</font>ba>
+		t8n0 [label="0:5",style=filled];
+		{ rank=same; t8n3 t8n2}
+		t8n3 [label="3:3",color=red];
+		{ rank=same; t8n4 t8n1}
+		t8n4 [label="4:3",shape=box];
+		t8n3 -> t8n4 [label="(3,...)\naba...",weight=1];
+		t8n1 [label="1:0",shape=box];
+		t8n3 -> t8n1 [label="(1,...)\nbaaba...",weight=1];
+		t8n0 -> t8n3 [label="(0,1)\na",weight=1];
+		t8n2 [label="2:1",shape=box];
+		t8n0 -> t8n2 [label="(1,...)\nbaaba...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST9{
+
+	label=<<font color="grey">abaaba</font>b>
+		t9n0 [label="0:6",style=filled];
+		{ rank=same; t9n3 t9n7}
+		t9n3 [label="3:3",color=red];
+		{ rank=same; t9n4 t9n5}
+		t9n4 [label="4:3",shape=box];
+		t9n3 -> t9n4 [label="(3,...)\nabab...",weight=1];
+		t9n5 [label="5:6",style=filled];
+		{ rank=same; t9n1 t9n6}
+		t9n1 [label="1:0",shape=box];
+		t9n5 -> t9n1 [label="(3,...)\nabab...",weight=1];
+		t9n6 [label="6:6",shape=box,style=filled];
+		t9n5 -> t9n6 [label="(6,...)\nb...",weight=1];
+		t9n3 -> t9n5 [label="(1,3)\nba",weight=1];
+		t9n0 -> t9n3 [label="(0,1)\na",weight=1];
+		t9n7 [label="7:6",style=filled];
+		{ rank=same; t9n2 t9n8}
+		t9n2 [label="2:1",shape=box];
+		t9n7 -> t9n2 [label="(3,...)\nabab...",weight=1];
+		t9n8 [label="8:6",shape=box,style=filled];
+		t9n7 -> t9n8 [label="(6,...)\nb...",weight=1];
+		t9n0 -> t9n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST10{
+
+	label=<<font color="grey">abaababa</font>>
+		t10n0 [label="0:7",style=filled];
+		{ rank=same; t10n3 t10n7}
+		t10n3 [label="3:3"];
+		{ rank=same; t10n4 t10n5}
+		t10n4 [label="4:3",shape=box];
+		t10n3 -> t10n4 [label="(3,...)\nababa...",weight=1];
+		t10n5 [label="5:6",color=red];
+		{ rank=same; t10n1 t10n6}
+		t10n1 [label="1:0",shape=box];
+		t10n5 -> t10n1 [label="(3,...)\nababa...",weight=1];
+		t10n6 [label="6:6",shape=box];
+		t10n5 -> t10n6 [label="(6,...)\nba...",weight=1];
+		t10n3 -> t10n5 [label="(1,3)\nba",weight=1];
+		t10n0 -> t10n3 [label="(0,1)\na",weight=1];
+		t10n7 [label="7:6"];
+		{ rank=same; t10n2 t10n8}
+		t10n2 [label="2:1",shape=box];
+		t10n7 -> t10n2 [label="(3,...)\nababa...",weight=1];
+		t10n8 [label="8:6",shape=box];
+		t10n7 -> t10n8 [label="(6,...)\nba...",weight=1];
+		t10n0 -> t10n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST11{
+
+	label=<<font color="grey">abaababa</font>a>
+		t11n0 [label="0:8",style=filled];
+		{ rank=same; t11n3 t11n7}
+		t11n3 [label="3:3"];
+		{ rank=same; t11n4 t11n5}
+		t11n4 [label="4:3",shape=box];
+		t11n3 -> t11n4 [label="(3,...)\nababaa...",weight=1];
+		t11n5 [label="5:6",color=red];
+		{ rank=same; t11n1 t11n6}
+		t11n1 [label="1:0",shape=box];
+		t11n5 -> t11n1 [label="(3,...)\nababaa...",weight=1];
+		t11n6 [label="6:6",shape=box];
+		t11n5 -> t11n6 [label="(6,...)\nbaa...",weight=1];
+		t11n3 -> t11n5 [label="(1,3)\nba",weight=1];
+		t11n0 -> t11n3 [label="(0,1)\na",weight=1];
+		t11n7 [label="7:6"];
+		{ rank=same; t11n2 t11n8}
+		t11n2 [label="2:1",shape=box];
+		t11n7 -> t11n2 [label="(3,...)\nababaa...",weight=1];
+		t11n8 [label="8:6",shape=box];
+		t11n7 -> t11n8 [label="(6,...)\nbaa...",weight=1];
+		t11n0 -> t11n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST12{
+
+	label=<<font color="grey">abaababa</font>ab>
+		t12n0 [label="0:9",style=filled];
+		{ rank=same; t12n3 t12n7}
+		t12n3 [label="3:3"];
+		{ rank=same; t12n4 t12n5}
+		t12n4 [label="4:3",shape=box];
+		t12n3 -> t12n4 [label="(3,...)\nababaab...",weight=1];
+		t12n5 [label="5:6",color=red];
+		{ rank=same; t12n1 t12n6}
+		t12n1 [label="1:0",shape=box];
+		t12n5 -> t12n1 [label="(3,...)\nababaab...",weight=1];
+		t12n6 [label="6:6",shape=box];
+		t12n5 -> t12n6 [label="(6,...)\nbaab...",weight=1];
+		t12n3 -> t12n5 [label="(1,3)\nba",weight=1];
+		t12n0 -> t12n3 [label="(0,1)\na",weight=1];
+		t12n7 [label="7:6"];
+		{ rank=same; t12n2 t12n8}
+		t12n2 [label="2:1",shape=box];
+		t12n7 -> t12n2 [label="(3,...)\nababaab...",weight=1];
+		t12n8 [label="8:6",shape=box];
+		t12n7 -> t12n8 [label="(6,...)\nbaab...",weight=1];
+		t12n0 -> t12n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST13{
+
+	label=<<font color="grey">abaababa</font>aba>
+		t13n0 [label="0:10",style=filled];
+		{ rank=same; t13n3 t13n7}
+		t13n3 [label="3:3"];
+		{ rank=same; t13n4 t13n5}
+		t13n4 [label="4:3",shape=box];
+		t13n3 -> t13n4 [label="(3,...)\nababaaba...",weight=1];
+		t13n5 [label="5:6",color=red];
+		{ rank=same; t13n1 t13n6}
+		t13n1 [label="1:0",shape=box];
+		t13n5 -> t13n1 [label="(3,...)\nababaaba...",weight=1];
+		t13n6 [label="6:6",shape=box];
+		t13n5 -> t13n6 [label="(6,...)\nbaaba...",weight=1];
+		t13n3 -> t13n5 [label="(1,3)\nba",weight=1];
+		t13n0 -> t13n3 [label="(0,1)\na",weight=1];
+		t13n7 [label="7:6"];
+		{ rank=same; t13n2 t13n8}
+		t13n2 [label="2:1",shape=box];
+		t13n7 -> t13n2 [label="(3,...)\nababaaba...",weight=1];
+		t13n8 [label="8:6",shape=box];
+		t13n7 -> t13n8 [label="(6,...)\nbaaba...",weight=1];
+		t13n0 -> t13n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST14{
+
+	label=<<font color="grey">abaababaaba</font>a>
+		t14n0 [label="0:11",style=filled];
+		{ rank=same; t14n3 t14n7}
+		t14n3 [label="3:3"];
+		{ rank=same; t14n13 t14n5}
+		t14n13 [label="13:11",style=filled];
+		{ rank=same; t14n14 t14n4}
+		t14n14 [label="14:11",shape=box,style=filled];
+		t14n13 -> t14n14 [label="(11,...)\na...",weight=1];
+		t14n4 [label="4:3",shape=box];
+		t14n13 -> t14n4 [label="(6,...)\nbaabaa...",weight=1];
+		t14n3 -> t14n13 [label="(3,6)\naba",weight=1];
+		t14n5 [label="5:6",color=red];
+		{ rank=same; t14n9 t14n6}
+		t14n9 [label="9:11",style=filled];
+		{ rank=same; t14n10 t14n1}
+		t14n10 [label="10:11",shape=box,style=filled];
+		t14n9 -> t14n10 [label="(11,...)\na...",weight=1];
+		t14n1 [label="1:0",shape=box];
+		t14n9 -> t14n1 [label="(6,...)\nbaabaa...",weight=1];
+		t14n5 -> t14n9 [label="(3,6)\naba",weight=1];
+		t14n6 [label="6:6",shape=box];
+		t14n5 -> t14n6 [label="(6,...)\nbaabaa...",weight=1];
+		t14n3 -> t14n5 [label="(1,3)\nba",weight=1];
+		t14n0 -> t14n3 [label="(0,1)\na",weight=1];
+		t14n7 [label="7:6"];
+		{ rank=same; t14n11 t14n8}
+		t14n11 [label="11:11",style=filled];
+		{ rank=same; t14n12 t14n2}
+		t14n12 [label="12:11",shape=box,style=filled];
+		t14n11 -> t14n12 [label="(11,...)\na...",weight=1];
+		t14n2 [label="2:1",shape=box];
+		t14n11 -> t14n2 [label="(6,...)\nbaabaa...",weight=1];
+		t14n7 -> t14n11 [label="(3,6)\naba",weight=1];
+		t14n8 [label="8:6",shape=box];
+		t14n7 -> t14n8 [label="(6,...)\nbaabaa...",weight=1];
+		t14n0 -> t14n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST15{
+
+	label=<<font color="grey">abaababaaba</font>ab>
+		t15n0 [label="0:12",style=filled];
+		{ rank=same; t15n3 t15n7}
+		t15n3 [label="3:3"];
+		{ rank=same; t15n13 t15n5}
+		t15n13 [label="13:11"];
+		{ rank=same; t15n14 t15n4}
+		t15n14 [label="14:11",shape=box];
+		t15n13 -> t15n14 [label="(11,...)\nab...",weight=1];
+		t15n4 [label="4:3",shape=box];
+		t15n13 -> t15n4 [label="(6,...)\nbaabaab...",weight=1];
+		t15n3 -> t15n13 [label="(3,6)\naba",weight=1];
+		t15n5 [label="5:6",color=red];
+		{ rank=same; t15n9 t15n6}
+		t15n9 [label="9:11"];
+		{ rank=same; t15n10 t15n1}
+		t15n10 [label="10:11",shape=box];
+		t15n9 -> t15n10 [label="(11,...)\nab...",weight=1];
+		t15n1 [label="1:0",shape=box];
+		t15n9 -> t15n1 [label="(6,...)\nbaabaab...",weight=1];
+		t15n5 -> t15n9 [label="(3,6)\naba",weight=1];
+		t15n6 [label="6:6",shape=box];
+		t15n5 -> t15n6 [label="(6,...)\nbaabaab...",weight=1];
+		t15n3 -> t15n5 [label="(1,3)\nba",weight=1];
+		t15n0 -> t15n3 [label="(0,1)\na",weight=1];
+		t15n7 [label="7:6"];
+		{ rank=same; t15n11 t15n8}
+		t15n11 [label="11:11"];
+		{ rank=same; t15n12 t15n2}
+		t15n12 [label="12:11",shape=box];
+		t15n11 -> t15n12 [label="(11,...)\nab...",weight=1];
+		t15n2 [label="2:1",shape=box];
+		t15n11 -> t15n2 [label="(6,...)\nbaabaab...",weight=1];
+		t15n7 -> t15n11 [label="(3,6)\naba",weight=1];
+		t15n8 [label="8:6",shape=box];
+		t15n7 -> t15n8 [label="(6,...)\nbaabaab...",weight=1];
+		t15n0 -> t15n7 [label="(1,3)\nba",weight=1];
+	color=blue;ratio=0.75
+	}
+}

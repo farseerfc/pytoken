@@ -1,0 +1,10 @@
+digraph ST{
+
+	subgraph clusterST0{
+
+		t0n6 [label=""];
+		t0n6 -> t0n8 [style=dotted,weight=0];
+		t0n8 [label=""];
+	color=blue
+	}
+}

@@ -1,0 +1,35 @@
+digraph ST{
+
+	subgraph clusterST2{
+
+		t2n0 [label="0:6",style=filled];
+		{ rank=same; t2n4 t2n10 t2n6 t2n8}
+		t2n4 [label="4:6",style=filled];
+		{ rank=same; t2n1 t2n5}
+		t2n1 [label="1:0",shape=box];
+		t2n4 -> t2n1 [label="(3,...)\nabdc...",weight=1];
+		t2n5 [label="5:6",shape=box,style=filled];
+		t2n4 -> t2n5 [label="(6,...)\nc...",weight=1];
+		t2n4 -> t2n6 [style=dotted,weight=0];
+		t2n0 -> t2n4 [label="(0,3)\nabd",weight=1];
+		t2n10 [label="10:6",shape=box,style=filled];
+		t2n0 -> t2n10 [label="(6,...)\nc...",weight=1];
+		t2n6 [label="6:6",style=filled];
+		{ rank=same; t2n2 t2n7}
+		t2n2 [label="2:1",shape=box];
+		t2n6 -> t2n2 [label="(3,...)\nabdc...",weight=1];
+		t2n7 [label="7:6",shape=box,style=filled];
+		t2n6 -> t2n7 [label="(6,...)\nc...",weight=1];
+		t2n6 -> t2n8 [style=dotted,weight=0];
+		t2n0 -> t2n6 [label="(1,3)\nbd",weight=1];
+		t2n8 [label="8:6",style=filled];
+		{ rank=same; t2n3 t2n9}
+		t2n3 [label="3:2",shape=box];
+		t2n8 -> t2n3 [label="(3,...)\nabdc...",weight=1];
+		t2n9 [label="9:6",shape=box,style=filled];
+		t2n8 -> t2n9 [label="(6,...)\nc...",weight=1];
+		t2n8 -> t2n0 [style=dotted,weight=0];
+		t2n0 -> t2n8 [label="(2,3)\nd",weight=1];
+	color=blue
+	}
+}

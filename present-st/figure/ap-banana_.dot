@@ -1,0 +1,105 @@
+digraph ST{
+
+	subgraph clusterST3{
+
+	label=<<font color="grey">b</font>>
+		t3n0 [label="0:0",style=filled,color=red];
+		{ rank=same; t3n1}
+		t3n1 [label="1:0",shape=box,style=filled];
+		t3n0 -> t3n1 [label="(0,...)\nb...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST4{
+
+	label=<<font color="grey">ba</font>>
+		t4n0 [label="0:1",style=filled,color=red];
+		{ rank=same; t4n2 t4n1}
+		t4n2 [label="2:1",shape=box,style=filled];
+		t4n0 -> t4n2 [label="(1,...)\na...",weight=1];
+		t4n1 [label="1:0",shape=box];
+		t4n0 -> t4n1 [label="(0,...)\nba...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST5{
+
+	label=<<font color="grey">ban</font>>
+		t5n0 [label="0:2",style=filled,color=red];
+		{ rank=same; t5n2 t5n1 t5n3}
+		t5n2 [label="2:1",shape=box];
+		t5n0 -> t5n2 [label="(1,...)\nan...",weight=1];
+		t5n1 [label="1:0",shape=box];
+		t5n0 -> t5n1 [label="(0,...)\nban...",weight=1];
+		t5n3 [label="3:2",shape=box,style=filled];
+		t5n0 -> t5n3 [label="(2,...)\nn...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST6{
+
+	label=<<font color="grey">ban</font>a>
+		t6n0 [label="0:3",style=filled,color=red];
+		{ rank=same; t6n2 t6n1 t6n3}
+		t6n2 [label="2:1",shape=box];
+		t6n0 -> t6n2 [label="(1,...)\nana...",weight=1];
+		t6n1 [label="1:0",shape=box];
+		t6n0 -> t6n1 [label="(0,...)\nbana...",weight=1];
+		t6n3 [label="3:2",shape=box];
+		t6n0 -> t6n3 [label="(2,...)\nna...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST7{
+
+	label=<<font color="grey">ban</font>an>
+		t7n0 [label="0:4",style=filled,color=red];
+		{ rank=same; t7n2 t7n1 t7n3}
+		t7n2 [label="2:1",shape=box];
+		t7n0 -> t7n2 [label="(1,...)\nanan...",weight=1];
+		t7n1 [label="1:0",shape=box];
+		t7n0 -> t7n1 [label="(0,...)\nbanan...",weight=1];
+		t7n3 [label="3:2",shape=box];
+		t7n0 -> t7n3 [label="(2,...)\nnan...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST8{
+
+	label=<<font color="grey">ban</font>ana>
+		t8n0 [label="0:5",style=filled,color=red];
+		{ rank=same; t8n2 t8n1 t8n3}
+		t8n2 [label="2:1",shape=box];
+		t8n0 -> t8n2 [label="(1,...)\nanana...",weight=1];
+		t8n1 [label="1:0",shape=box];
+		t8n0 -> t8n1 [label="(0,...)\nbanana...",weight=1];
+		t8n3 [label="3:2",shape=box];
+		t8n0 -> t8n3 [label="(2,...)\nnana...",weight=1];
+	color=blue;ratio=0.75
+	}
+	subgraph clusterST9{
+
+	label=<<font color="grey">banana$</font>>
+		t9n0 [label="0:6",style=filled,color=red];
+		{ rank=same; t9n8 t9n1 t9n10 t9n6}
+		t9n8 [label="8:6",style=filled];
+		{ rank=same; t9n9 t9n4}
+		t9n9 [label="9:6",shape=box,style=filled];
+		t9n8 -> t9n9 [label="(6,...)\n$...",weight=1];
+		t9n4 [label="4:6",style=filled];
+		{ rank=same; t9n5 t9n2}
+		t9n5 [label="5:6",shape=box,style=filled];
+		t9n4 -> t9n5 [label="(6,...)\n$...",weight=1];
+		t9n2 [label="2:1",shape=box];
+		t9n4 -> t9n2 [label="(4,...)\nna$...",weight=1];
+		t9n8 -> t9n4 [label="(2,4)\nna",weight=1];
+		t9n0 -> t9n8 [label="(1,2)\na",weight=1];
+		t9n1 [label="1:0",shape=box];
+		t9n0 -> t9n1 [label="(0,...)\nbanana$...",weight=1];
+		t9n10 [label="10:6",shape=box,style=filled];
+		t9n0 -> t9n10 [label="(6,...)\n$...",weight=1];
+		t9n6 [label="6:6",style=filled];
+		{ rank=same; t9n7 t9n3}
+		t9n7 [label="7:6",shape=box,style=filled];
+		t9n6 -> t9n7 [label="(6,...)\n$...",weight=1];
+		t9n3 [label="3:2",shape=box];
+		t9n6 -> t9n3 [label="(4,...)\nna$...",weight=1];
+		t9n0 -> t9n6 [label="(2,4)\nna",weight=1];
+	color=blue;ratio=0.75
+	}
+}

@@ -1,0 +1,6 @@
+digraph{
+	rankdir=LR;
+	root [shape=none,label=""];
+	nd [shape=point];
+	root -> nd [label="na"];
+}

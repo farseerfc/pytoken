@@ -1,5 +1,3 @@
-*.pdf
-*.dot
 
 __pycache__
 *.ipt

@@ -1,0 +1,46 @@
+digraph ST{
+
+	subgraph clusterST0{
+
+		t0n0 [label="0:10",style=filled];
+		t0n1 [label="1:-1",shape=box];
+		t0n0 -> t0n1 [label="(0,∞)\nmississi...",weight=1];
+		t0n12 [label="12:8"];
+		t0n6 [label="6:8"];
+		t0n2 [label="2:-1",shape=box];
+		t0n6 -> t0n2 [label="(5,∞)\nssippi...",weight=1];
+		t0n7 [label="7:-1",shape=box];
+		t0n6 -> t0n7 [label="(8,∞)\nppi...",weight=1];
+		t0n6 -> t0n8 [style=dotted,weight=0];
+		t0n12 -> t0n6 [label="(2,5)\nssi",weight=1];
+		t0n13 [label="13:-1",shape=box];
+		t0n12 -> t0n13 [label="(8,∞)\nppi...",weight=1];
+		t0n12 -> t0n0 [style=dotted,weight=0];
+		t0n0 -> t0n12 [label="(1,2)\ni",weight=1];
+		t0n4 [label="4:4"];
+		t0n8 [label="8:8"];
+		t0n3 [label="3:-1",shape=box];
+		t0n8 -> t0n3 [label="(5,∞)\nssippi...",weight=1];
+		t0n9 [label="9:-1",shape=box];
+		t0n8 -> t0n9 [label="(8,∞)\nppi...",weight=1];
+		t0n8 -> t0n10 [style=dotted,weight=0];
+		t0n4 -> t0n8 [label="(3,5)\nsi",weight=1];
+		t0n10 [label="10:8"];
+		t0n5 [label="5:-1",shape=box];
+		t0n10 -> t0n5 [label="(5,∞)\nssippi...",weight=1];
+		t0n11 [label="11:-1",shape=box];
+		t0n10 -> t0n11 [label="(8,∞)\nppi...",weight=1];
+		t0n10 -> t0n12 [style=dotted,weight=0];
+		t0n4 -> t0n10 [label="(4,5)\ni",weight=1];
+		t0n4 -> t0n0 [style=dotted,weight=0];
+		t0n0 -> t0n4 [label="(2,3)\ns",weight=1];
+		t0n15 [label="15:10",style=filled];
+		t0n14 [label="14:-1",shape=box];
+		t0n15 -> t0n14 [label="(9,∞)\npi...",weight=1];
+		t0n16 [label="16:-1",shape=box];
+		t0n15 -> t0n16 [label="(10,∞)\ni...",weight=1];
+		t0n15 -> t0n0 [style=dotted,weight=0];
+		t0n0 -> t0n15 [label="(8,9)\np",weight=1];
+	color=blue
+	}
+}

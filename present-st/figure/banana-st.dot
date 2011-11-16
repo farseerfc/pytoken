@@ -1,0 +1,24 @@
+digraph ST{
+
+		t0n0 [label="0:6",style=filled];
+		t0n1 [label="1:0",shape=box];
+			t0n0 -> t0n1 [label="banana$"];
+		t0n8 [label="8:6",style=filled];
+		t0n4 [label="4:6",style=filled];
+		t0n2 [label="2:1",shape=box];
+			t0n4 -> t0n2 [label="na$"];
+		t0n5 [label="5:6",shape=box,style=filled];
+			t0n4 -> t0n5 [label="$"];
+			t0n8 -> t0n4 [label="na"];
+		t0n9 [label="9:6",shape=box,style=filled];
+			t0n8 -> t0n9 [label="$"];
+			t0n0 -> t0n8 [label="a"];
+		t0n6 [label="6:6",style=filled];
+		t0n3 [label="3:2",shape=box];
+			t0n6 -> t0n3 [label="na$"];
+		t0n7 [label="7:6",shape=box,style=filled];
+			t0n6 -> t0n7 [label="$"];
+			t0n0 -> t0n6 [label="na"];
+		t0n10 [label="10:6",shape=box,style=filled];
+			t0n0 -> t0n10 [label="$"];
+}
