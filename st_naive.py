@@ -1,11 +1,11 @@
 #!/usr/bin/python2
 class Node(object):
 
-    def __init__(self,node_id,leaf=False):
+    def __init__(self,node_id,gen,leaf=False):
         self.children={}
         self.node_id=node_id
         self.leaf=leaf
-        self.gen=-1
+        self.gen=gen
 
     def __repr__(self):
         return unicode(self.node_id)+u":"+unicode(self.gen)
@@ -49,7 +49,7 @@ class STnaive(object):
 
     def __init__(self,string):
         self.string=string
-        self.root=Node(0)
+        self.root=Node(0,0)
         self.nr_node=1 # root is counted
         self.construct()
         self.tree_id=STnaive.NR_TREE
@@ -64,10 +64,10 @@ class STnaive(object):
             self.add(self.root,current)
 
     def drawdot(self):
-        print u"\tsubgraph clusterST%d{\n"%(self.tree_id)
+        #print u"\tsubgraph clusterST%d{\n"%(self.tree_id)
         self.root.drawdot(self.tree_id,self.root.gen)
-        print u"\tcolor=blue"
-        print u"\t}"
+        #print u"\tcolor=blue"
+        #print u"\t}"
 
     def add(self,node,start):
         while True:
@@ -75,7 +75,7 @@ class STnaive(object):
             char=self.string[start]
             if not (char in node.children):
                 node.children[char]=Edge(self.string,start, \
-                        len(self.string), Node(self.alloc_node(),True))
+                        len(self.string), Node(self.alloc_node(),start,True))
                 return
 
             old_edge=node.children[char]
@@ -91,7 +91,7 @@ class STnaive(object):
             if common_end<old_edge.end:
                 # we need to split a edge
                 old_node=old_edge.node
-                inter_node=Node(self.alloc_node())
+                inter_node=Node(self.alloc_node(),start)
                 inter_node.children[self.string[common_end]]=Edge( \
                         self.string,common_end,old_edge.end,old_node)
                 old_edge.node=inter_node
@@ -108,11 +108,12 @@ def draw(st):
 
 if __name__==u"__main__":
     print u"digraph ST{\n"
-    
+    import sys
+    STnaive(sys.stdin.read().strip()).drawdot()
     #for i in range(0,len("mississippi$")):
     #    STnaive("mississippi$"[:i+1]).drawdot()
-    draw(u"mississippi$")
-    draw(u"ababcab$")
+    #draw(u"mississippi$")
+    #draw(u"ababcab$")
     #STnaive("papua").drawdot()
     #STnaive("a").drawdot()
     #STnaive("ab").drawdot()

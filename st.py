@@ -9,11 +9,12 @@ FCLOG=False
 class Node(object):
     RANKING = True
 
-    def __init__(self,node_id,suffix_link=None):
+    def __init__(self,node_id,gen,suffix_link=None):
         self.children={}
         self.node_id=node_id
-        #self.gen=gen
+        self.gen=gen
         self.suffix_link=suffix_link
+        self.passed=False
 
     def is_leaf(self): # root is not leaf and has no suffix_link
         return self.suffix_link == None and self.node_id != 0 
@@ -44,7 +45,7 @@ class Node(object):
     def __iter__(self):
         return self.children.__iter__()
 
-    # recursion version, use iteration version in ST.common
+    # recursion version, use iteration version in common.py
     def common(self,parent_len=0,edge_len=0):
         begin_set = set()
         for char in self.children:

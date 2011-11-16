@@ -66,5 +66,8 @@ class STrie(object):
         self.root.printSuffix()
 
 if __name__==u"__main__":
-    st=STrie(u"BANANAS")
-    st.printSuffix()
+    import sys
+    ipt=sys.stdin.read()
+    ipt=ipt.strip()
+    st=STrie(ipt)
+    st.drawDot()

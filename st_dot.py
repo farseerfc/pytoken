@@ -6,6 +6,7 @@ def draw_node(node,tree,gen):
     string = tree.string
     leaf_str = u",shape=box" if node.is_leaf() else u""
     leaf_str+= u",style=filled" if node.gen == gen else u""
+    leaf_str+= u",color=red" if node == tree.active.src else u""
     print u"\t\tt%dn%d [label=\"%r\"%s];"% \
             (tree_id,node.node_id,node,leaf_str)
     if len(node.children)>0:
@@ -34,8 +35,12 @@ def draw_node(node,tree,gen):
 def draw_tree(tree):
     tree.tree_id = ST.alloc_treeid()
     print u"\tsubgraph clusterST%d{\n"%(tree.tree_id)
+    active=u"<font color=\"grey\">%s</font>%s"%( \
+		    tree.string[:tree.active.begin],
+		    tree.string[tree.active.begin:])
+    print u"\tlabel=<%s>"%active
     draw_node(tree.root,tree,tree.root.gen)
-    print u"\tcolor=blue"
+    print u"\tcolor=blue;ratio=0.75"
     print u"\t}"
 
 
@@ -66,7 +71,7 @@ if __name__==u"__main__":
     result = []
 
     print u"digraph ST{\n"
-    draw_tree(st)
-    #draw_step(string)
-    print u"}"
+    #draw_tree(st)
+    draw_step(string)
+    print u"ratio=0.75\n}"
 
