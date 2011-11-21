@@ -22,12 +22,13 @@ def type_token(token_id):
 assert(token_type(ENDMARKER)==0)
 
 class TokenPly(object):
-    def __init__(self,lextoken,filename):
+    def __init__(self,lextoken,filename,column):
         self.type  = token_type(lextoken.type)
         self.value   = lextoken.value
         self.lexpos    = lextoken.lexpos
         self.lineno    = lextoken.lineno
         self.filename = filename
+        self.column = column
 
     def __repr__(self):
         return u"TokenPly(%s,%s,%d,%d,%s)"% (
@@ -149,7 +150,12 @@ def filename_filter(filename,lexer):
         if lexer.filename == filename:
             yield tok
 
-def clex(filename):
+def find_column(ipt,token):
+    last_cr=ipt.rfind('\n',0,token.lexpos)
+    if last_cr<0:last_cr=0
+    return token.lexpos-last_cr + 1
+
+def clex(filename,ipt):
     from c_pre import preprocess
     def errfoo(msg,a,b):
         import sys
@@ -159,14 +165,12 @@ def clex(filename):
         return False
     clex=CLexer(errfoo,typelookup)
     clex.build()
-    clex.input(open(filename).read(),filename)
+    clex.input(ipt,filename)
     return filename_filter(filename,clex)
 
-def pylex(filename):
-    fl=open(filename)
+def pylex(filename,ipt):
     lexer=PythonLexer()
-    lexer.input(fl.read(),filename)
-    fl.close()
+    lexer.input(ipt,filename)
     return lexer
 
 LEXER_MAP={"c":clex,"h":clex,"py":pylex}
@@ -179,10 +183,14 @@ def tokenize(filename):
     ext=filename.split(".")
     ext=ext[len(ext)-1]
 
-    lexer=LEXER_MAP[ext](filename)
+    fd=open(filename)
+    ipt=fd.read()
+    fd.close()
+
+    lexer=LEXER_MAP[ext](filename,ipt)
     ts=TokenSeq([])
     for lextoken in lexer:
-        ts.append(TokenPly(lextoken,filename))
+        ts.append(TokenPly(lextoken,filename,find_column(ipt,lextoken)))
     return ts
 
 

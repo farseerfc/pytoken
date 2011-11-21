@@ -4,6 +4,10 @@ from filter import *
 from common import common
 from ngram import filter_ngram,filter_sort_occur
 
+def output_origin(occur,length,end_set,pos,tokenseq):
+    print u"%f,%d:%s\t%s\t%s"%(occur,length,end_set,
+         tokenseq[end-length:end],";".join(pos))
+
 if __name__==u"__main__":
     import sys
     #sys.setrecursionlimit(1<<16)
@@ -37,14 +41,14 @@ if __name__==u"__main__":
             filename=tokenseq[start].filename
             start_lexpos=tokenseq[start].lexpos
             start_lineno=tokenseq[start].lineno
+            start_column=tokenseq[start].column
             end_lexpos=tokenseq[end].lexpos
             end_lineno=tokenseq[end].lineno
-            pos.append("%s:(%d,%d,%d,%d)"%(filename,
-                start_lexpos,start_lineno,
-                end_lexpos,end_lineno))
+            end_column=tokenseq[end].column
+            pos.append("%s:(%d,%d,%d,%d,%d,%d)"%(filename,
+                start_lexpos,start_lineno,start_column,
+                end_lexpos,end_lineno,end_column))
 
         end = list(end_set)[0]
-        print u"%f,%d:%s\t%s\t%s"%(occur,length,end_set,
-            tokenseq[end-length:end],";".join(pos))
-
+        output_origin(occur,length,end_set,pos,tokenseq)
 
