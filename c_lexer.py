@@ -13,7 +13,7 @@ import sys
 
 import ply.lex
 from ply.lex import TOKEN
-from io import open
+#from io import open
 
 
 
@@ -194,7 +194,7 @@ class CLexer(object):
     ##
 
     # valid C identifiers (K&R2: A.2.3)
-    identifier = ur'[a-zA-Z_][0-9a-zA-Z_]*'
+    identifier = ur'[a-zA-Z_][0-9a-zA-Z_$]*'
 
     # integer constants (K&R2: A.2.5.1)
     integer_suffix_opt = ur'(u?ll|U?LL|([uU][lL])|([lL][uU])|[uU]|[lL])?'
@@ -211,9 +211,10 @@ class CLexer(object):
     simple_escape = ur"""([a-zA-Z\\?'"])"""
     octal_escape = ur"""([0-7]{1,3})"""
     hex_escape = ur"""(x[0-9a-fA-F]+)"""
-    bad_escape = ur"""([\\][^a-zA-Z\\?'"x0-7])"""
+    newline_escape= ur"""(\n)"""
+    bad_escape = ur"""([\\][^a-zA-Z\\?'"x0-7\n])"""
 
-    escape_sequence = ur"""(\\("""+simple_escape+u'|'+octal_escape+u'|'+hex_escape+u'))'
+    escape_sequence = ur"""(\\("""+newline_escape+u'|'+simple_escape+u'|'+octal_escape+u'|'+hex_escape+u'))'
     cconst_char = ur"""([^'\\\n]|"""+escape_sequence+u')'    
     char_const = u"'"+cconst_char+u"'"
     wchar_const = u'L'+char_const
@@ -239,19 +240,21 @@ class CLexer(object):
         # 
         (u'ppline', u'exclusive'),
     )
+
     
     def t_PPHASH(self, t):
         ur'[ \t]*\#'
-        m = self.line_pattern.match(
-            t.lexer.lexdata, pos=t.lexer.lexpos)
+        #m = self.line_pattern.match(
+        #    t.lexer.lexdata, pos=t.lexer.lexpos)
         
-        if m:
-            t.lexer.begin(u'ppline')
-            self.pp_line = self.pp_filename = None
+        #if m:
+        t.lexer.push_state(u'ppline')
+        self.pp_line = self.pp_filename = None
+        
             #~ print "ppline starts on line %s" % t.lexer.lineno
-        else:
-            t.type = u'PPHASH'
-            return t
+        #else:
+        #    t.type = u'PPHASH'
+        #    return t
     
     ##
     ## Rules for the ppline state
@@ -259,7 +262,8 @@ class CLexer(object):
     @TOKEN(string_literal)
     def t_ppline_FILENAME(self, t):
         if self.pp_line is None:
-            self._error(u'filename before line number in #line', t)
+            pass
+            #self._error(u'filename before line number in #line', t)
         else:
             self.pp_filename = t.value.lstrip(u'"').rstrip(u'"')
             #~ print "PP got filename: ", self.pp_filename
@@ -273,23 +277,33 @@ class CLexer(object):
             # after the file name
             pass
 
+    def t_ppline_NEXTLINE(self,t):
+        ur'.*?\\\n'
+        t.lexer.lineno+=t.value.count(u'\n')
+
+
     def t_ppline_NEWLINE(self, t):
-        ur'\n'
-        
-        if self.pp_line is None:
-            self._error(u'line number missing in #line', t)
+        ur'.*?\n'
+
+        if self.pp_line is None: 
+            t.lexer.lineno+=t.value.count(u'\n')
+        #    self._error(u'line number missing in #line', t)
         else:
             self.lexer.lineno = int(self.pp_line)
             
             if self.pp_filename is not None:
                 self.filename = self.pp_filename
                 
-        t.lexer.begin(u'INITIAL')
+        t.lexer.pop_state()
 
     def t_ppline_PPLINE(self, t):
         ur'line'
         pass
-    
+
+    #def t_ppline_other(self, t):
+    #    ur'.*?(\\|\n)'
+    #    self.pp_nextline=None
+
     t_ppline_ignore = u' \t'
 
     def t_ppline_error(self, t):
@@ -299,12 +313,16 @@ class CLexer(object):
     ##
     ## Rules for the normal state
     ##
-    t_ignore = u' \t'
+    t_ignore = u' \f\t'
 
     # Newlines
     def t_NEWLINE(self, t):
-        ur'\n+'
+        ur'\\?(\n)+'
         t.lexer.lineno += t.value.count(u"\n")
+
+    def t_COMMENT(self,t):
+        ur'(/\*(.|\n|@)*?\*/)|(//.*)'
+        t.lexer.lineno+=t.value.count(u'\n')
 
     # Operators
     t_PLUS              = ur'\+'
@@ -381,7 +399,7 @@ class CLexer(object):
 
     @TOKEN(bad_octal_constant)
     def t_BAD_CONST_OCT(self, t):
-        msg = u"Invalid octal constant"
+        msg = u"Invalid octal constant %d" % t.lineno
         self._error(msg, t)
 
     @TOKEN(octal_constant)
@@ -421,7 +439,7 @@ class CLexer(object):
     
     @TOKEN(bad_string_literal)
     def t_BAD_STRING_LITERAL(self, t):
-        msg = u"String contains invalid escape code" 
+        msg = u"String contains invalid escape code %d" %t.lineno
         self._error(msg, t)
 
     @TOKEN(identifier)
@@ -434,7 +452,7 @@ class CLexer(object):
         return t
     
     def t_error(self, t):
-        msg = u'Illegal character %s' % repr(t.value[0])
+        msg = u'Illegal character %s in line %d' % (repr(t.value[0]),t.lineno)
         self._error(msg, t)
 
 

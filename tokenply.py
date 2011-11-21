@@ -1,9 +1,8 @@
 #!/usr/bin/python2
 from python_lex import PythonLexer
-from functools import total_ordering
 from codecs import unicode_escape_encode
 from c_lexer import CLexer
-from io import open
+#from io import open
 
 ENDMARKER = u"ENDMARKER"
 
@@ -47,6 +46,15 @@ class TokenPly(object):
                 return False
             else: return self.filename < other.filename
         return self.type < other.type
+
+    def __le__(self,other):
+        return (self<other) or (self == other)
+
+    def __gt__(self,other):
+        return other < self
+
+    def __ge__(self,other):
+        return other <= self
 
     def __hash__(self):
         if self.type==0:
@@ -126,7 +134,15 @@ class TokenSeq(object):
     def __lt__(self,other):
         return self.__cmp__(other) < 0
 
-TokenSeq = total_ordering(TokenSeq)
+    def __le__(self,other):
+        return (self < other) or (self == other)
+
+    def __ge__(self,other):
+        return other <= self
+
+    def __gt__(self,other):
+        return other < self
+
 
 def filename_filter(filename,lexer):
     for tok in lexer:
@@ -143,7 +159,7 @@ def clex(filename):
         return False
     clex=CLexer(errfoo,typelookup)
     clex.build()
-    clex.input(preprocess(filename),filename)
+    clex.input(open(filename).read(),filename)
     return filename_filter(filename,clex)
 
 def pylex(filename):
