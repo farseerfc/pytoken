@@ -117,11 +117,11 @@ class CLexer(object):
     ## Reserved keywords
     ##
     keywords = (
-        u'AUTO', u'_BOOL', u'BREAK', u'CASE', u'CHAR', u'CONST', u'CONTINUE',
-        u'DEFAULT', u'DO', u'DOUBLE', u'ELSE', u'ENUM', u'EXTERN',
-        u'FLOAT', u'FOR', u'GOTO', u'IF', u'INLINE', u'INT', u'LONG', u'REGISTER',
-        u'RESTRICT', u'RETURN', u'SHORT', u'SIGNED', u'SIZEOF', u'STATIC', u'STRUCT',
-        u'SWITCH', u'TYPEDEF', u'UNION', u'UNSIGNED', u'VOID',
+        u'AUTO',  u'BREAK', u'CASE', u'CONST', u'CONTINUE',
+        u'DEFAULT', u'DO',  u'ELSE', u'ENUM', u'EXTERN',
+        u'FOR', u'GOTO', u'IF', u'INLINE',  u'REGISTER',
+        u'RESTRICT', u'RETURN', u'SIZEOF', u'STATIC', u'STRUCT',
+        u'SWITCH', u'TYPEDEF', u'UNION',
         u'VOLATILE', u'WHILE',
     )
 
@@ -157,7 +157,7 @@ class CLexer(object):
         u'PLUS', u'MINUS', u'TIMES', u'DIVIDE', u'MOD',
         u'OR', u'AND', u'NOT', u'XOR', u'LSHIFT', u'RSHIFT',
         u'LOR', u'LAND', u'LNOT',
-        u'LT', u'LE', u'GT', u'GE', u'EQ', u'NE',
+        u'LT', u'LE', u'GT', u'GE', u'EQ', u'NE',u'AT',
         
         # Assignment
         u'EQUALS', u'TIMESEQUAL', u'DIVEQUAL', u'MODEQUAL', 
@@ -194,7 +194,7 @@ class CLexer(object):
     ##
 
     # valid C identifiers (K&R2: A.2.3)
-    identifier = ur'[a-zA-Z_][0-9a-zA-Z_$]*'
+    identifier = ur'[a-zA-Z_$][0-9a-zA-Z_$]*'
 
     # integer constants (K&R2: A.2.5.1)
     integer_suffix_opt = ur'(u?ll|U?LL|([uU][lL])|([lL][uU])|[uU]|[lL])?'
@@ -202,27 +202,27 @@ class CLexer(object):
     octal_constant = u'0[0-7]*'+integer_suffix_opt
     hex_constant = u'0[xX][0-9a-fA-F]+'+integer_suffix_opt
     
-    bad_octal_constant = u'0[0-7]*[89]'
+    bad_octal_constant = u'FCFCFCFCFC'
 
     # character constants (K&R2: A.2.5.2)
     # Note: a-zA-Z are allowed as escape chars to support #line
     # directives with Windows paths as filenames (\dir\file...)
     #
-    simple_escape = ur"""([a-zA-Z\\?'"])"""
-    octal_escape = ur"""([0-7]{1,3})"""
+    simple_escape = ur"""([a-zA-Z\\?'"%])"""
+    octal_escape = ur"""([0-9]{1,3})"""
     hex_escape = ur"""(x[0-9a-fA-F]+)"""
     newline_escape= ur"""(\n)"""
-    bad_escape = ur"""([\\][^a-zA-Z\\?'"x0-7\n])"""
+    bad_escape = ur"""([\\][^a-zA-Z\\?'"x0-7\n%])"""
 
     escape_sequence = ur"""(\\("""+newline_escape+u'|'+simple_escape+u'|'+octal_escape+u'|'+hex_escape+u'))'
-    cconst_char = ur"""([^'\\\n]|"""+escape_sequence+u')'    
+    cconst_char = ur"""([^'\\]|"""+escape_sequence+u')'    
     char_const = u"'"+cconst_char+u"'"
     wchar_const = u'L'+char_const
     unmatched_quote = u"('"+cconst_char+u"*\\n)|('"+cconst_char+u"*$)"
     bad_char_const = ur"""('"""+cconst_char+u"""[^'\n]+')|('')|('"""+bad_escape+ur"""[^'\n]*')"""
 
     # string literals (K&R2: A.2.6)
-    string_char = ur"""([^"\\\n]|"""+escape_sequence+u')'    
+    string_char = ur"""([^"\\]|"""+escape_sequence+u')'    
     string_literal = u'"'+string_char+u'*"'
     wstring_literal = u'L'+string_literal
     bad_string_literal = u'"'+string_char+u'*'+bad_escape+string_char+u'*"'
@@ -239,75 +239,73 @@ class CLexer(object):
         # ppline: preprocessor line directives
         # 
         (u'ppline', u'exclusive'),
+	(u'comment',u'exclusive'),
     )
 
     
     def t_PPHASH(self, t):
         ur'[ \t]*\#'
-        #m = self.line_pattern.match(
-        #    t.lexer.lexdata, pos=t.lexer.lexpos)
-        
-        #if m:
         t.lexer.push_state(u'ppline')
-        self.pp_line = self.pp_filename = None
         
-            #~ print "ppline starts on line %s" % t.lexer.lineno
-        #else:
-        #    t.type = u'PPHASH'
-        #    return t
-    
-    ##
-    ## Rules for the ppline state
-    ##
-    @TOKEN(string_literal)
-    def t_ppline_FILENAME(self, t):
-        if self.pp_line is None:
-            pass
-            #self._error(u'filename before line number in #line', t)
-        else:
-            self.pp_filename = t.value.lstrip(u'"').rstrip(u'"')
-            #~ print "PP got filename: ", self.pp_filename
-
-    @TOKEN(decimal_constant)
-    def t_ppline_LINE_NUMBER(self, t):
-        if self.pp_line is None:
-            self.pp_line = t.value
-        else:
-            # Ignore: GCC's cpp sometimes inserts a numeric flag
-            # after the file name
-            pass
+    def t_ppline_COMMENT_BEGIN(self,t):
+        ur'/\*'
+	t.lexer.pop_state()
+	t.lexer.push_state(u'comment')
 
     def t_ppline_NEXTLINE(self,t):
-        ur'.*?\\\n'
+        ur'\\\n'
         t.lexer.lineno+=t.value.count(u'\n')
 
-
-    def t_ppline_NEWLINE(self, t):
-        ur'.*?\n'
-
-        if self.pp_line is None: 
-            t.lexer.lineno+=t.value.count(u'\n')
-        #    self._error(u'line number missing in #line', t)
-        else:
-            self.lexer.lineno = int(self.pp_line)
-            
-            if self.pp_filename is not None:
-                self.filename = self.pp_filename
-                
-        t.lexer.pop_state()
-
-    def t_ppline_PPLINE(self, t):
-        ur'line'
+    def t_ppline_ESCAPE(self,t):
+        ur'\\'
         pass
 
-    #def t_ppline_other(self, t):
-    #    ur'.*?(\\|\n)'
-    #    self.pp_nextline=None
+    def t_ppline_NEWLINE(self, t):
+        ur'\n'
+        t.lexer.lineno+=t.value.count(u'\n')
+        t.lexer.pop_state()
+
+    def t_ppline_OTHER(self,t):
+        ur'[^\\\n/]+'
+        pass
+
+    def t_ppline_SLASH(self,t):
+        ur'/'
+        pass
 
     t_ppline_ignore = u' \t'
 
     def t_ppline_error(self, t):
-        msg = u'invalid #line directive'
+        msg = u'invalid #macro directive %d'%(t.lineno)
+        self._error(msg, t)
+
+    def t_COMMENT(self,t):
+        ur'/\*'
+        t.lexer.push_state('comment')
+
+    def t_comment_OTHER(self,t):
+        ur'[^\n*/]+'
+
+    def t_comment_End(self,t):
+        ur'\*/'
+        t.lexer.pop_state()
+	#print >>sys.stderr, "%r"%t
+       
+
+    def t_comment_STAR(self,t):
+        ur'\*'
+
+    def t_comment_SLASH(self,t):
+        ur'/'
+
+    def t_comment_NEWLINE(self,t):
+        ur'\n+'
+        t.lexer.lineno+=t.value.count(u'\n')
+
+    t_comment_ignore = u' \f\t'
+
+    def t_comment_error(self, t):
+        msg = u'invalid comment %d'%(t.lineno)
         self._error(msg, t)
 
     ##
@@ -320,9 +318,9 @@ class CLexer(object):
         ur'\\?(\n)+'
         t.lexer.lineno += t.value.count(u"\n")
 
-    def t_COMMENT(self,t):
-        ur'(/\*(.|\n|@)*?\*/)|(//.*)'
-        t.lexer.lineno+=t.value.count(u'\n')
+    def t_NEWCOMMENT(self,t):
+        ur'//([^\n])*?\n'
+        t.lexer.lineno += t.value.count(u"\n")
 
     # Operators
     t_PLUS              = ur'\+'
@@ -345,6 +343,8 @@ class CLexer(object):
     t_GE                = ur'>='
     t_EQ                = ur'=='
     t_NE                = ur'!='
+
+    t_AT                = ur'@'
 
     # Assignment operators
     t_EQUALS            = ur'='
@@ -423,12 +423,12 @@ class CLexer(object):
     
     @TOKEN(unmatched_quote)
     def t_UNMATCHED_QUOTE(self, t):
-        msg = u"Unmatched '"
+        msg = u"Unmatched ' %d" % (t.lineno)
         self._error(msg, t)
 
     @TOKEN(bad_char_const)
     def t_BAD_CHAR_CONST(self, t):
-        msg = u"Invalid char constant %s" % t.value
+        msg = u"Invalid char constant %s %d" % (t.value,t.lineno)
         self._error(msg, t)
 
     @TOKEN(wstring_literal)
@@ -453,7 +453,7 @@ class CLexer(object):
     
     def t_error(self, t):
         msg = u'Illegal character %s in line %d' % (repr(t.value[0]),t.lineno)
-        self._error(msg, t)
+        #self._error(msg, t)
 
 
 if __name__ == u"__main__":

@@ -10,51 +10,45 @@ class Node(object):
     RANKING = True
 
     def __init__(self,node_id,gen,suffix_link=None):
-        self.children={}
+        self._children={}
+	self.key_list=[]
         self.node_id=node_id
         self.gen=gen
         self.suffix_link=suffix_link
         self.passed=False
+
 
     def is_leaf(self): # root is not leaf and has no suffix_link
         return self.suffix_link == None and self.node_id != 0 
 
     def __repr__(self):
         return unicode(self.node_id)+u":"+unicode(self.gen)
-    def get_children(self):
-        child_list=[self[key] for key in self]
-        #child_list.sort(key=lambda x:x.dst.rank())
-        return child_list
 
-    #def rank(self):
-    #    result=self.node_id
-    #    if Node.RANKING:
-    #        for key in self:
-    #            result = min(result,self[key].dst.rank())
-    #    return result
+    def get_children(self):
+        #child_list=[self[key] for key in self]
+        #child_list.sort(key=lambda x:x.dst.rank())
+        #return child_list
+        return self.key_list
+
+    def rank(self):
+        result=self.node_id
+        if Node.RANKING:
+            for key in self:
+               result = min(result,self[key].dst.rank())
+        return result
 
     def __getitem__(self,key):
-        return self.children[key]
+        return self._children[key]
 
     def __setitem__(self,key,value):
-        self.children[key]=value
+        self._children[key]=value
+	self.key_list.append(key)
 
     def __contains__(self,item):
-        return item in self.children
+        return item in self._children
 
     def __iter__(self):
-        return self.children.__iter__()
-
-    # recursion version, use iteration version in common.py
-    def common(self,parent_len=0,edge_len=0):
-        begin_set = set()
-        for char in self.children:
-            edge = self.children[char]
-            len_edge = parent_len + len(edge)
-            begin_set.add(edge.begin-parent_len)
-            for x in edge.dst.common(len_edge,len(edge)):
-                yield x
-        yield parent_len,begin_set
+        return self.get_children().__iter__()
 
 
 class Edge(object):
@@ -116,9 +110,9 @@ class ST(object):
 
     def __init__(self,string,alphabet=None):
         self.string=string
-        if alphabet == None:
-            alphabet = set(string)
-        self.alphabet=alphabet
+        #if alphabet == None:
+        #    alphabet = set(string)
+        #self.alphabet=alphabet
         self.root=Node(0,0)
         self.nr_node=1 # root is counted
         self.tree_id=ST.alloc_treeid()
@@ -130,7 +124,7 @@ class ST(object):
     def append(self,string):
         old_len = len(self.string)
         self.string += string
-        self.alphabet = self.alphabet.union(string)
+        #self.alphabet = self.alphabet.union(string)
         for current in xrange(old_len,len(self.string)):
             self.add(current)
 
@@ -150,7 +144,8 @@ class ST(object):
                     break
                 parent=edge.split(active,self,current)
             # new leaf
-            new_node = Node(self.alloc_node(),current)
+            #new_node = Node(self.alloc_node(),current)
+	    new_node = None
             new_edge = Edge(current, ST.INFINITY,parent,new_node) 
             self.insert_edge(new_edge)
             # insert suffix link
@@ -181,3 +176,5 @@ class ST(object):
     def __len__(self):
         return len(self.string)
 
+    def is_leaf(self,node):
+	return node == None or node.is_leaf()

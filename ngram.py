@@ -11,8 +11,19 @@ def ngram(tokenseq,time,n):
             result[gram]=time
     return result
 
-def input(filename,n):
+def merge_ngram(ngrams):
     result = {}
+    for grams in ngrams:
+        for tupl in grams:
+            if tupl in result:
+                result[tupl] += grams[tupl]
+            else:
+                result[tupl]  = grams[tupl]
+    return result
+
+
+def input(filename,n):
+    result = []
     for line in open(filename):
         pos, tokenseq_str = line.split("\t")[:2]
         length_str,end_set_str = pos.split(":")
@@ -22,12 +33,8 @@ def input(filename,n):
         tokenseq = tokenseq_str.split(",")
 
         grams = ngram(tokenseq,len(end_set),n)
-        for tupl in grams:
-            if tupl in result:
-                result[tupl] += grams[tupl]
-            else:
-                result[tupl]  = grams[tupl]
-    return result
+        result.append(grams)
+    return merge_ngram(result)
 
 def filter_ngram(tokenseq,filename,n,gen):
     ngrams = input(filename,n)

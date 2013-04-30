@@ -27,19 +27,41 @@ class CSThread(Thread):
 
 #########################################################
 # original model
+
+def clear_passed(node):
+  stack=[]
+  stack.append(node)
+
+  while len(stack) >0:
+    node = stack.pop()
+    node.passed=False
+
+    for char in node:
+      edge = node[char]
+      if edge.dst != None:
+          stack.append(edge.dst)
+
 def common_orig(st):
     stack=[]
     stack.append((st.root,0,0))
     result=[]
 
+    if st.root.passed: clear_passed(st.root)
+
     while len(stack)>0:
         node,parent_len,edge_len=stack.pop()
+        if st.is_leaf(node): continue
         end_set = set()
-        for char in node.children:
-            edge = node.children[char]
+        for char in node:
+            edge = node[char]
             len_edge = parent_len + len(edge)
             end_set.add(edge.begin)
             stack.append((edge.dst,len_edge,len(edge)))
+        if node.passed: continue
+        node.passed=True
+        while node.suffix_link != None:
+            node = node.suffix_link
+            node.passed=True
         yield parent_len,end_set
 
 

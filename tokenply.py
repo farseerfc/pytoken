@@ -9,7 +9,10 @@ ENDMARKER = u"ENDMARKER"
 TOKENTYPE={}
 TYPETOKEN=[]
 
+STORE_VALUE=False
+
 def token_type(type_str):
+    #return type_str
     if type_str not in TOKENTYPE:
         TYPETOKEN.append(type_str)
         TOKENTYPE[type_str]=len(TYPETOKEN)-1
@@ -17,23 +20,31 @@ def token_type(type_str):
 
 
 def type_token(token_id):
+    #return token_id
     return TYPETOKEN[token_id]
 
-assert(token_type(ENDMARKER)==0)
+#assert(token_type(ENDMARKER)==0)
 
 class TokenPly(object):
     def __init__(self,lextoken,filename,column):
         self.type  = token_type(lextoken.type)
-        self.value   = lextoken.value
+        if STORE_VALUE:
+            self.value   = lextoken.value
         self.lexpos    = lextoken.lexpos
         self.lineno    = lextoken.lineno
         self.filename = filename
         self.column = column
 
     def __repr__(self):
-        return u"TokenPly(%s,%s,%d,%d,%s)"% (
+        if STORE_VALUE:
+            return u"TokenPly(%s,%s,%d,%d,%d,%s)"% (
                 type_token(self.type),repr(self.value),
-                self.lineno,self.lexpos,repr(self.filename))
+                self.lineno,self.column,self.lexpos,repr(self.filename))
+        else:
+            return u"TokenPly(%s,%d,%d,%d,%s)"% (
+                type_token(self.type),
+                self.lineno,self.column,self.lexpos,repr(self.filename))
+
 
     def __eq__(self,other):
         if self.type == 0:
@@ -60,7 +71,7 @@ class TokenPly(object):
     def __hash__(self):
         if self.type==0:
             return hash(self.filename)
-        return self.type
+        return hash(self.type)
 
 class TokenSeq(object):
     def __init__(self,lst,start=0,length=-1):
@@ -76,8 +87,12 @@ class TokenSeq(object):
         for token in lst:
             self.lst.append(token)
 
+    def to_list(self):
+        return [type_token(x.type) for x in self.cano()]
+
     def cano(self):
         if self.start == 0 and self.length == len(self.lst): return
+        return self.lst[self.start:self.start+self.length]
         raise NotImplemented
 
         self.lst=self.lst[self.start:self.start+self.length]
@@ -153,7 +168,7 @@ def filename_filter(filename,lexer):
 def find_column(ipt,token):
     last_cr=ipt.rfind('\n',0,token.lexpos)
     if last_cr<0:last_cr=0
-    return token.lexpos-last_cr + 1
+    return token.lexpos-last_cr
 
 def clex(filename,ipt):
     from c_pre import preprocess
@@ -175,7 +190,8 @@ def pylex(filename,ipt):
 
 LEXER_MAP={"c":clex,"h":clex,"py":pylex}
 
-def tokenize(filename):
+def tokenize(pair): #filename,file_id):
+    filename,file_id = pair
     import sys
     print >>sys.stderr, filename
     sys.stderr.flush()
@@ -184,21 +200,24 @@ def tokenize(filename):
     ext=ext[len(ext)-1]
 
     fd=open(filename)
-    ipt=fd.read()
+    ipt=fd.read().decode("utf-8",errors="ignore")
     fd.close()
 
     lexer=LEXER_MAP[ext](filename,ipt)
     ts=TokenSeq([])
     for lextoken in lexer:
-        ts.append(TokenPly(lextoken,filename,find_column(ipt,lextoken)))
+        ts.append(TokenPly(lextoken,file_id,find_column(ipt,lextoken)))
     return ts
 
 
 if __name__==u"__main__":
     import sys
     idx=0
-    for filename in sys.argv[1:]:
-        for tok in tokenize(filename):
+    list_file = [line.strip() for line in open(sys.argv[1]).readlines()]
+    fileid=0
+    for filename in list_file:
+        fileid+=1
+        for tok in tokenize((filename,fileid)):
             print u"%d:\t%s"%(idx,tok)
             idx+=1
 
