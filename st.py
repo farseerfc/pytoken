@@ -11,7 +11,7 @@ class Node(object):
 
     def __init__(self,node_id,gen,suffix_link=None):
         self._children={}
-	self.key_list=[]
+        self.key_list=[]
         self.node_id=node_id
         self.gen=gen
         self.suffix_link=suffix_link
@@ -25,10 +25,10 @@ class Node(object):
         return unicode(self.node_id)+u":"+unicode(self.gen)
 
     def get_children(self):
-        #child_list=[self[key] for key in self]
+        #child_list=[self[key] for key in self.key_list]
         #child_list.sort(key=lambda x:x.dst.rank())
         #return child_list
-        return self.key_list
+        return self._children.values()
 
     def rank(self):
         result=self.node_id
@@ -110,9 +110,9 @@ class ST(object):
 
     def __init__(self,string,alphabet=None):
         self.string=string
-        #if alphabet == None:
+        # if alphabet == None:
         #    alphabet = set(string)
-        #self.alphabet=alphabet
+        self.alphabet=alphabet
         self.root=Node(0,0)
         self.nr_node=1 # root is counted
         self.tree_id=ST.alloc_treeid()
@@ -124,7 +124,7 @@ class ST(object):
     def append(self,string):
         old_len = len(self.string)
         self.string += string
-        #self.alphabet = self.alphabet.union(string)
+        # self.alphabet = self.alphabet.union(string)
         for current in xrange(old_len,len(self.string)):
             self.add(current)
 
@@ -144,8 +144,8 @@ class ST(object):
                     break
                 parent=edge.split(active,self,current)
             # new leaf
-            #new_node = Node(self.alloc_node(),current)
-	    new_node = None
+            new_node = Node(self.alloc_node(),current)
+            # new_node = None
             new_edge = Edge(current, ST.INFINITY,parent,new_node) 
             self.insert_edge(new_edge)
             # insert suffix link

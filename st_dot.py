@@ -9,7 +9,7 @@ def draw_node(node,tree,gen):
     leaf_str+= u",color=red" if node == tree.active.src else u""
     print u"\t\tt%dn%d [label=\"%r\"%s];"% \
             (tree_id,node.node_id,node,leaf_str)
-    if len(node.children)>0:
+    if len(node._children)>0:
         print u"\t\t{ rank=same; %s}"%u" ".join(u"t%dn%d"%(
             tree_id,x.dst.node_id) for x in node.get_children())
     for edge in node.get_children():
@@ -40,7 +40,7 @@ def draw_tree(tree):
 		    tree.string[tree.active.begin:])
     print u"\tlabel=<%s>"%active
     draw_node(tree.root,tree,tree.root.gen)
-    print u"\tcolor=blue;ratio=0.75"
+    print u"\tcolor=blue;ratio=0.25"
     print u"\t}"
 
 
@@ -73,5 +73,5 @@ if __name__==u"__main__":
     print u"digraph ST{\n"
     #draw_tree(st)
     draw_step(string)
-    print u"ratio=0.75\n}"
+    print u"ratio=0.05\n}"
 
